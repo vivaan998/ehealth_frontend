@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Helmet } from 'react-helmet';
+// import { Helmet } from 'react-helmet';
 import { withRouter } from 'react-router-dom';
 import _ from 'lodash';
 
@@ -12,7 +12,7 @@ import { LayoutSidebar } from './LayoutSidebar';
 import { PageConfigContext } from './PageConfigContext';
 import { ThemeClass } from './../Theme';
 
-import config from './../../../config';
+import config from '../../config';
 
 const findChildByType = (children, targetType) => {
     let result;
@@ -231,7 +231,7 @@ class Layout extends React.Component {
                     changeMeta: (metaData) => { this.setState(metaData) }
                 }}
             >
-                <Helmet>
+                {/* <Helmet> */}
                     <meta charSet="utf-8" />
                     <title>{ config.siteTitle + (this.state.pageTitle ? ` - ${this.state.pageTitle}` : '') }</title>
                     <link rel="canonical" href={ config.siteCannonicalUrl } />
@@ -242,7 +242,7 @@ class Layout extends React.Component {
                         ))
                     }
 
-                </Helmet>
+                {/* </Helmet> */}
                 <ThemeClass>
                     {(themeClass) => (
                         <div className={ classNames(layoutClass, themeClass) } ref={ this.containerRef }>
