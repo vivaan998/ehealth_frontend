@@ -12,6 +12,8 @@ import { render } from 'react-dom';
 //   document.getElementById('root')
 // );
 
+// unused commnet
+
 render(
   <App />,
   document.getElementById('root')
