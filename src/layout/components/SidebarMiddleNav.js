@@ -17,42 +17,42 @@ export const SidebarMiddleNav = () => (
             <SidebarMenu.Item title="Reports" to='/dashboards/reports' exact />
         </SidebarMenu.Item> */}
         <SidebarMenu.Item
-            icon={<i className="fa fa-fw fa-th"></i>}
+            icon={<i className="fa fa-fw fa-home"></i>}
             title="Dashboard"
             to='/dashboard'
         />
         <SidebarMenu.Item
-            icon={<i className="fa fa-fw fa-th"></i>}
+            icon={<i className="fa fa-fw fa-heartbeat"></i>}
             title="My Medical Report"
             to='/mymedicalreport'
         />
         <SidebarMenu.Item
-            icon={<i className="fa fa-fw fa-th"></i>}
+            icon={<i className="fa fa-fw fa-calendar"></i>}
             title="Appointments"
             to='/appointments'
         />
         <SidebarMenu.Item
-            icon={<i className="fa fa-fw fa-th"></i>}
+            icon={<i className="fa fa-fw fa-users"></i>}
             title="Patients"
             to='/patients'
         />
         <SidebarMenu.Item
-            icon={<i className="fa fa-fw fa-th"></i>}
+            icon={<i className="fa fa-fw fa-plus-square"></i>}
             title="Immunizations"
             to='/immunizations'
         />
         <SidebarMenu.Item
-            icon={<i className="fa fa-fw fa-th"></i>}
+            icon={<i className="fa fa-fw fa-stethoscope"></i>}
             title="Practitioners"
             to='/practitioners'
         />
         <SidebarMenu.Item
-            icon={<i className="fa fa-fw fa-th"></i>}
+            icon={<i className="fa fa-fw fa-medkit"></i>}
             title="Providers"
             to='/providers'
         />
         <SidebarMenu.Item
-            icon={<i className="fa fa-fw fa-th"></i>}
+            icon={<i className="fa fa-fw fa-eyedropper"></i>}
             title="Vaccines"
             to='/vaccines'
         />
