@@ -20,7 +20,9 @@ import Avatar, { AvatarAddOn } from './Avatar';
 import ExtendedDropdown from './ExtendedDropdown';
 import IconWithBadge from './IconWithBadge';
 import InputGroupAddon from './InputGroupAddon';
-import SidebarMenu from './SidebarMenu'
+import SidebarMenu from './SidebarMenu';
+import UncontrolledPopover from './UncontrolledPopover';
+
 
 export {
     Alert,
@@ -115,5 +117,6 @@ export {
     ExtendedDropdown,
     IconWithBadge,
     InputGroupAddon,
-    SidebarMenu
+    SidebarMenu,
+    UncontrolledPopover
 };

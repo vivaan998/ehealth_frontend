@@ -4,7 +4,7 @@ import { SidebarMenu } from './../../components';
 
 export const SidebarMiddleNav = () => (
     <SidebarMenu>
-        <SidebarMenu.Item
+        {/* <SidebarMenu.Item
             icon={<i className="fa fa-fw fa-home"></i>}
             title="Dashboards"
         >
@@ -15,22 +15,57 @@ export const SidebarMiddleNav = () => (
             <SidebarMenu.Item title="Financial" to='/dashboards/financial' exact />
             <SidebarMenu.Item title="Stock" to='/dashboards/stock' exact />
             <SidebarMenu.Item title="Reports" to='/dashboards/reports' exact />
-        </SidebarMenu.Item>
+        </SidebarMenu.Item> */}
         <SidebarMenu.Item
             icon={<i className="fa fa-fw fa-th"></i>}
-            title="Widgets"
-            to='/widgets'
+            title="Dashboard"
+            to='/dashboard'
+        />
+        <SidebarMenu.Item
+            icon={<i className="fa fa-fw fa-th"></i>}
+            title="My Medical Report"
+            to='/mymedicalreport'
+        />
+        <SidebarMenu.Item
+            icon={<i className="fa fa-fw fa-th"></i>}
+            title="Appointments"
+            to='/appointments'
+        />
+        <SidebarMenu.Item
+            icon={<i className="fa fa-fw fa-th"></i>}
+            title="Patients"
+            to='/patients'
+        />
+        <SidebarMenu.Item
+            icon={<i className="fa fa-fw fa-th"></i>}
+            title="Immunizations"
+            to='/immunizations'
+        />
+        <SidebarMenu.Item
+            icon={<i className="fa fa-fw fa-th"></i>}
+            title="Practitioners"
+            to='/practitioners'
+        />
+        <SidebarMenu.Item
+            icon={<i className="fa fa-fw fa-th"></i>}
+            title="Providers"
+            to='/providers'
+        />
+        <SidebarMenu.Item
+            icon={<i className="fa fa-fw fa-th"></i>}
+            title="Vaccines"
+            to='/vaccines'
         />
         { /* -------- Cards ---------*/ }
-        <SidebarMenu.Item
+        {/* <SidebarMenu.Item
             icon={<i className="fa fa-fw fa-clone"></i>}
             title="Cards"
         >
             <SidebarMenu.Item title="Cards" to='/cards/cards' exact />
             <SidebarMenu.Item title="Cards Headers" to='/cards/cardsheaders' exact />
-        </SidebarMenu.Item>
+        </SidebarMenu.Item> */}
         { /* -------- Layouts ---------*/ }
-        <SidebarMenu.Item
+        {/* <SidebarMenu.Item
             icon={<i className="fa fa-fw fa-columns"></i>}
             title="Layouts"
         >
@@ -39,9 +74,9 @@ export const SidebarMiddleNav = () => (
             <SidebarMenu.Item title="Sidebar A" to='/layouts/sidebar-a' exact />
             <SidebarMenu.Item title="Sidebar With Navbar" to="/layouts/sidebar-with-navbar" exact />
             <SidebarMenu.Item title="Drag &amp; Drop" to='/layouts/dnd-layout' exact />
-        </SidebarMenu.Item>
+        </SidebarMenu.Item> */}
         { /* -------- Interface ---------*/ }
-        <SidebarMenu.Item
+        {/* <SidebarMenu.Item
             icon={<i className="fa fa-fw fa-toggle-on"></i>}
             title="Interface"
         >
@@ -67,16 +102,16 @@ export const SidebarMiddleNav = () => (
             <SidebarMenu.Item title="Crop Image" to='/interface/crop-image' />
             <SidebarMenu.Item title="Drag &amp; Drop Elements" to='/interface/drag-and-drop-elements' />
             <SidebarMenu.Item title="Calendar" to='/interface/calendar' />
-        </SidebarMenu.Item>
+        </SidebarMenu.Item> */}
         { /* -------- Graphs ---------*/ }
-        <SidebarMenu.Item
+        {/* <SidebarMenu.Item
             icon={<i className="fa fa-fw fa-pie-chart"></i>}
             title="Graphs"
         >
             <SidebarMenu.Item title="ReCharts" to='/graphs/re-charts' />
-        </SidebarMenu.Item>
+        </SidebarMenu.Item> */}
         { /* -------- Forms ---------*/ }
-        <SidebarMenu.Item
+        {/* <SidebarMenu.Item
             icon={<i className="fa fa-fw fa-check-square-o"></i>}
             title="Forms"
         >
@@ -91,18 +126,18 @@ export const SidebarMiddleNav = () => (
             <SidebarMenu.Item title="Date Picker" to='/forms/date-picker' />
             <SidebarMenu.Item title="Dropzone" to='/forms/dropzone' />
             <SidebarMenu.Item title="Sliders" to='/forms/sliders' />
-        </SidebarMenu.Item>
+        </SidebarMenu.Item> */}
         { /* -------- Tables ---------*/ }
-        <SidebarMenu.Item
+        {/* <SidebarMenu.Item
             icon={<i className="fa fa-fw fa-trello"></i>}
             title="Tables"
         >
             <SidebarMenu.Item title="Tables" to='/tables/tables' />
             <SidebarMenu.Item title="Extended Tables" to='/tables/extended-table' />
             <SidebarMenu.Item title="AgGrid" to='/tables/ag-grid' />
-        </SidebarMenu.Item>
+        </SidebarMenu.Item> */}
         { /* -------- Apps ---------*/ }
-        <SidebarMenu.Item
+        {/* <SidebarMenu.Item
             icon={<i className="fa fa-fw fa-mouse-pointer"></i>}
             title="Apps"
         >
@@ -149,9 +184,9 @@ export const SidebarMiddleNav = () => (
             </SidebarMenu.Item>
             <SidebarMenu.Item title="Clients" to="/apps/clients" exact />
             <SidebarMenu.Item title="Chat" to="/apps/chat" exact />
-        </SidebarMenu.Item>
+        </SidebarMenu.Item> */}
         { /* -------- Pages ---------*/ }
-        <SidebarMenu.Item
+        {/* <SidebarMenu.Item
             icon={<i className="fa fa-fw fa-copy"></i>}
             title="Pages"
         >
@@ -175,9 +210,9 @@ export const SidebarMiddleNav = () => (
             icon={<i className="fa fa-fw fa-bookmark-o"></i>}
             title="Docs"
             href='https://webkom.gitbook.io/spin/v/airframe/airframe-react/documentation-react'
-        />
+        /> */}
         { /* -------- Versions ---------*/ }
-        <SidebarMenu.Item
+        {/* <SidebarMenu.Item
             icon={<i className="fa fa-fw fa-folder-open-o"></i>}
             title="Versions"
         >
@@ -187,6 +222,6 @@ export const SidebarMiddleNav = () => (
             <SidebarMenu.Item title="Vue" to="http://dashboards.webkom.co/vue/airframe" />
             <SidebarMenu.Item title="Angular" to="http://dashboards.webkom.co/angular/airframe" />
             <SidebarMenu.Item title=".NET MVC" to="http://dashboards.webkom.co/net-mvc/airframe" />
-        </SidebarMenu.Item>
+        </SidebarMenu.Item> */}
     </SidebarMenu >
 );

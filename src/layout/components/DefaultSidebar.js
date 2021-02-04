@@ -8,8 +8,8 @@ import {
 
 import { SidebarMiddleNav } from './SidebarMiddleNav';
 
-// import { SidebarTopA } from '../../routes/components/Sidebar/SidebarTopA'
-// import { SidebarBottomA } from '../../routes/components/Sidebar/SidebarBottomA'
+import { SidebarTopA } from '../../routes/components/Sidebar/SidebarTopA'
+import { SidebarBottomA } from '../../routes/components/Sidebar/SidebarBottomA'
 // import { LogoThemed } from '../../routes/components/LogoThemed/LogoThemed';
 
 export const DefaultSidebar = () => (
@@ -35,14 +35,14 @@ export const DefaultSidebar = () => (
 
         { /* START SIDEBAR: Only for Mobile */ }
         <Sidebar.MobileFluid>
-            {/* <SidebarTopA /> */}
+            <SidebarTopA />
             
             <Sidebar.Section fluid cover>
                 { /* SIDEBAR: Menu */ }
                 <SidebarMiddleNav />
             </Sidebar.Section>
 
-            {/* <SidebarBottomA /> */}
+            <SidebarBottomA />
         </Sidebar.MobileFluid>
         { /* END SIDEBAR: Only for Mobile */ }
     </Sidebar>
