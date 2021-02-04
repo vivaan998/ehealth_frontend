@@ -24,7 +24,7 @@ const SidebarTopA = () => (
                     <Sidebar.HideSlim>
                         <Avatar.Image
                             size="lg"
-                            src={ avatarImg }
+                            src={require('./../../../images/avatars/3.jpg')}
                             addOns={[
                                 <AvatarAddOn.Icon 
                                     className="fa fa-circle"
@@ -43,7 +43,7 @@ const SidebarTopA = () => (
                 
                 <UncontrolledButtonDropdown>
                     <DropdownToggle color="link" className="pl-0 pb-0 btn-profile sidebar__link">
-                        { faker.name.firstName() } { faker.name.lastName() }
+                        Harshil Patel
                         <i className="fa fa-angle-down ml-2"></i>
                     </DropdownToggle>
                     <DropdownMenu persist>
