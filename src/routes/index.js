@@ -2,6 +2,9 @@ import React from "react";
 import { Route, Switch, Redirect } from "react-router";
 import { DefaultNavbar } from "./../layout/components/DefaultNavbar";
 import { DefaultSidebar } from "./../layout/components/DefaultSidebar";
+import Login from './Pages/Login';
+
+
 
 import {
     Appointments,
@@ -35,6 +38,9 @@ export const RoutedContent = () => {
       <Route path='/vaccines' exact component={Vaccines} />
 
       <Route path='/practitioners' exact component={Practitioners} />
+
+      <Route component={ Login } path="/pages/login" />
+
 
     </Switch>
   );

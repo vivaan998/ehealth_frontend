@@ -22,6 +22,8 @@ import IconWithBadge from './IconWithBadge';
 import InputGroupAddon from './InputGroupAddon';
 import SidebarMenu from './SidebarMenu';
 import UncontrolledPopover from './UncontrolledPopover';
+import CustomInput from './CustomInput';
+import EmptyLayout from './EmptyLayout';
 
 
 export {
@@ -100,6 +102,8 @@ export {
 
 export {
     Layout,
+    CustomInput,
+    EmptyLayout,
     withPageConfig,
     setupPage,
     PageConfigConsumer,

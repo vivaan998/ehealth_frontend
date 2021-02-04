@@ -11,7 +11,7 @@ import {
 import { NavbarActivityFeed } from './NavbarActivityFeed';
 import { NavbarMessages } from './NavbarMessages';
 import { NavbarUser } from './NavbarUser';
-// import { LogoThemed } from './../../routes/components/LogoThemed/LogoThemed';
+import { LogoThemed } from './../../routes/components/LogoThemed/LogoThemed';
 
 export const DefaultNavbar = () => (
     <Navbar light expand="xs" fluid>
@@ -21,12 +21,11 @@ export const DefaultNavbar = () => (
             </NavItem>
             <NavItem className="navbar-brand d-lg-none">
                 <Link to="/">
-                    {/* <logothemed/> */}
-                    <h6>Here logothemed goes</h6>
+                    <LogoThemed />
                 </Link>
             </NavItem>
             <NavItem className="d-none d-md-block">
-                <span className="navbar-text">
+                {/* <span className="navbar-text">
                     <Link to="/">
                         <i className="fa fa-home"></i>
                     </Link>
@@ -42,12 +41,12 @@ export const DefaultNavbar = () => (
                 </span>
                 <span className="navbar-text">
                     Page Link
-                </span>
+                </span> */}
             </NavItem>
         </Nav>
         <Nav navbar className="ml-auto">
-            <NavbarActivityFeed />
-            <NavbarMessages className="ml-2" />
+            {/* <NavbarActivityFeed />
+            <NavbarMessages className="ml-2" /> */}
             <NavbarUser className="ml-2" />
         </Nav>
     </Navbar>
