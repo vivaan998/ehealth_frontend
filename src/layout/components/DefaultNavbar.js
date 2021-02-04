@@ -25,12 +25,13 @@ export const DefaultNavbar = () => (
                 </Link>
             </NavItem>
             <NavItem className="d-none d-md-block">
-                {/* <span className="navbar-text">
-                    <Link to="/">
+                <span className="navbar-text">
+                    {/* <Link to="/">
                         <i className="fa fa-home"></i>
-                    </Link>
+                    </Link> */}
+                    <h5>eHealth.my</h5>
                 </span>
-                <span className="navbar-text px-2">
+                {/* <span className="navbar-text px-2">
                     <i className="fa fa-angle-right"></i>
                 </span>
                 <span className="navbar-text">
