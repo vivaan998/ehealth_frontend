@@ -11,11 +11,11 @@ var config = {
     // clientStatsFile:        'stats.webpack.json',
 
     // Source Directory ===============================================
-    // srcDir:                 path.join(root, 'app'),
-    // srcServerDir:           path.join(root, 'server'),
+    srcDir:                 path.join(root, 'src'),
+    srcServerDir:           path.join(root, 'server'),
 
     // HTML Layout ====================================================
-    // srcHtmlLayout:          path.join(root, 'app', 'index.html'),
+    srcHtmlLayout:          path.join(root, 'public', 'index.html'),
 
     // Site Config ====================================================
     siteTitle:              'eHealth.my',

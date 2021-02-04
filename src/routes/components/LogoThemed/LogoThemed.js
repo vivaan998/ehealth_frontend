@@ -5,16 +5,16 @@ import classNames from 'classnames';
 import { ThemeConsumer } from '../../../components/Theme';
 
 const logos = {
-    'white': require('./../../../images/logos/logo-success.svg'),
-    'primary': require('./../../../images/logos/logo-primary.svg'),
-    'success': require('./../../../images/logos/logo-success.svg'),
-    'warning': require('./../../../images/logos/logo-warning.svg'),
-    'danger': require('./../../../images/logos/logo-danger.svg'),
-    'info': require('./../../../images/logos/logo-info.svg'),
-    'indigo': require('./../../../images/logos/logo-indigo.svg'),
-    'purple': require('./../../../images/logos/logo-purple.svg'),
-    'pink': require('./../../../images/logos/logo-pink.svg'),
-    'yellow': require('./../../../images/logos/logo-yellow.svg')
+    'white': './../../../images/logos/eHealth.png',
+    'primary': './../../../images/logos/eHealth.png',
+    'success': './../../../images/logos/logo-success.svg',
+    'warning': './../../../images/logos/logo-warning.svg',
+    'danger': './../../../images/logos/logo-danger.svg',
+    'info': './../../../images/logos/logo-info.svg',
+    'indigo': './../../../images/logos/logo-indigo.svg',
+    'purple': './../../../images/logos/logo-purple.svg',
+    'pink': './../../../images/logos/logo-pink.svg',
+    'yellow': './../../../images/logos/logo-yellow.svg'
 }
 
 const getLogoUrl = (style, color) => {
@@ -31,8 +31,10 @@ const getLogoUrlBackground = (style, color) => {
 }
 
 const LogoThemed = ({ checkBackground, className, ...otherProps }) => (
+
     <ThemeConsumer>
     {
+        
         ({ style, color }) => (
             <img
                 src={
@@ -43,10 +45,12 @@ const LogoThemed = ({ checkBackground, className, ...otherProps }) => (
                 className={ classNames('d-block', className) }
                 alt="eHealth Logo"
                 { ...otherProps }
+                height="120px"
             />
         )
     }
     </ThemeConsumer>
+   
 );
 LogoThemed.propTypes = {
     checkBackground: PropTypes.bool,

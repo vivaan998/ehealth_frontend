@@ -48,18 +48,18 @@ export const RoutedContent = () => {
 
 export const RoutedNavbars = () => {
   return (
-    <switch>
+    <Switch>
       {/* Default Navbar: */}
       <Route component={DefaultNavbar} />
-    </switch>
+    </Switch>
   );
 };
 
 export const RoutedSidebars = () => {
   return (
-    <switch>
+    <Switch>
       {/* Default Sidebar: */}
       <Route component={DefaultSidebar} />
-    </switch>
+    </Switch>
   );
 };
