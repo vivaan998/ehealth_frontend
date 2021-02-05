@@ -39,7 +39,7 @@ export const RoutedContent = () => {
 
       <Route path='/practitioners' exact component={Practitioners} />
 
-      <Route component={ Login } path="/pages/login" />
+      <Route component={ Login } path="/login" />
 
 
     </Switch>

@@ -44,8 +44,8 @@ const LogoThemed = ({ checkBackground, className, ...otherProps }) => (
                 }
                 className={ classNames('d-block', className) }
                 alt="eHealth Logo"
+                height = '100'
                 { ...otherProps }
-                height="120px"
             />
         )
     }
