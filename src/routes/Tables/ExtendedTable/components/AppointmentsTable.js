@@ -8,31 +8,31 @@ import faker from 'faker/locale/en_US';
 import moment from 'moment';
 
 import {
-    Badge,
+    // Badge,
     Button,
-    CustomInput,
+    // CustomInput,
     // StarRating,
     ButtonGroup
-} from './../../../../components';
+} from '../../../../components';
 import { CustomExportCSV } from './CustomExportButton';
 import { CustomSearch } from './CustomSearch';
 import { CustomPaginationPanel } from './CustomPaginationPanel';
 import { CustomSizePerPageButton } from './CustomSizePerPageButton';
 import { CustomPaginationTotal } from './CustomPaginationTotal';
-import { randomArray } from './../../../../utilities';
+// import { randomArray } from './../../../../utilities';
 import {
     buildCustomTextFilter,
-    buildCustomSelectFilter,
-    buildCustomNumberFilter
-} from './../filters';
+    // buildCustomSelectFilter,
+    // buildCustomNumberFilter
+} from '../filters';
 
 const INITIAL_PRODUCTS_COUNT = 500;
 
-const ProductQuality = {
-    Good: 'product-quality__good',
-    Bad: 'product-quality__bad',
-    Unknown: 'product-quality__unknown'
-};
+// const ProductQuality = {
+//     Good: 'product-quality__good',
+//     Bad: 'product-quality__bad',
+//     Unknown: 'product-quality__unknown'
+// };
 
 const sortCaret = (order) => {
     if (!order)
@@ -61,7 +61,7 @@ const generateRow = (index) => ({
     // inStockDate: faker.date.past()
 });
 
-export default class AdvancedTableA extends React.Component {
+export default class AppointmentsTable extends React.Component {
     constructor() {
         super();
         
@@ -199,93 +199,7 @@ export default class AdvancedTableA extends React.Component {
                     { cell }
                 </span>
             ),
-            // ...buildCustomTextFilter({
-            //     placeholder: 'Enter Patient name...',
-            //     getFilter: filter => { this.nameFilter = filter; }
-            // })
         }
-        // {
-        //     dataField: 'id',
-        //     text: 'Product ID',
-        //     headerFormatter: column => (
-        //         <React.Fragment>
-        //             <span className="text-nowrap">{ column.text }</span>
-        //             <a
-        //                 href="javascript:;"
-        //                 className="d-block small text-decoration-none text-nowrap"
-        //                 onClick={ this.handleResetFilters.bind(this) }
-        //             >
-        //                 Reset Filters <i className="fa fa-times fa-fw text-danger"></i>
-        //             </a>
-        //         </React.Fragment>
-        //     )
-        // },
-        // {
-        //     dataField: 'quality',
-        //     text: 'Product Quality',
-        //     formatter: (cell) => {
-        //         let pqProps;
-        //         switch (cell) {
-        //             case ProductQuality.Good:
-        //                 pqProps = {
-        //                     color: 'success',
-        //                     text: 'Good'
-        //                 }
-        //             break;
-        //             case ProductQuality.Bad:
-        //                 pqProps = {
-        //                     color: 'danger',
-        //                     text: 'Bad'
-        //                 }
-        //             break;
-        //             case ProductQuality.Unknown:
-        //             default:
-        //                 pqProps = {
-        //                     color: 'secondary',
-        //                     text: 'Unknown'
-        //                 }
-        //         }
-
-        //         return (
-        //             <Badge color={pqProps.color}>
-        //                 { pqProps.text }
-        //             </Badge>
-        //         )
-        //     },
-        //     sort: true,
-        //     sortCaret,
-        //     ...buildCustomSelectFilter({
-        //         placeholder: 'Select Quality',
-        //         options: [
-        //             { value: ProductQuality.Good, label: 'Good' },
-        //             { value: ProductQuality.Bad, label: 'Bad' },
-        //             { value: ProductQuality.Unknown, label: 'Unknown' }
-        //         ],
-        //         getFilter: filter => { this.qualityFilter = filter; }
-        //     })
-        // }, {
-        //     dataField: 'price',
-        //     text: 'Product Price',
-        //     sort: true,
-        //     sortCaret,
-        //     ...buildCustomNumberFilter({
-        //         comparators: [Comparator.EQ, Comparator.GT, Comparator.LT],
-        //         getFilter: filter => { this.priceFilter = filter; }
-        //     })
-        // },
-        //  {
-        //     dataField: 'satisfaction',
-        //     text: 'Buyer Satisfaction',
-        //     sort: true,
-        //     sortCaret,
-        //     formatter: (cell) =>
-        //         <StarRating at={ cell } max={ 6 } />,
-        //     ...buildCustomSelectFilter({
-        //         placeholder: 'Select Satisfaction',
-        //         options: _.times(6, (i) => ({ value: i + 1, label: i + 1 })),
-        //         getFilter: filter => { this.satisfactionFilter = filter; }
-        //     })
-        // }, 
         ]; 
     }
 

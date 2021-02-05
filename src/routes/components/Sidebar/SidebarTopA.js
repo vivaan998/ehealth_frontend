@@ -61,7 +61,7 @@ const SidebarTopA = () => (
                         Billings
                     </DropdownItem>
                     <DropdownItem divider />
-                    <DropdownItem tag={ Link } to="/pages/login">
+                    <DropdownItem tag={ Link } to="/login">
                         <i className="fa fa-fw fa-sign-out mr-2"></i>
                         Sign Out
                     </DropdownItem>
