@@ -52,7 +52,7 @@ const generateRow = (index) => ({
   action: (
     <ButtonGroup>
       {" "}
-      <Button size="sm" outline>
+      <Button size="sm" outline color='danger'>
         Archive
       </Button>
     </ButtonGroup>

@@ -48,7 +48,7 @@ const generateRow = (index) => ({
     patientName: faker.name.firstName(),
     scheduledBy:faker.name.lastName(),
     scheduledOn: faker.date.past(),
-    action: <Button color='danger'>Cancel</Button>
+    action: <Button outline size='sm' color='danger'>Cancel</Button>
     // quality: randomArray([
     //     ProductQuality.Bad,
     //     ProductQuality.Good,
