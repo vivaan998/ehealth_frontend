@@ -1,48 +1,110 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import MenuListingService from '../../services/MenuListingService'
+import AuthenticationService from '../../services/AuthenticationService';
 import {
     Sidebar,
     SidebarTrigger,
 } from './../../components';
 
-import { SidebarMiddleNav } from './SidebarMiddleNav';
+import SidebarMiddleNav from './SidebarMiddleNav';
 
-import { SidebarTopA } from '../../routes/components/Sidebar/SidebarTopA'
+import SidebarTopA from '../../routes/components/Sidebar/SidebarTopA'
 import { SidebarBottomA } from '../../routes/components/Sidebar/SidebarBottomA'
 import { LogoThemed } from '../../routes/components/LogoThemed/LogoThemed';
 
-export const DefaultSidebar = () => (
-    <Sidebar>
-        { /* START SIDEBAR-OVERLAY: Close (x) */ }
-        <Sidebar.Close>
-            <SidebarTrigger tag={ 'a' } href="javascript;">
-                <i className="fa fa-times-circle fa-fw"></i>
-            </SidebarTrigger>
-        </Sidebar.Close>
-        { /* START SIDEBAR-OVERLAY: Close (x) */ }
-        
-        { /* START SIDEBAR: Only for Desktop */ }
-        <Sidebar.HideSlim>
-            <Sidebar.Section>
-                <Link to="/" className="sidebar__brand">
-                    <LogoThemed checkBackground />
-                </Link>
-            </Sidebar.Section>
-        </Sidebar.HideSlim>
-        { /* END SIDEBAR: Only for Desktop */ }
+class DefaultSidebar extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            profileData: 'Default User',
+            menuItems: '',
+            menuList: '',
+            isLoading: false,
+            dashboard: false,
+            mymedicalreport: false,
+            appointments: false,
+            patients: false,
+            immunizations: false,
+            practitioners: false,
+            providers: false,
+            vaccines: false
+        }
+    }
+    getMenu = async () => {
+        try{
+            const response = await MenuListingService.getMenu();
+            if (response.status == true){
+                this.setState({
+                    profileData: response.data.data,
+                    menuItems: response.data.menu,
+                    isLoading: false,
+                    
+                });
+                console.log('menuItems >>>', this.state.menuItems);
+                let menu;
+                var temp = this.state.menuItems;
+                menu = (temp).map(o => o.title);
+                    this.setState({
+                        menuList: menu
+                });
 
-        { /* START SIDEBAR: Only for Mobile */ }
-        <Sidebar.MobileFluid>
-            <SidebarTopA />
+            }
+        }
+        catch(e){
+            console.log(e, e.data);
+        }
+    }
+
+    componentDidMount = async () => { 
+        this.setState({
+            isLoading: true
+        });
+        if (AuthenticationService.getUser()){
+            this.getMenu();
             
-            <Sidebar.Section fluid cover>
-                { /* SIDEBAR: Menu */ }
-                <SidebarMiddleNav />
-            </Sidebar.Section>
+        }
+        else{
+            this.props.history.push({
+                pathname: "/login",
+            })
+        }
+    }
+    
+    render(){
+        return(
+            <Sidebar>
+                { /* START SIDEBAR-OVERLAY: Close (x) */ }
+                <Sidebar.Close>
+                    <SidebarTrigger tag={ 'a' } href="javascript;">
+                        <i className="fa fa-times-circle fa-fw"></i>
+                    </SidebarTrigger>
+                </Sidebar.Close>
+                { /* START SIDEBAR-OVERLAY: Close (x) */ }
+                
+                { /* START SIDEBAR: Only for Desktop */ }
+                <Sidebar.HideSlim>
+                    <Sidebar.Section>
+                        <Link to="/" className="sidebar__brand">
+                            <LogoThemed checkBackground />
+                        </Link>
+                    </Sidebar.Section>
+                </Sidebar.HideSlim>
+                { /* END SIDEBAR: Only for Desktop */ }
 
-            <SidebarBottomA />
-        </Sidebar.MobileFluid>
-        { /* END SIDEBAR: Only for Mobile */ }
-    </Sidebar>
-);
+                { /* START SIDEBAR: Only for Mobile */ }
+                <Sidebar.MobileFluid>
+                    <SidebarTopA data={this.state} {...this.props}/>
+                    
+                    <Sidebar.Section fluid cover>
+                        { /* SIDEBAR: Menu */ }
+                        <SidebarMiddleNav {...this.props} data={this.state}/>
+                    </Sidebar.Section>
+                </Sidebar.MobileFluid>
+                { /* END SIDEBAR: Only for Mobile */ }
+            </Sidebar>
+        )
+    }
+}
+
+export default DefaultSidebar;

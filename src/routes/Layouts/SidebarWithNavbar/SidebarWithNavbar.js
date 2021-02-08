@@ -29,7 +29,7 @@ export const SidebarWithNavbar = () => (
             </ul>
         </section>
 
-        <section className="mb-5">
+        {/* <section className="mb-5">
             <h6>
                 This Starter has:
             </h6>
@@ -47,9 +47,9 @@ export const SidebarWithNavbar = () => (
                     <b>Bugs</b> - do you see errors in this version? Please report vie email: <i>info@webkom.co</i>
                 </li>
             </ul>
-        </section>
+        </section> */}
 
-        <section className="mb-5">
+        {/* <section className="mb-5">
             <h6>
                 Other versions for &quot;Airframe&quot;:
             </h6>
@@ -76,8 +76,8 @@ export const SidebarWithNavbar = () => (
                     <b>Other Versions</b>, such as <i>Ruby on Rails, Ember, Laravel etc.</i>, please ask for the beta version via email: info@webkom.co
                 </li>
             </ul>
-        </section>
-
+        </section> */}
+{/* 
         <section className="mb-5">
             <h6>
                 Work Orders:
@@ -86,6 +86,6 @@ export const SidebarWithNavbar = () => (
                 Regarding configuration, changes under client&apos;s requirements.<br />
                 Pleace contact us through the <a href="http://wbkom.co/contact" className="text-primary" target="_blank" rel="noopener noreferrer">webkom.co/contact</a> website.
             </p>
-        </section>
+        </section> */}
     </Container>
 );

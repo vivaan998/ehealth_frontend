@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import validator from 'validator';
+import AuthenticationService from '../../../services/AuthenticationService'
+import Config from '../../../config/Config'
 import {
     Form,
     FormGroup,
@@ -16,60 +18,196 @@ import {
 import { HeaderAuth } from "../../components/Pages/HeaderAuth";
 import { FooterAuth } from "../../components/Pages/FooterAuth";
 
-const Login = () => (
-    <EmptyLayout>
-        <EmptyLayout.Section center>
-            { /* START Header */}
-            <HeaderAuth 
-                title="Sign In"
-            />
-            { /* END Header */}
-            { /* START Form */}
-            <Form className="mb-3">
-                <FormGroup>
-                    <Label for="emailAdress">
-                        Email Adress
-                    </Label>
-                    <Input type="email" name="email" id="emailAdress" placeholder="Enter email..." className="bg-white" />
-                    <FormText color="muted">
-                        
-                    </FormText>
-                </FormGroup>
-                <FormGroup>
-                    <Label for="password">
-                        Password
-                    </Label>
-                    <Input type="password" name="password" id="password" placeholder="Password..." className="bg-white" />
-                </FormGroup>
-                <FormGroup>
-                    <CustomInput type="checkbox" id="rememberPassword" label="Remember Password" inline />
-                </FormGroup>
-                <ThemeConsumer>
-                {
-                    ({ color }) => (
-                        <Button color={ color } block tag={ Link } to="/">
-                            Sign In
-                        </Button>
-                    )
+class Login extends React.Component {
+    
+    constructor(props){
+        super();
+        this.state = {
+            emailId: '',
+            password: '',
+            emailId_errorMessage: '',
+            password_errorMessage: '',
+            authenticationMessage: '',
+            color: "black",
+            isLoading: false,
+        }
+    }
+
+    async Authenticate() {
+        this.setState(({
+            isLoading: true,
+            authenticationMessage: '',
+        }))
+        if (this.state.emailId == ''){
+            this.setState({
+                emailId_errorMessage: "Enter email ID",
+                isLoading: false
+            });
+            return
+        }
+        else{
+            if (validator.isEmail(this.state.emailId)){
+                this.setState({
+                    emailId_errorMessage: ""
+                });
+            }
+            else{
+                this.setState({
+                    emailId_errorMessage: "Enter a valid email ID",
+                    isLoading: false
+                })
+                return 
+            }
+            
+        }
+        if (this.state.password == ''){
+            this.setState({
+                password_errorMessage: "Enter password",
+                isLoading: false
+            });
+            return
+        }
+        else{
+            this.setState({
+                password_errorMessage: ""
+            });
+            const postData = {
+                email: this.state.emailId,
+                password: this.state.password
+            }
+            try{
+                const response = await AuthenticationService.Login(postData);
+                if (response.status == true) {
+                    console.log(response.data);
+                    this.setState({
+                        color: "success",
+                        authenticationMessage: "Login successful",
+                        isLoading: false,
+                    });
+
+                    AuthenticationService.setToken(response.data.access_token);
+                    Config.access_token = response.data.access_token;
+                    // Config.role_id = 100;
+                    
+                    this.props.history.replace({
+                        pathname: "/dashboard",
+                        state: {
+                            id: 7,
+                            color: 'green'
+                        }
+                    })  
+                    
+                    
                 }
-                </ThemeConsumer>
-            </Form>
-            { /* END Form */}
-            { /* START Bottom Links */}
-            <div className="d-flex mb-5">
-                <Link to="/pages/forgotpassword" className="text-decoration-none">
-                    Forgot Password
-                </Link>
-                <Link to="/pages/register" className="ml-auto text-decoration-none">
-                    Register
-                </Link>
-            </div>
-            { /* END Bottom Links */}
-            { /* START Footer */}
-            <FooterAuth />
-            { /* END Footer */}
-        </EmptyLayout.Section>
-    </EmptyLayout>
-);
+                else{
+                    this.setState({
+                        color: "danger",
+                        isLoading: false,
+                        authenticationMessage: response.data.data.error
+                    });
+                }
+            }
+            catch (e){
+                console.log(e, e.data)      
+            }
+        }
+
+    }
+    onChangeEmail(value){
+        this.setState({
+            emailId: value
+        });
+    }
+
+    onChangePassword(value){
+        this.setState({
+            password: value
+        })
+    }
+
+    render(){
+        return (
+            <EmptyLayout>
+                <EmptyLayout.Section center>
+                    { /* START Header */}
+                    <HeaderAuth 
+                        title="Sign In"
+                    />
+                    { /* END Header */}
+                    { /* START Form */}
+                    <Form className="mb-3">
+                        <FormGroup>
+                            <Label for="emailAdress">
+                                Email Address
+                            </Label>
+                            <Input 
+                                type="email"
+                                name="emailId" 
+                                id="emailId"
+                                placeholder="harshil@gmail.com" 
+                                className="bg-white"
+                                value={this.state.emailId}
+                                onChange={e => this.onChangeEmail(e.target.value)}
+                                
+                            />
+                            <FormText color="danger">
+                                {this.state.emailId_errorMessage}
+                            </FormText>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="password">
+                                Password
+                            </Label>
+                            <Input 
+                                type="password"
+                                name="password" 
+                                id="password"
+                                placeholder="Password" 
+                                className="bg-white"
+                                value={this.state.password}
+                                onChange={e => this.onChangePassword(e.target.value)}
+                            />
+                            <FormText color="danger">
+                                {this.state.password_errorMessage}
+                            </FormText>
+                        </FormGroup>
+                        <ThemeConsumer>
+                        {
+                            ({ color }) => (
+                                <Button 
+                                    color={ color } 
+                                    block 
+                                    tag={ Link } 
+                                    onClick={() => this.Authenticate()}
+                                    disabled={this.state.isLoading}
+                                >
+                                    Sign In
+                                </Button>
+                            )
+                        }
+                        </ThemeConsumer>
+
+                        <FormText color={this.state.color}>
+                            {this.state.authenticationMessage}
+                        </FormText>
+                        
+                    </Form>
+                    { /* END Form */}
+                    { /* START Bottom Links */}
+                    {/* <div className="d-flex mb-5">
+                        <Link to="/pages/forgotpassword" className="text-decoration-none">
+                            Forgot Password
+                        </Link>
+                    </div> */}
+                    { /* END Bottom Links */}
+                    { /* START Footer */}
+                    <FooterAuth />
+                    { /* END Footer */}
+                </EmptyLayout.Section>
+            </EmptyLayout>
+        );
+    }
+}
+
 
 export default Login;

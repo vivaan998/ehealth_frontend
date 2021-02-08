@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router";
-import { DefaultNavbar } from "./../layout/components/DefaultNavbar";
-import { DefaultSidebar } from "./../layout/components/DefaultSidebar";
+import DefaultNavbar from "./../layout/components/DefaultNavbar";
+import DefaultSidebar from "./../layout/components/DefaultSidebar";
 import Login from './Pages/Login';
 
 
