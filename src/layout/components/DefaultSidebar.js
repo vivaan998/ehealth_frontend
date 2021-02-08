@@ -20,15 +20,6 @@ class DefaultSidebar extends React.Component{
             profileData: 'Default User',
             menuItems: '',
             menuList: '',
-            isLoading: false,
-            dashboard: false,
-            mymedicalreport: false,
-            appointments: false,
-            patients: false,
-            immunizations: false,
-            practitioners: false,
-            providers: false,
-            vaccines: false
         }
     }
     getMenu = async () => {
@@ -52,14 +43,12 @@ class DefaultSidebar extends React.Component{
             }
         }
         catch(e){
+            console.log('error >>>', e);
             console.log(e, e.data);
         }
     }
 
     componentDidMount = async () => { 
-        this.setState({
-            isLoading: true
-        });
         if (AuthenticationService.getUser()){
             this.getMenu();
             

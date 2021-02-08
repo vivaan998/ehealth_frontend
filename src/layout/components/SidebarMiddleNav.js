@@ -17,7 +17,7 @@ class SidebarMiddleNav extends React.Component {
         //     PROVIDERS       : {icon: 'fa fa-fw fa-medkit', title: 'Providers', to: '/providers'},
         //     VACCINES        : {icon: 'fa fa-fw fa-eyedropper', title: 'Vaccines', to: '/vaccines'},
         // }
-        // console.log('props in middleNav>>>', this.props);
+        console.log('props in middleNav>>>', this.props);
         // this.state = {
         //     profileData: '',
         //     menuItems: '',
@@ -173,7 +173,7 @@ class SidebarMiddleNav extends React.Component {
             />);
         }
         else{
-            return(<SidebarMenu.Item/>)
+            return(<></>);
         }
     }
     vaccines(){
@@ -185,11 +185,12 @@ class SidebarMiddleNav extends React.Component {
             />);
         }
         else{
-            return(<SidebarMenu.Item/>)
+            return(<SidebarMenu.Item/>);
         }
     }
 
     render(){
+        console.log(this.props);
         return(
 
             <SidebarMenu>
