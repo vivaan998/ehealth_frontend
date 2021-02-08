@@ -47,17 +47,6 @@ const generateRow = (index) => ({
   dateAdded: faker.date.past(),
   vaccineName: faker.name.firstName(),
   doseRequired: faker.finance.amount(),
-  action: (
-    <ButtonGroup>
-      {" "}
-      <Button size="sm" outline color='primary'>
-        Administered To
-      </Button>
-      <Button size="sm" outline color='danger'>
-        Archive
-      </Button>
-    </ButtonGroup>
-  ),
   // quality: randomArray([
   //     ProductQuality.Bad,
   //     ProductQuality.Good,
@@ -74,7 +63,28 @@ export default class VaccinesTable extends React.Component {
     super();
 
     this.state = {
-      products: _.times(INITIAL_PRODUCTS_COUNT, generateRow),
+      products: [
+        {
+          id: 0,
+          vaccineName: "c",
+        doseRequired:5,
+        dateAdded: "Sat Nov 28 2020 02:35:58 GMT+0530 (India Standard Time)"
+
+        },
+        {
+          id: 1,
+          vaccineName: "b",
+          doseRequired: 24.5,
+          dateAdded: "Sat Nov 28 2020 02:35:58 GMT+0530 (India Standard Time)"
+
+        },
+        {
+          id: 2,
+          vaccineName: "a",
+          doseRequired: 24.5,
+          dateAdded: "Sat Nov 28 2020 02:35:58 GMT+0530 (India Standard Time)"
+        },
+      ],
       selected: [],
     };
 
@@ -99,13 +109,13 @@ export default class VaccinesTable extends React.Component {
   //     }
   // }
 
-  handleAddRow() {
-    const currentSize = this.state.products.length;
+  // handleAddRow() {
+  //   const currentSize = this.state.products.length;
 
-    this.setState({
-      products: [generateRow(currentSize + 1), ...this.state.products],
-    });
-  }
+  //   this.setState({
+  //     products: [generateRow(currentSize + 1), ...this.state.products],
+  //   });
+  // }
 
   handleDeleteRow() {
     this.setState({
@@ -123,8 +133,26 @@ export default class VaccinesTable extends React.Component {
     this.satisfactionFilter("");
   }
 
+  handleArchive(cell, row){
+    console.log(row.id);
+  }
+  
+  actionButton = (cell, row,) => {
+    return(
+      <Button size="sm" outline color="danger" onClick={() => this.handleArchive(cell, row)}>
+          Archive
+      </Button>
+    )
+  }
+
   createColumnDefinitions() {
+    
     return [
+      {
+        dataField: "id",
+        hidden: true,
+        isKey: true
+      },
       {
         dataField: "vaccineName",
         text: "Vaccine Name",
@@ -169,12 +197,13 @@ export default class VaccinesTable extends React.Component {
         sortCaret,
       },
       {
-        dataField: "action",
         text: "Action",
-        // sort: true,
-        // align: "center",
-        // sortCaret,
-        formatter: (cell) => <span className="text-inverse">{cell}</span>,
+        
+        // events: {
+        //   onClick: (e, column, row, rowIndex) => {console.log(rowIndex)}
+        // },
+        
+        formatter: this.actionButton
       },
     ];
   }
@@ -230,14 +259,14 @@ export default class VaccinesTable extends React.Component {
                   <Button
                     size="sm"
                     outline
-                    onClick={this.handleDeleteRow.bind(this)}
+                    // onClick={this.handleDeleteRow.bind(this)}
                   >
                     Delete
                   </Button>
                   <Button
                     size="sm"
                     outline
-                    onClick={this.handleAddRow.bind(this)}
+                    // onClick={this.handleAddRow.bind(this)}
                   >
                     <i className="fa fa-fw fa-plus"></i>
                   </Button>

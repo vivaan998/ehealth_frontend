@@ -29,8 +29,6 @@ import {
   // buildCustomNumberFilter
 } from "../filters";
 
-const INITIAL_PRODUCTS_COUNT = 500;
-
 // const ProductQuality = {
 //     Good: 'product-quality__good',
 //     Bad: 'product-quality__bad',
@@ -42,42 +40,28 @@ const sortCaret = (order) => {
   if (order) return <i className={`fa fa-fw text-muted fa-sort-${order}`}></i>;
 };
 
-const generateRow = (index) => ({
-  // id: index,
-  dateAdded: faker.date.past(),
-  providerName: faker.name.firstName(),
-  action: (
-    <ButtonGroup>
-      {" "}
-      <Button size="sm" outline color='primary'>
-        Practitioners
-      </Button>
-      <Button size="sm" outline color='purple'>
-        Appointments
-      </Button>
-      <Button size="sm" outline color='danger'>
-        Archive
-      </Button>
-    </ButtonGroup>
-  ),
-  // quality: randomArray([
-  //     ProductQuality.Bad,
-  //     ProductQuality.Good,
-  //     ProductQuality.Unknown
-  // ]),
-
-  // price: (1000 + Math.random() * 1000).toFixed(2),
-  // satisfaction: Math.round(Math.random() * 6),
-  // inStockDate: faker.date.past()
-});
-
-export default class ProvidersTable extends React.Component {
+export default class ProviderTable extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      products: _.times(INITIAL_PRODUCTS_COUNT, generateRow),
-      selected: [],
+      products: [
+        {
+          id: 0,
+          dateAdded: "Mon Jan 04 2021 04:03:00 GMT+0530 (India Standard Time)",
+          providerName: "c",
+        },
+        {
+          id: 1,
+          dateAdded: "Mon Jan 04 2021 04:03:00 GMT+0530 (India Standard Time)",
+          providerName: "b",
+        },
+        {
+          id: 2,
+          dateAdded: "Mon Jan 04 2021 04:03:00 GMT+0530 (India Standard Time)",
+          providerName: "a",
+        },
+      ],
     };
 
     this.headerCheckboxRef = React.createRef();
@@ -101,13 +85,13 @@ export default class ProvidersTable extends React.Component {
   //     }
   // }
 
-  handleAddRow() {
-    const currentSize = this.state.products.length;
+  // handleAddRow() {
+  //   const currentSize = this.state.products.length;
 
-    this.setState({
-      products: [generateRow(currentSize + 1), ...this.state.products],
-    });
-  }
+  //   this.setState({
+  //     products: [generateRow(currentSize + 1), ...this.state.products],
+  //   });
+  // }
 
   handleDeleteRow() {
     this.setState({
@@ -125,8 +109,103 @@ export default class ProvidersTable extends React.Component {
     this.satisfactionFilter("");
   }
 
+  // handlePractitionersOnClick(cell, row) {
+  //   console.log("Practitioners Button clicked, rowId:", row.id);
+  // }
+
+  // onClickAppointments(cell, row) {
+  //   console.log("Appointments button clicked, rowId:", row.id);
+  // }
+
+  // onClickArchive(cell, row) {
+  //   console.log("Archive button clicked, rowId:", row.id);
+  // }
+
+  // handleArchive(cell, row){
+  //   console.log(row.id);
+  // }
+
+  // actionColButton(cell, row, enumObject, rowIndex) {
+  //   return (
+  //     // <ButtonGroup>
+  //     //   {" "}
+  //       <Button
+  //         size="sm"
+  //         outline
+  //         color="primary"
+  //         onClick={() => this.handleArchive(cell, row)}        >
+  //         Practitioners
+  //       </Button>
+  //     //   <Button
+  //     //     size="sm"
+  //     //     outline
+  //     //     color="purple"
+  //     //     onClick={() => this.onClickAppointments(cell, row)}
+  //     //   >
+  //     //     Appointments
+  //     //   </Button>
+  //     //   <Button
+  //     //     size="sm"
+  //     //     outline
+  //     //     color="danger"
+  //     //     onClick={() => this.onClickArchive(cell, row)}
+  //     //   >
+  //     //     Archive
+  //     //   </Button>
+  //     // </ButtonGroup>
+  //   );
+  // }
+
+  handleAppointmentsOnClick(cell, row) {
+    console.log("Appointments button clicked, rowId:", row.id);
+  }
+
+  handleArchiveOnClick(cell, row) {
+    console.log("Archive button clicked, rowId:", row.id);
+  }
+
+  handlePractitionersOnClick(cell, row) {
+    console.log("Practitioners Button clicked, rowId:", row.id);
+  }
+
+  actionColButton = (cell, row) => {
+    return (
+      <ButtonGroup>
+        <Button
+          size="sm"
+          outline
+          color="primary"
+          onClick={() => this.handlePractitionersOnClick(cell, row)}
+        >
+          Practitioners
+        </Button>
+        <Button
+          size="sm"
+          outline
+          color="purple"
+          onClick={() => this.handleAppointmentsOnClick(cell, row)}
+        >
+          Appointments
+        </Button>
+        <Button
+          size="sm"
+          outline
+          color="danger"
+          onClick={() => this.handleArchiveOnClick(cell, row)}
+        >
+          Archive
+        </Button>
+      </ButtonGroup>
+    );
+  };
+
   createColumnDefinitions() {
     return [
+      {
+        dataField: "id",
+        hidden: true,
+        isKey: true,
+      },
       {
         dataField: "providerName",
         text: "Provider Name",
@@ -158,12 +237,11 @@ export default class ProvidersTable extends React.Component {
         sortCaret,
       },
       {
-        dataField: "action",
         text: "Action",
         // sort: true,
         // align: "center",
         // sortCaret,
-        formatter: (cell) => <span className="text-inverse">{cell}</span>,
+        formatter: this.actionColButton,
       },
     ];
   }
@@ -219,14 +297,14 @@ export default class ProvidersTable extends React.Component {
                   <Button
                     size="sm"
                     outline
-                    onClick={this.handleDeleteRow.bind(this)}
+                    // onClick={this.handleDeleteRow.bind(this)}
                   >
                     Delete
                   </Button>
                   <Button
                     size="sm"
                     outline
-                    onClick={this.handleAddRow.bind(this)}
+                    // onClick={this.handleAddRow.bind(this)}
                   >
                     <i className="fa fa-fw fa-plus"></i>
                   </Button>
