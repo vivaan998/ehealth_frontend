@@ -8,11 +8,13 @@ import {
     FormGroup,
     FormText,
     Input,
+    InputGroup,
     CustomInput,
     Button,
     Label,
     EmptyLayout,
-    ThemeConsumer
+    ThemeConsumer,
+    InputGroupAddon,
 } from './../../../components';
 
 import { HeaderAuth } from "../../components/Pages/HeaderAuth";
@@ -28,8 +30,10 @@ class Login extends React.Component {
             emailId_errorMessage: '',
             password_errorMessage: '',
             authenticationMessage: '',
+            hidePassword: true,
             color: "black",
             isLoading: false,
+            passwordType: "password"
         }
     }
 
@@ -86,7 +90,7 @@ class Login extends React.Component {
                     });
 
                     AuthenticationService.setToken(response.data.access_token);
-                    Config.access_token = response.data.access_token;
+                    // Config.access_token = response.data.access_token;
                     // Config.role_id = 100;
                     
                     this.props.history.replace({
@@ -125,6 +129,12 @@ class Login extends React.Component {
         })
     }
 
+    secureEntry(){
+        this.setState({
+            hidePassword: !this.state.hidePassword,
+        });
+    }
+
     render(){
         return (
             <EmptyLayout>
@@ -140,16 +150,22 @@ class Login extends React.Component {
                             <Label for="emailAdress">
                                 Email Address
                             </Label>
-                            <Input 
-                                type="email"
-                                name="emailId" 
-                                id="emailId"
-                                placeholder="harshil@gmail.com" 
-                                className="bg-white"
-                                value={this.state.emailId}
-                                onChange={e => this.onChangeEmail(e.target.value)}
-                                
-                            />
+                            <InputGroup>
+                                    <InputGroupAddon addonType="prepend">
+                                        <i className="fa fa-fw fa-envelope"></i>
+                                    </InputGroupAddon>
+                                    <Input 
+                                        type="email"
+                                        name="emailId" 
+                                        id="emailId"
+                                        placeholder="harshil@gmail.com" 
+                                        className="bg-white"
+                                        value={this.state.emailId}
+                                        onChange={e => this.onChangeEmail(e.target.value)}
+                                        
+                                    />
+                            </InputGroup>
+                            
                             <FormText color="danger">
                                 {this.state.emailId_errorMessage}
                             </FormText>
@@ -158,15 +174,31 @@ class Login extends React.Component {
                             <Label for="password">
                                 Password
                             </Label>
-                            <Input 
-                                type="password"
-                                name="password" 
-                                id="password"
-                                placeholder="Password" 
-                                className="bg-white"
-                                value={this.state.password}
-                                onChange={e => this.onChangePassword(e.target.value)}
-                            />
+                            <InputGroup>
+                                    <InputGroupAddon addonType="prepend">
+                                        <i className="fa fa-fw fa-lock"></i>
+                                    </InputGroupAddon>
+                                    <Input 
+                                        type={(this.state.hidePassword) ? ('password') : ('text')}
+                                        name="password" 
+                                        id="password"
+                                        placeholder="Password" 
+                                        className="bg-white"
+                                        value={this.state.password}
+                                        onChange={e => this.onChangePassword(e.target.value)}
+                                    />
+                                    {(this.state.hidePassword) ?
+                                        <InputGroupAddon addonType="append" onClick={() => this.secureEntry()}>
+                                            <i className="fa fa-fw fa-eye-slash"></i>
+                                        </InputGroupAddon>  
+                                        :
+                                        <InputGroupAddon addonType="append" onClick={() => this.secureEntry()}>
+                                            <i className="fa fa-fw fa-eye"></i>
+                                        </InputGroupAddon>  
+                                    }
+
+                            </InputGroup>
+                            
                             <FormText color="danger">
                                 {this.state.password_errorMessage}
                             </FormText>

@@ -11,7 +11,6 @@ import {
     ThemeSelector,
     ThemeConsumer,
 } from './Theme';
-
 import Nav from './Nav';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
