@@ -41,6 +41,8 @@ import {
 } from "../filters";
 
 import ProvidersService from './../../../../services/ProvidersService';
+import AuthenticationService from './../../../../services/AuthenticationService';
+
 
 const sortCaret = (order) => {
     if (!order) return <i className="fa fa-fw fa-sort text-muted"></i>;
@@ -94,14 +96,14 @@ export default class ProviderTable extends React.Component {
     //   });
     // }
 
-    handleDeleteRow() {
-        this.setState({
-            products: _.filter(
-                this.state.products,
-                (product) => !_.includes(this.state.selected, product.id)
-            ),
-        });
-    }
+    // handleDeleteRow() {
+    //     this.setState({
+    //         products: _.filter(
+    //             this.state.products,
+    //             (product) => !_.includes(this.state.selected, product.id)
+    //         ),
+    //     });
+    // }
 
     handlePractitionersOnClick(cell, row) {
         console.log("Practitioners Button clicked, rowId:", row.provider_id);
@@ -261,6 +263,54 @@ export default class ProviderTable extends React.Component {
 
   }
 
+  createColumnDefinitions() {
+    return [
+        {
+            dataField: "provider_id",
+            hidden: true,
+            isKey: true,
+        },
+        {
+            dataField: "name_tx",
+            text: "Provider Name",
+            sort: true,
+            // align: "center",
+            sortCaret,
+            formatter: (cell) => <span className="text-inverse">{cell}</span>,
+            ...buildCustomTextFilter({
+                placeholder: "Enter Provider name...",
+                getFilter: (filter) => {
+                    this.nameFilter = filter;
+                },
+            }),
+        },
+        {
+            dataField: "created_dt",
+            text: "Date Added",
+            formatter: (cell) => moment(cell).format("DD/MM/YYYY"),
+            filter: dateFilter({
+                className: "d-flex align-items-center",
+                comparatorClassName: "d-none",
+                dateClassName: "form-control form-control-sm",
+                comparator: Comparator.GT,
+                getFilter: (filter) => {
+                    this.stockDateFilter = filter;
+                },
+            }),
+            sort: true,
+            sortCaret,
+        },
+        {
+            text: "Action",
+            // sort: true,
+            // align: "center",
+            // sortCaret,
+            formatter: this.actionColButton,
+        },
+    ];
+}
+
+
   render() {
     const columnDefs = this.createColumnDefinitions();
     const paginationDef = paginationFactory({
@@ -290,11 +340,11 @@ export default class ProviderTable extends React.Component {
     //         <CustomInput type={ mode } checked={ checked } innerRef={el => el && (el.indeterminate = indeterminate)} />
     //     )
     // };
-    console.log(this.state.products);
+    // console.log(this.state.products);
     return (
       <ToolkitProvider
         keyField="id"
-        data={this.state.products}
+        data={this.state.providersList}
         columns={columnDefs}
         search
         exportCSV
