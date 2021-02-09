@@ -35,15 +35,12 @@ import { CustomSearch } from "./CustomSearch";
 import { CustomPaginationPanel } from "./CustomPaginationPanel";
 import { CustomSizePerPageButton } from "./CustomSizePerPageButton";
 import { CustomPaginationTotal } from "./CustomPaginationTotal";
-import ProviderService from '../../../../services/ProviderService';
 import {
     buildCustomTextFilter
 } from "../filters";
 
 import ProvidersService from './../../../../services/ProvidersService';
 import AuthenticationService from './../../../../services/AuthenticationService';
-
-import { Link, Redirect, useHistory,withRouter } from 'react-router-dom';
 
 
 const sortCaret = (order) => {
@@ -66,7 +63,6 @@ export default class ProviderTable extends React.Component {
             color: "black",
             isLoading: false,
             name: '',
-            name_errorMessage: '',
         };
 
         this.headerCheckboxRef = React.createRef();
@@ -189,10 +185,10 @@ export default class ProviderTable extends React.Component {
   }
 
   async CreateProvider() {
-      this.setState(({
+      this.setState({
           isLoading: true,
           authenticationMessage: '',
-      }))
+      })
       if (this.state.name == ''){
         this.setState({
             name_errorMessage: "Enter Name",
@@ -246,7 +242,7 @@ export default class ProviderTable extends React.Component {
           }
           try{
               console.log(postData);
-              const response = await ProviderService.createProvider(postData);
+              const response = await ProvidersService.createProvider(postData);
               if (response.status == true) {
                   console.log(response.data);
                   this.setState({
