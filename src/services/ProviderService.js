@@ -13,7 +13,7 @@ const createProvider = async (data) => {
         }
     }
     var response;
-    const res = await axios.post(paths.provider, data, config)
+    const res = await axios.post(paths.providers, data, config)
         .then(function (res){
             response = {status: true, data: res.data}
         })

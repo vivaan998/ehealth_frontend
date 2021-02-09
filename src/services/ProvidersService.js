@@ -12,7 +12,7 @@ const getList = async (data) => {
         }
     }
     var response;
-    const res = await axios.get(paths.providersGet, config)
+    const res = await axios.get(paths.providers, config)
         .then(function (res){
             response = {status: true, data: res.data}
         })

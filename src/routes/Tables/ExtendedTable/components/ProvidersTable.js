@@ -43,6 +43,8 @@ import {
 import ProvidersService from './../../../../services/ProvidersService';
 import AuthenticationService from './../../../../services/AuthenticationService';
 
+import { Link, Redirect, useHistory,withRouter } from 'react-router-dom';
+
 
 const sortCaret = (order) => {
     if (!order) return <i className="fa fa-fw fa-sort text-muted"></i>;
@@ -50,11 +52,21 @@ const sortCaret = (order) => {
 };
 
 export default class ProviderTable extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             providersList: [],
+            email: '',
+            password: '',
+            emailId_errorMessage: '',
+            password_errorMessage: '',
+            authenticationMessage: '',
+            hidePassword: true,
+            color: "black",
+            isLoading: false,
+            name: '',
+            name_errorMessage: '',
         };
 
         this.headerCheckboxRef = React.createRef();
@@ -107,6 +119,10 @@ export default class ProviderTable extends React.Component {
 
     handlePractitionersOnClick(cell, row) {
         console.log("Practitioners Button clicked, rowId:", row.provider_id);
+        // console.log(this.props);
+        this.props.history.push("/practitioners");
+        // return <Redirect to='/practitioners' />
+        // <Link to='/practitioners' />
     }
 
     handleAppointmentsOnClick(cell, row) {
@@ -229,6 +245,7 @@ export default class ProviderTable extends React.Component {
               password: this.state.password
           }
           try{
+              console.log(postData);
               const response = await ProviderService.createProvider(postData);
               if (response.status == true) {
                   console.log(response.data);
@@ -238,13 +255,13 @@ export default class ProviderTable extends React.Component {
                       isLoading: false,
                   });
                   
-                  this.props.history.replace({
-                      pathname: "/providers",
-                      state: {
-                          id: 7,
-                          color: 'green'
-                      }
-                  })  
+                //   this.props.history.replace({
+                //       pathname: "/providers",
+                //       state: {
+                //           id: 7,
+                //           color: 'green'
+                //       }
+                //   })  
                   
                   
               }

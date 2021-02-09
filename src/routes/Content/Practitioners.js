@@ -1,5 +1,5 @@
 import React from 'react';
-import PractitionersTable from "./../Tables/ExtendedTable/components/ProvidersTable";
+import PractitionersTable from "./../Tables/ExtendedTable/components/PractitionersTable";
 import { Container } from "./../../components";
 import { HeaderMain } from "./../components/HeaderMain";
 

@@ -27,6 +27,7 @@ import {
 
 import PractitionersService from './../../../../services/PractitionersService';
 
+
 const sortCaret = (order) => {
     if (!order) return <i className="fa fa-fw fa-sort text-muted"></i>;
     if (order) return <i className={`fa fa-fw text-muted fa-sort-${order}`}></i>;
@@ -88,7 +89,7 @@ export default class PractitionersTable extends React.Component {
         });
     }
 
-    handleImmunizationsOnClick(cell, row) {
+    handleImmunizationssOnClick(cell, row) {
         console.log("Immunizations Button clicked, rowId:", row.practitioner_id);
     }
 
@@ -168,7 +169,7 @@ export default class PractitionersTable extends React.Component {
             },
             {
                 dataField: "type",
-                text: "Last Name",
+                text: "Type",
                 sort: true,
                 // align: "center",
                 sortCaret,
