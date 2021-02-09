@@ -23,7 +23,7 @@ import SidebarMenu from './SidebarMenu';
 import UncontrolledPopover from './UncontrolledPopover';
 import CustomInput from './CustomInput';
 import EmptyLayout from './EmptyLayout';
-
+import UncontrolledModal from './UncontrolledModal';
 
 export {
     Alert,
@@ -121,5 +121,6 @@ export {
     IconWithBadge,
     InputGroupAddon,
     SidebarMenu,
-    UncontrolledPopover
+    UncontrolledPopover,
+    UncontrolledModal
 };

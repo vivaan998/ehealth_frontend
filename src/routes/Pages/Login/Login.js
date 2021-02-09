@@ -33,7 +33,6 @@ class Login extends React.Component {
             hidePassword: true,
             color: "black",
             isLoading: false,
-            passwordType: "password"
         }
     }
 

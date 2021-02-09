@@ -1,7 +1,8 @@
-const endpoint = 'http://192.168.0.106:5000/';
+const endpoint = 'http://localhost:5000/';
 const endpointApi = `${endpoint}api/v1/`;
 const paths = {
     login:  `${endpointApi}auth/login`,
-    menu:   `${endpointApi}auth/menu`   
+    menu:   `${endpointApi}auth/menu`,
+    provider: `${endpointApi}providers/`  
 };
 export default paths;
