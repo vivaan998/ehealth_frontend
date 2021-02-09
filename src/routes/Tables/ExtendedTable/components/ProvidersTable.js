@@ -2,12 +2,11 @@ import React from "react";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory, {
-  Comparator,
-  dateFilter,
+    Comparator,
+    dateFilter,
 } from "react-bootstrap-table2-filter";
 import ToolkitProvider from "react-bootstrap-table2-toolkit";
 import _ from "lodash";
-import faker from "faker/locale/en_US";
 import moment from "moment";
 import validator from 'validator';
 
@@ -38,236 +37,114 @@ import { CustomSizePerPageButton } from "./CustomSizePerPageButton";
 import { CustomPaginationTotal } from "./CustomPaginationTotal";
 import ProviderService from '../../../../services/ProviderService';
 import {
-  buildCustomTextFilter,
-  // buildCustomSelectFilter,
-  // buildCustomNumberFilter
+    buildCustomTextFilter
 } from "../filters";
 
-// const ProductQuality = {
-//     Good: 'product-quality__good',
-//     Bad: 'product-quality__bad',
-//     Unknown: 'product-quality__unknown'
-// };
+import ProvidersService from './../../../../services/ProvidersService';
 
 const sortCaret = (order) => {
-  if (!order) return <i className="fa fa-fw fa-sort text-muted"></i>;
-  if (order) return <i className={`fa fa-fw text-muted fa-sort-${order}`}></i>;
+    if (!order) return <i className="fa fa-fw fa-sort text-muted"></i>;
+    if (order) return <i className={`fa fa-fw text-muted fa-sort-${order}`}></i>;
 };
 
 export default class ProviderTable extends React.Component {
-  constructor(props) {
-    super(props);
+    constructor() {
+        super();
 
-    this.state = {
-      products: [
-        {
-          id: 0,
-          dateAdded: "Mon Jan 04 2021 04:03:00 GMT+0530 (India Standard Time)",
-          providerName: "c",
-        },
-        {
-          id: 1,
-          dateAdded: "Mon Jan 04 2021 04:03:00 GMT+0530 (India Standard Time)",
-          providerName: "b",
-        },
-        {
-          id: 2,
-          dateAdded: "Mon Jan 04 2021 04:03:00 GMT+0530 (India Standard Time)",
-          providerName: "a",
-        },
-      ],
-      name: '',
-      emailId: '',
-      password: '',
-      name_errorMessage: '',
-      emailId_errorMessage: '',
-      password_errorMessage: '',
-      authenticationMessage: '',
-      color: "black",
-      hidePassword: true,
+        this.state = {
+            providersList: [],
+        };
+
+        this.headerCheckboxRef = React.createRef();
+    }
+
+    getList = async () => {
+        try{
+            const response = await ProvidersService.getList();
+            if (response.status == true){
+                this.setState({
+                    providersList: response.data.result,                    
+                });
+                console.log('providersList >>>', this.state.providersList);
+            }
+        }
+        catch(e){
+            console.log('error >>>', e);
+            console.log(e, e.data);
+        }
+    }
+
+    componentDidMount = async () => { 
+        if (AuthenticationService.getUser()){
+            this.getList();
+            
+        }
+        else{
+            this.props.history.push({
+                pathname: "/login",
+            })
+        }
+    }   
+
+    // handleAddRow() {
+    //   const currentSize = this.state.products.length;
+
+    //   this.setState({
+    //     products: [generateRow(currentSize + 1), ...this.state.products],
+    //   });
+    // }
+
+    handleDeleteRow() {
+        this.setState({
+            products: _.filter(
+                this.state.products,
+                (product) => !_.includes(this.state.selected, product.id)
+            ),
+        });
+    }
+
+    handlePractitionersOnClick(cell, row) {
+        console.log("Practitioners Button clicked, rowId:", row.provider_id);
+    }
+
+    handleAppointmentsOnClick(cell, row) {
+        console.log("Appointments button clicked, rowId:", row.provider_id);
+    }
+
+    handleArchiveOnClick(cell, row) {
+        console.log("Archive button clicked, active flag:", row.active_fl);
+    }
+
+    actionColButton = (cell, row) => {
+        return (
+            <ButtonGroup>
+                <Button
+                    size="sm"
+                    outline
+                    color="primary"
+                    onClick={() => this.handlePractitionersOnClick(cell, row)}
+                >
+                    Practitioners
+        </Button>
+                <Button
+                    size="sm"
+                    outline
+                    color="purple"
+                    onClick={() => this.handleAppointmentsOnClick(cell, row)}
+                >
+                    Appointments
+        </Button>
+                <Button
+                    size="sm"
+                    outline
+                    color="danger"
+                    onClick={() => this.handleArchiveOnClick(cell, row)}
+                >
+                    Archive
+        </Button>
+            </ButtonGroup>
+        );
     };
-
-    this.headerCheckboxRef = React.createRef();
-  }
-
-  // handleSelect(row, isSelected) {
-  //     if (isSelected) {
-  //         this.setState({ selected: [...this.state.selected, row.id] })
-  //     } else {
-  //         this.setState({
-  //             selected: this.state.selected.filter(itemId => itemId !== row.id)
-  //         })
-  //     }
-  // }
-
-  // handleSelectAll(isSelected, rows) {
-  //     if (isSelected) {
-  //         this.setState({ selected: _.map(rows, 'id') })
-  //     } else {
-  //         this.setState({ selected: [] });
-  //     }
-  // }
-
-  // handleAddRow() {
-  //   const currentSize = this.state.products.length;
-
-  //   this.setState({
-  //     products: [generateRow(currentSize + 1), ...this.state.products],
-  //   });
-  // }
-
-  handleDeleteRow() {
-    this.setState({
-      products: _.filter(
-        this.state.products,
-        (product) => !_.includes(this.state.selected, product.id)
-      ),
-    });
-  }
-
-  handleResetFilters() {
-    this.nameFilter("");
-    this.qualityFilter("");
-    this.priceFilter("");
-    this.satisfactionFilter("");
-  }
-
-  // handlePractitionersOnClick(cell, row) {
-  //   console.log("Practitioners Button clicked, rowId:", row.id);
-  // }
-
-  // onClickAppointments(cell, row) {
-  //   console.log("Appointments button clicked, rowId:", row.id);
-  // }
-
-  // onClickArchive(cell, row) {
-  //   console.log("Archive button clicked, rowId:", row.id);
-  // }
-
-  // handleArchive(cell, row){
-  //   console.log(row.id);
-  // }
-
-  // actionColButton(cell, row, enumObject, rowIndex) {
-  //   return (
-  //     // <ButtonGroup>
-  //     //   {" "}
-  //       <Button
-  //         size="sm"
-  //         outline
-  //         color="primary"
-  //         onClick={() => this.handleArchive(cell, row)}        >
-  //         Practitioners
-  //       </Button>
-  //     //   <Button
-  //     //     size="sm"
-  //     //     outline
-  //     //     color="purple"
-  //     //     onClick={() => this.onClickAppointments(cell, row)}
-  //     //   >
-  //     //     Appointments
-  //     //   </Button>
-  //     //   <Button
-  //     //     size="sm"
-  //     //     outline
-  //     //     color="danger"
-  //     //     onClick={() => this.onClickArchive(cell, row)}
-  //     //   >
-  //     //     Archive
-  //     //   </Button>
-  //     // </ButtonGroup>
-  //   );
-  // }
-
-  handleAppointmentsOnClick(cell, row) {
-    console.log("Appointments button clicked, rowId:", row.id);
-  }
-
-  handleArchiveOnClick(cell, row) {
-    console.log("Archive button clicked, rowId:", row.id);
-  }
-
-  handlePractitionersOnClick(cell, row) {
-    console.log("Practitioners Button clicked, rowId:", row.id);
-  }
-
-  actionColButton = (cell, row) => {
-    return (
-      <ButtonGroup>
-        <Button
-          size="sm"
-          outline
-          color="primary"
-          onClick={() => this.handlePractitionersOnClick(cell, row)}
-        >
-          Practitioners
-        </Button>
-        <Button
-          size="sm"
-          outline
-          color="purple"
-          onClick={() => this.handleAppointmentsOnClick(cell, row)}
-        >
-          Appointments
-        </Button>
-        <Button
-          size="sm"
-          outline
-          color="danger"
-          onClick={() => this.handleArchiveOnClick(cell, row)}
-        >
-          Archive
-        </Button>
-      </ButtonGroup>
-    );
-  };
-
-  createColumnDefinitions() {
-    return [
-      {
-        dataField: "id",
-        hidden: true,
-        isKey: true,
-      },
-      {
-        dataField: "providerName",
-        text: "Provider Name",
-        sort: true,
-        // align: "center",
-        sortCaret,
-        formatter: (cell) => <span className="text-inverse">{cell}</span>,
-        ...buildCustomTextFilter({
-          placeholder: "Enter Provider name...",
-          getFilter: (filter) => {
-            this.nameFilter = filter;
-          },
-        }),
-      },
-      {
-        dataField: "dateAdded",
-        text: "Date Added",
-        formatter: (cell) => moment(cell).format("DD/MM/YYYY"),
-        filter: dateFilter({
-          className: "d-flex align-items-center",
-          comparatorClassName: "d-none",
-          dateClassName: "form-control form-control-sm",
-          comparator: Comparator.GT,
-          getFilter: (filter) => {
-            this.stockDateFilter = filter;
-          },
-        }),
-        sort: true,
-        sortCaret,
-      },
-      {
-        text: "Action",
-        // sort: true,
-        // align: "center",
-        // sortCaret,
-        formatter: this.actionColButton,
-      },
-    ];
-  }
 
   secureEntry(){
     this.setState({
