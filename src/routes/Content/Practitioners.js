@@ -1,8 +1,14 @@
 import React from 'react';
+import PractitionersTable from "./../Tables/ExtendedTable/components/ProvidersTable";
+import { Container } from "./../../components";
+import { HeaderMain } from "./../components/HeaderMain";
 
 const Practitioners = () => {
     return(
-        <h1>Practitioners</h1>
+        <Container>
+            <HeaderMain title="Practitioners" className="mb-5 mt-4" />
+            <PractitionersTable />
+        </Container>
     );
 }
 
