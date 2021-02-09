@@ -38,16 +38,16 @@ class NavbarUser extends React.Component{
 
 
 
-const NavbarUser = (props) => (
-    <NavItem { ...props }>
-        <NavLink tag={ Link } to="/login">
-            <i className="fa fa-power-off"></i>
-        </NavLink>
-    </NavItem>
-);
-NavbarUser.propTypes = {
-    className: PropTypes.string,
-    style: PropTypes.object
-};
+// const NavbarUser = (props) => (
+//     <NavItem { ...props }>
+//         <NavLink tag={ Link } to="/login">
+//             <i className="fa fa-power-off"></i>
+//         </NavLink>
+//     </NavItem>
+// );
+// NavbarUser.propTypes = {
+//     className: PropTypes.string,
+//     style: PropTypes.object
+// };
 
 export default NavbarUser;
