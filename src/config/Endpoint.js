@@ -5,6 +5,8 @@ const paths = {
     menu:               `${endpointApi}auth/menu`,
     providers:          `${endpointApi}providers/`,
     practitionersGet:   `${endpointApi}practitioners/`,
-    vaccines:           `${endpointApi}vaccines/`
+    vaccines:           `${endpointApi}vaccines/`,
+    practitioners:      `${endpointApi}practitioners/`,
+    get_all_providers:  `${endpointApi}get-providers/`
 };
 export default paths;

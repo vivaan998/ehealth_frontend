@@ -11,10 +11,23 @@ import moment from "moment";
 import axios from 'axios';
 import paths from './../../../../config/Endpoint';
 import AuthenticationService from './../../../../services/AuthenticationService';
+import Config from './../../../../config/Config';
 
 import {
     Button,
     ButtonGroup,
+    UncontrolledModal,
+    ModalHeader,
+    ModalBody,
+    Col,
+    Input,
+    InputGroup,
+    InputGroupAddon,
+    FormText,
+    ModalFooter,
+    Label,
+    Form,
+    FormGroup,
 } from "../../../../components";
 import { CustomExportCSV } from "./CustomExportButton";
 import { CustomSearch } from "./CustomSearch";
@@ -26,6 +39,8 @@ import {
 } from "../filters";
 
 import PractitionersService from './../../../../services/PractitionersService';
+import validator from 'validator';
+import MenuListingService from './../../../../services/MenuListingService';
 
 const sortCaret = (order) => {
     if (!order) return <i className="fa fa-fw fa-sort text-muted"></i>;
@@ -33,15 +48,34 @@ const sortCaret = (order) => {
 };
 
 export default class PractitionersTable extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             practitionersList: [],
+            firstname: '',
+            name_errorMessage: '',
+            lastname_errorMessage: "",
+            lastname: "",
+            emailId: "",
+            emailId_errorMessage: '',
+            hidePassword: true,
+            password: '',
+            password_errorMessage: '',
+            color: "black",
+            isLoading: false,
+            mykad_errorMessage: '',
+            mykad: '',
+            type: '',
+            firstname_errorMessage: '',
+            authenticationMessage: '',
+            allProviders: [],
+            provider: null,
         };
 
         this.headerCheckboxRef = React.createRef();
     }
+
 
     getList = async () => {
         try {
@@ -59,9 +93,26 @@ export default class PractitionersTable extends React.Component {
         }
     }
 
+    getAllProviders = async () => {
+        try {
+            const response = await PractitionersService.getAllProvidersList();
+            if (response.status == true) {
+                this.setState({
+                    allProviders: response.data.data,
+                });
+                console.log('all Providers List >>>', this.state.allProviders);
+            }
+        }
+        catch (e) {
+            console.log('error >>>', e);
+            console.log(e, e.data);
+        }
+    }
+
     componentDidMount = async () => {
         if (AuthenticationService.getUser()) {
             this.getList();
+            this.getAllProviders();
 
         }
         else {
@@ -88,7 +139,7 @@ export default class PractitionersTable extends React.Component {
         });
     }
 
-    handleImmunizationsOnClick(cell, row) {
+    handleImmunizationssOnClick(cell, row) {
         console.log("Immunizations Button clicked, rowId:", row.practitioner_id);
     }
 
@@ -168,7 +219,7 @@ export default class PractitionersTable extends React.Component {
             },
             {
                 dataField: "type",
-                text: "Last Name",
+                text: "Type",
                 sort: true,
                 // align: "center",
                 sortCaret,
@@ -206,8 +257,175 @@ export default class PractitionersTable extends React.Component {
         ];
     }
 
-    render() {
+    onChangeFirstName(value) {
+        this.setState({
+            firstname: value
+        })
+    }
 
+    onChangeLastName(value) {
+        this.setState({
+            lastname: value
+        })
+    }
+
+    onChangeEmail(value) {
+        this.setState({
+            emailId: value
+        });
+    }
+
+    onChangePassword(value) {
+        this.setState({
+            password: value
+        })
+    }
+
+    secureEntry() {
+        this.setState({
+            hidePassword: !this.state.hidePassword,
+        });
+    }
+
+    onChangeMyKad(value) {
+        this.setState({
+            mykad: value
+        })
+    }
+
+    onChangeType(value) {
+        this.setState({
+            type: value
+        })
+    }
+
+    onChangeProvider(value) {
+        this.setState({
+            provider: value
+        })
+    }
+
+    async CreatePractitioner() {
+        this.setState({
+            isLoading: true,
+            authenticationMessage: '',
+        });
+
+        if (this.state.firstname == '') {
+            this.setState({
+                firstname_errorMessage: "Enter First Name",
+                isLoading: false
+            });
+            return
+        }
+        else {
+            this.setState({
+                firstname_errorMessage: "",
+            });
+        }
+
+        if (this.state.lastname == '') {
+            this.setState({
+                lastname_errorMessage: "Enter Last Name",
+                isLoading: false
+            });
+            return
+        }
+        else {
+            this.setState({
+                lastname_errorMessage: "",
+            });
+        }
+
+        if (this.state.emailId == '') {
+            this.setState({
+                emailId_errorMessage: "Enter email ID",
+                isLoading: false
+            });
+            return
+        }
+        else {
+            if (validator.isEmail(this.state.emailId)) {
+                this.setState({
+                    emailId_errorMessage: ""
+                });
+            }
+            else {
+                this.setState({
+                    emailId_errorMessage: "Enter a valid email ID",
+                    isLoading: false
+                })
+                return
+            }
+        }
+
+        if (this.state.password == "") {
+            this.setState({
+                password_errorMessage: "Enter Password",
+                isLoading: false
+            });
+            return
+        } else {
+            this.setState({
+                password_errorMessage: "",
+            });
+        }
+
+        if (this.state.mykad == '') {
+            this.setState({
+                mykad_errorMessage: "Enter MyKad id",
+                isLoading: false
+            });
+            return
+        } else {
+            if (this.state.mykad.length > 20 ) {
+                this.setState({
+                    mykad_errorMessage: "length of MyKad id should be 20",
+                    isLoading: false
+                });
+                return
+            } else {
+                this.setState({
+                    mykad_errorMessage: "",
+                })
+            }
+        }
+
+        const postData = {
+            "first_name": this.state.firstname,
+            "last_name": this.state.lastname,
+            "email_tx": this.state.emailId,
+            "ic_card_tx": this.state.mykad,
+            "provider_id": Number(this.state.provider),
+            "doctor_fl": 0,
+            "password": this.state.password
+        }
+
+        try {
+            console.log(postData);
+            const response = await PractitionersService.createPractitioner(postData);
+            if (response.status == true) {
+                console.log(response.data);
+                this.setState({
+                    color: "success",
+                    authenticationMessage: "Successfully created provider",
+                    isLoading: false,
+                })
+                this.getList();
+            } else {
+                this.setState({
+                    color: "danger",
+                    isLoading: false,
+                    authenticationMessage: response.data.data.error
+                });
+            }
+        } catch (e) {
+            console.log(e, e.data);
+        }
+
+    }
+
+    render() {
         const columnDefs = this.createColumnDefinitions();
         const paginationDef = paginationFactory({
             paginationSize: 5,
@@ -252,10 +470,190 @@ export default class PractitionersTable extends React.Component {
                                     <Button
                                         size="sm"
                                         outline
+                                        id="modal1"
                                     // onClick={this.handleAddRow.bind(this)}
                                     >
                                         <i className="fa fa-fw fa-plus"></i>
                                     </Button>
+                                    <UncontrolledModal target="modal1" className="modal-outline-primary">
+                                        <ModalHeader tag="h5">
+                                            New Practitioner
+                                        </ModalHeader>
+                                        <ModalBody>
+                                            <Form>
+                                                { /* START Input */}
+                                                <FormGroup row>
+                                                    <Label for="firstname" sm={4}>
+                                                        First Name
+                                                    </Label>
+                                                    <Col sm={8}>
+                                                        <Input
+                                                            type="text"
+                                                            name="firstname"
+                                                            id="firstname"
+                                                            placeholder="First Name"
+                                                            value={this.state.firstname}
+                                                            onChange={e => this.onChangeFirstName(e.target.value)}
+                                                        />
+                                                        <FormText color="danger">
+                                                            {this.state.firstname_errorMessage}
+                                                        </FormText>
+                                                    </Col>
+                                                </FormGroup>
+                                                { /* END Input */}
+                                                { /* START Input */}
+                                                <FormGroup row>
+                                                    <Label for="lastname" sm={4}>
+                                                        Last Name
+                                                    </Label>
+                                                    <Col sm={8}>
+                                                        <Input
+                                                            type="text"
+                                                            name="firstname"
+                                                            id="lastname"
+                                                            placeholder="Last Name"
+                                                            value={this.state.lastname}
+                                                            onChange={e => this.onChangeLastName(e.target.value)}
+                                                        />
+                                                        <FormText color="danger">
+                                                            {this.state.lastname_errorMessage}
+                                                        </FormText>
+                                                    </Col>
+                                                </FormGroup>
+                                                { /* END Input */}
+                                                { /* START Input */}
+                                                <FormGroup row>
+                                                    <Label for="emailId" sm={4}>
+                                                        Email ID
+                                                    </Label>
+                                                    <Col sm={8}>
+                                                        <Input
+                                                            type="email"
+                                                            name="emailId"
+                                                            id="emailId"
+                                                            placeholder="harshil@gmail.com"
+                                                            value={this.state.emailId}
+                                                            onChange={e => this.onChangeEmail(e.target.value)}
+                                                        />
+                                                        <FormText color="danger">
+                                                            {this.state.emailId_errorMessage}
+                                                        </FormText>
+                                                    </Col>
+                                                </FormGroup>
+                                                { /* END Input */}
+                                                { /* START Input */}
+                                                <FormGroup row>
+                                                    <Label for="password" sm={4}>
+                                                        Password
+                                                    </Label>
+                                                    <Col sm={8}>
+                                                        <InputGroup>
+                                                            <Input
+                                                                type={(this.state.hidePassword) ? ('password') : ('text')}
+                                                                name="password"
+                                                                id="password"
+                                                                placeholder="Password"
+                                                                className="bg-white"
+                                                                value={this.state.password}
+                                                                onChange={e => this.onChangePassword(e.target.value)}
+                                                            />
+                                                            {(this.state.hidePassword) ?
+                                                                <InputGroupAddon addonType="append" onClick={() => this.secureEntry()}>
+                                                                    <i className="fa fa-fw fa-eye-slash"></i>
+                                                                </InputGroupAddon>
+                                                                :
+                                                                <InputGroupAddon addonType="append" onClick={() => this.secureEntry()}>
+                                                                    <i className="fa fa-fw fa-eye"></i>
+                                                                </InputGroupAddon>
+                                                            }
+
+                                                        </InputGroup>
+                                                        <FormText color="danger">
+                                                            {this.state.password_errorMessage}
+                                                        </FormText>
+                                                    </Col>
+                                                </FormGroup>
+                                                { /* END Input */}
+                                                { /* START Input */}
+                                                <FormGroup row>
+                                                    <Label for="mykad" sm={4}>
+                                                        MyKad id
+                                                    </Label>
+                                                    <Col sm={8}>
+                                                        <Input
+                                                            type="text"
+                                                            name="mykad"
+                                                            id="mykad"
+                                                            placeholder="MyKad id"
+                                                            value={this.state.mykad}
+                                                            onChange={e => this.onChangeMyKad(e.target.value)}
+                                                        />
+                                                        <FormText color="danger">
+                                                            {this.state.mykad_errorMessage}
+                                                        </FormText>
+                                                    </Col>
+                                                </FormGroup>
+                                                { /* END Input */}
+                                                { /* START Select */}
+                                                <FormGroup row>
+                                                    <Label for="type" sm={4}>
+                                                        Type
+                                                    </Label>
+                                                    <Col sm={8}>
+                                                        <Input
+                                                            type="select"
+                                                            name="select"
+                                                            id="type"
+                                                            onChange={e => this.onChangeType(e.target.value)}
+                                                        >
+                                                            <option defaultValue="">Doctor</option>
+                                                            <option>Nurse</option>
+                                                        </Input>
+                                                    </Col>
+                                                </FormGroup>
+                                                { /* END Select */}
+
+                                                { /* START Select */}
+                                                <FormGroup row>
+                                                    <Label for="provider" sm={4}>
+                                                        Provider
+                                                    </Label>
+                                                    <Col sm={8}>
+
+                                                        {Config.profileData.designation === "Admin" ? (
+                                                            <Input
+                                                                type="select"
+                                                                name="select"
+                                                                id="provider"
+                                                                onChange={e => this.onChangeProvider(e.target.value)}
+                                                            >
+
+                                                                {this.state.allProviders.map((obj) => <option value={obj.provider_id}>{obj.name}</option>)}
+
+                                                                {/* <option defaultValue="">SSG Hospital</option>
+                                                                <option>KD Hospital</option> */}
+                                                            </Input>
+                                                        ) : (
+                                                            <option>{Config.profileData.name}</option>
+                                                        )}
+
+                                                    </Col>
+                                                </FormGroup>
+                                                { /* END Select */}
+                                            </Form>
+                                        </ModalBody>
+                                        <ModalFooter>
+                                            <FormText color={this.state.color}>
+                                                {this.state.authenticationMessage}
+                                            </FormText>
+                                            <UncontrolledModal.Close color="link">
+                                                Discard
+                                            </UncontrolledModal.Close>
+                                            <Button color="primary" onClick={() => this.CreatePractitioner()} disabled={this.state.isLoading}>
+                                                Create
+                                            </Button>
+                                        </ModalFooter>
+                                    </UncontrolledModal>
                                 </ButtonGroup>
                             </div>
                         </div>

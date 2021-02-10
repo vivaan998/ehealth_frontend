@@ -49,8 +49,8 @@ const sortCaret = (order) => {
 };
 
 export default class ProviderTable extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             providersList: [],
@@ -58,12 +58,15 @@ export default class ProviderTable extends React.Component {
             emailId: '',
             password: '',
             name_errorMessage: '',
+            email: '',
+            password: '',
             emailId_errorMessage: '',
             password_errorMessage: '',
             authenticationMessage: '',
             hidePassword: true,
             color: "black",
             isLoading: false,
+            name: '',
         };
 
         this.headerCheckboxRef = React.createRef();
@@ -116,6 +119,10 @@ export default class ProviderTable extends React.Component {
 
     handlePractitionersOnClick(cell, row) {
         console.log("Practitioners Button clicked, rowId:", row.provider_id);
+        // console.log(this.props);
+        this.props.history.push("/practitioners");
+        // return <Redirect to='/practitioners' />
+        // <Link to='/practitioners' />
     }
 
     handleAppointmentsOnClick(cell, row) {
@@ -182,10 +189,10 @@ export default class ProviderTable extends React.Component {
   }
 
   async CreateProvider() {
-      this.setState(({
+      this.setState({
           isLoading: true,
           authenticationMessage: '',
-      }))
+      })
       if (this.state.name == ''){
         this.setState({
             name_errorMessage: "Enter Name",

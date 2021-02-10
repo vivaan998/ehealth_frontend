@@ -12,6 +12,7 @@ import SidebarMiddleNav from './SidebarMiddleNav';
 import SidebarTopA from '../../routes/components/Sidebar/SidebarTopA'
 import { SidebarBottomA } from '../../routes/components/Sidebar/SidebarBottomA'
 import { LogoThemed } from '../../routes/components/LogoThemed/LogoThemed';
+import Config from './../../config/Config';
 
 class DefaultSidebar extends React.Component{
     constructor(props){
@@ -32,6 +33,7 @@ class DefaultSidebar extends React.Component{
                     isLoading: false,
                     
                 });
+                Config.profileData = this.state.profileData;
                 console.log('menuItems >>>', this.state.menuItems);
                 let menu;
                 var temp = this.state.menuItems;
