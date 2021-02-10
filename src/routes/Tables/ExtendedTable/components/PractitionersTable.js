@@ -11,6 +11,7 @@ import moment from "moment";
 import axios from 'axios';
 import paths from './../../../../config/Endpoint';
 import AuthenticationService from './../../../../services/AuthenticationService';
+import Config from './../../../../config/Config';
 
 import {
     Button,
@@ -39,6 +40,7 @@ import {
 
 import PractitionersService from './../../../../services/PractitionersService';
 import validator from 'validator';
+import MenuListingService from './../../../../services/MenuListingService';
 
 const sortCaret = (order) => {
     if (!order) return <i className="fa fa-fw fa-sort text-muted"></i>;
@@ -46,8 +48,8 @@ const sortCaret = (order) => {
 };
 
 export default class PractitionersTable extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             practitionersList: [],
@@ -67,11 +69,13 @@ export default class PractitionersTable extends React.Component {
             type: '',
             firstname_errorMessage: '',
             authenticationMessage: '',
-
+            allProviders: [],
+            provider: null,
         };
 
         this.headerCheckboxRef = React.createRef();
     }
+
 
     getList = async () => {
         try {
@@ -89,9 +93,26 @@ export default class PractitionersTable extends React.Component {
         }
     }
 
+    getAllProviders = async () => {
+        try {
+            const response = await PractitionersService.getAllProvidersList();
+            if (response.status == true) {
+                this.setState({
+                    allProviders: response.data.data,
+                });
+                console.log('all Providers List >>>', this.state.allProviders);
+            }
+        }
+        catch (e) {
+            console.log('error >>>', e);
+            console.log(e, e.data);
+        }
+    }
+
     componentDidMount = async () => {
         if (AuthenticationService.getUser()) {
             this.getList();
+            this.getAllProviders();
 
         }
         else {
@@ -357,9 +378,9 @@ export default class PractitionersTable extends React.Component {
             });
             return
         } else {
-            if (this.state.mykad.length > 12 || this.state.mykad.length < 12) {
+            if (this.state.mykad.length > 20 ) {
                 this.setState({
-                    mykad_errorMessage: "length of MyKad id should be 12",
+                    mykad_errorMessage: "length of MyKad id should be 20",
                     isLoading: false
                 });
                 return
@@ -375,8 +396,8 @@ export default class PractitionersTable extends React.Component {
             "last_name": this.state.lastname,
             "email_tx": this.state.emailId,
             "ic_card_tx": this.state.mykad,
-            "provider_id": 1,
-            "doctor_fl": true,
+            "provider_id": Number(this.state.provider),
+            "doctor_fl": 0,
             "password": this.state.password
         }
 
@@ -390,6 +411,7 @@ export default class PractitionersTable extends React.Component {
                     authenticationMessage: "Successfully created provider",
                     isLoading: false,
                 })
+                this.getList();
             } else {
                 this.setState({
                     color: "danger",
@@ -404,7 +426,6 @@ export default class PractitionersTable extends React.Component {
     }
 
     render() {
-
         const columnDefs = this.createColumnDefinitions();
         const paginationDef = paginationFactory({
             paginationSize: 5,
@@ -591,21 +612,31 @@ export default class PractitionersTable extends React.Component {
                                                     </Col>
                                                 </FormGroup>
                                                 { /* END Select */}
+
                                                 { /* START Select */}
                                                 <FormGroup row>
                                                     <Label for="provider" sm={4}>
                                                         Provider
                                                     </Label>
                                                     <Col sm={8}>
-                                                        <Input
-                                                            type="select"
-                                                            name="select"
-                                                            id="provider"
-                                                            onChange={e => this.onChangeProvider(e.target.value)}
-                                                        >
-                                                            <option defaultValue="">SSG Hospital</option>
-                                                            <option>KD Hospital</option>
-                                                        </Input>
+
+                                                        {Config.profileData.designation === "Admin" ? (
+                                                            <Input
+                                                                type="select"
+                                                                name="select"
+                                                                id="provider"
+                                                                onChange={e => this.onChangeProvider(e.target.value)}
+                                                            >
+
+                                                                {this.state.allProviders.map((obj) => <option value={obj.provider_id}>{obj.name}</option>)}
+
+                                                                {/* <option defaultValue="">SSG Hospital</option>
+                                                                <option>KD Hospital</option> */}
+                                                            </Input>
+                                                        ) : (
+                                                            <option>{Config.profileData.name}</option>
+                                                        )}
+
                                                     </Col>
                                                 </FormGroup>
                                                 { /* END Select */}
