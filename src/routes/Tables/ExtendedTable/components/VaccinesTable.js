@@ -11,126 +11,87 @@ import faker from "faker/locale/en_US";
 import moment from "moment";
 
 import {
-  // Badge,
   Button,
-  // CustomInput,
-  // StarRating,
   ButtonGroup,
+  UncontrolledModal,
+  ModalHeader,
+  ModalBody,
+  Col,
+  Input,
+  InputGroup,
+  InputGroupAddon,
+  FormText,
+  ModalFooter,
+  Label,
+  CustomInput,
+  Form, 
+  FormGroup, 
 } from "../../../../components";
 import { CustomExportCSV } from "./CustomExportButton";
 import { CustomSearch } from "./CustomSearch";
 import { CustomPaginationPanel } from "./CustomPaginationPanel";
 import { CustomSizePerPageButton } from "./CustomSizePerPageButton";
 import { CustomPaginationTotal } from "./CustomPaginationTotal";
-// import { randomArray } from './../../../../utilities';
-import {
-  buildCustomTextFilter,
-  // buildCustomSelectFilter,
-  // buildCustomNumberFilter
-} from "../filters";
+
+import VaccinesService from './../../../../services/VaccinesService';
+import AuthenticationService from './../../../../services/AuthenticationService';
+
 
 const INITIAL_PRODUCTS_COUNT = 500;
-
-// const ProductQuality = {
-//     Good: 'product-quality__good',
-//     Bad: 'product-quality__bad',
-//     Unknown: 'product-quality__unknown'
-// };
 
 const sortCaret = (order) => {
   if (!order) return <i className="fa fa-fw fa-sort text-muted"></i>;
   if (order) return <i className={`fa fa-fw text-muted fa-sort-${order}`}></i>;
 };
 
-const generateRow = (index) => ({
-  // id: index,
-  dateAdded: faker.date.past(),
-  vaccineName: faker.name.firstName(),
-  doseRequired: faker.finance.amount(),
-  // quality: randomArray([
-  //     ProductQuality.Bad,
-  //     ProductQuality.Good,
-  //     ProductQuality.Unknown
-  // ]),
-
-  // price: (1000 + Math.random() * 1000).toFixed(2),
-  // satisfaction: Math.round(Math.random() * 6),
-  // inStockDate: faker.date.past()
-});
-
 export default class VaccinesTable extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      products: [
-        {
-          id: 0,
-          vaccineName: "c",
-        doseRequired:5,
-        dateAdded: "Sat Nov 28 2020 02:35:58 GMT+0530 (India Standard Time)"
-
-        },
-        {
-          id: 1,
-          vaccineName: "b",
-          doseRequired: 24.5,
-          dateAdded: "Sat Nov 28 2020 02:35:58 GMT+0530 (India Standard Time)"
-
-        },
-        {
-          id: 2,
-          vaccineName: "a",
-          doseRequired: 24.5,
-          dateAdded: "Sat Nov 28 2020 02:35:58 GMT+0530 (India Standard Time)"
-        },
-      ],
-      selected: [],
+      vaccinesList: [],
+      name: '',
+      dose: 1,
+      description: '',
+      name_errorMessage: '',
+      description_errorMessage: '',
+      authenticationMessage: '',
+      color: "black",
+      isLoading: false,
     };
 
     this.headerCheckboxRef = React.createRef();
   }
+  componentDidMount = async () => { 
+    if (AuthenticationService.getUser()){
+        this.getList();
+        
+    }
+    else{
+        this.props.history.push({
+            pathname: "/login",
+        })
+    }
+  } 
 
-  // handleSelect(row, isSelected) {
-  //     if (isSelected) {
-  //         this.setState({ selected: [...this.state.selected, row.id] })
-  //     } else {
-  //         this.setState({
-  //             selected: this.state.selected.filter(itemId => itemId !== row.id)
-  //         })
-  //     }
-  // }
-
-  // handleSelectAll(isSelected, rows) {
-  //     if (isSelected) {
-  //         this.setState({ selected: _.map(rows, 'id') })
-  //     } else {
-  //         this.setState({ selected: [] });
-  //     }
-  // }
-
-  // handleAddRow() {
-  //   const currentSize = this.state.products.length;
-
-  //   this.setState({
-  //     products: [generateRow(currentSize + 1), ...this.state.products],
-  //   });
-  // }
-
-  handleDeleteRow() {
-    this.setState({
-      products: _.filter(
-        this.state.products,
-        (product) => !_.includes(this.state.selected, product.id)
-      ),
-    });
+  getList = async () => {
+    try{
+        const response = await VaccinesService.getVaccines();
+        if (response.status == true){
+            this.setState({
+                vaccinesList: response.data.result,                    
+            });
+            console.log('vaccinesList >>>', this.state.vaccinesList);
+        }
+    }
+    catch(e){
+        console.log('error >>>', e);
+        console.log(e, e.data);
+    }
   }
 
-  handleResetFilters() {
-    this.nameFilter("");
-    this.qualityFilter("");
-    this.priceFilter("");
-    this.satisfactionFilter("");
+  handleAdministered(cell, row){
+    console.log(row.id);
   }
 
   handleArchive(cell, row){
@@ -139,9 +100,17 @@ export default class VaccinesTable extends React.Component {
   
   actionButton = (cell, row,) => {
     return(
-      <Button size="sm" outline color="danger" onClick={() => this.handleArchive(cell, row)}>
-          Archive
-      </Button>
+      <ButtonGroup>
+        <Button size="sm" outline color="indigo" onClick={() => this.handleAdministered(cell, row)}>
+                  Administered to
+        </Button>
+        <Button size="sm" color="danger" outline onClick={() => this.handleArchive(cell, row)}>
+                  Archive
+        </Button>
+      </ButtonGroup>
+
+
+      
     )
   }
 
@@ -149,25 +118,19 @@ export default class VaccinesTable extends React.Component {
     
     return [
       {
-        dataField: "id",
+        dataField: "vaccine_id",
         hidden: true,
         isKey: true
       },
       {
-        dataField: "vaccineName",
+        dataField: "name_tx",
         text: "Vaccine Name",
         sort: true,
         // align: "center",
         sortCaret,
         formatter: (cell) => <span className="text-inverse">{cell}</span>,
-        ...buildCustomTextFilter({
-          placeholder: "Enter Vaccine name...",
-          getFilter: (filter) => {
-            this.nameFilter = filter;
-          },
-        }),
       },{
-        dataField: "doseRequired",
+        dataField: "doses_required",
         text: "Dose Required",
         sort: true,
         // align: "center",
@@ -181,18 +144,9 @@ export default class VaccinesTable extends React.Component {
         // }),
       },
       {
-        dataField: "dateAdded",
+        dataField: "created_dt",
         text: "Date Added",
         formatter: (cell) => moment(cell).format("DD/MM/YYYY"),
-        filter: dateFilter({
-          className: "d-flex align-items-center",
-          comparatorClassName: "d-none",
-          dateClassName: "form-control form-control-sm",
-          comparator: Comparator.GT,
-          getFilter: (filter) => {
-            this.stockDateFilter = filter;
-          },
-        }),
         sort: true,
         sortCaret,
       },
@@ -206,6 +160,95 @@ export default class VaccinesTable extends React.Component {
         formatter: this.actionButton
       },
     ];
+  }
+
+  onChangeName(value){
+    this.setState({
+      name: value
+    })
+  }
+
+  onChangeDose(value){
+    this.setState({
+        dose: parseInt(value)
+    });
+  }
+
+  onChangeDescription(value){
+      this.setState({
+          description: value
+      })
+  }
+
+  async addVaccine() {
+    this.setState(({
+        isLoading: true,
+        authenticationMessage: '',
+    }))
+    if (this.state.name == ''){
+      this.setState({
+          name_errorMessage: "Enter vaccine name",
+          isLoading: false
+      });
+      return
+    }
+    else{          
+      this.setState({
+          name_errorMessage: ""
+      });             
+    }
+
+    
+    if (this.state.description == ''){
+        this.setState({
+            description_errorMessage: "Enter vaccine description",
+            isLoading: false
+        });
+        return
+    }
+    else{
+        this.setState({
+            description_errorMessage: ""
+        });
+        const postData = {
+            name_tx: this.state.name,
+            doses_required: this.state.dose,
+            description_tx: this.state.description
+        }
+        try{
+            console.log('postData >>>', postData);
+            const response = await VaccinesService.createVaccine(postData);
+            if (response.status == true) {
+                console.log(response.data);
+                this.setState({
+                    color: "success",
+                    authenticationMessage: "Successfully created vaccine",
+                    isLoading: false,
+                });
+                
+                // this.props.history.replace({
+                //     pathname: "/providers",
+                //     state: {
+                //         id: 7,
+                //         color: 'green'
+                //     }
+                // })  
+                
+                
+            }
+            else{
+                this.setState({
+                    color: "danger",
+                    isLoading: false,
+                    authenticationMessage: response.data.data.error
+                });
+            }
+        }
+        catch (e){
+            console.log(e, e.data)      
+        }
+    }
+
   }
 
   render() {
@@ -225,23 +268,11 @@ export default class VaccinesTable extends React.Component {
         <CustomPaginationTotal {...{ from, to, size }} />
       ),
     });
-    // const selectRowConfig = {
-    //     mode: 'checkbox',
-    //     selected: this.state.selected,
-    //     onSelect: this.handleSelect.bind(this),
-    //     onSelectAll: this.handleSelectAll.bind(this),
-    //     selectionRenderer: ({ mode, checked, disabled }) => (
-    //         <CustomInput type={ mode } checked={ checked } disabled={ disabled } />
-    //     ),
-    //     selectionHeaderRenderer: ({ mode, checked, indeterminate }) => (
-    //         <CustomInput type={ mode } checked={ checked } innerRef={el => el && (el.indeterminate = indeterminate)} />
-    //     )
-    // };
-    console.log(this.state.products);
+    
     return (
       <ToolkitProvider
         keyField="id"
-        data={this.state.products}
+        data={this.state.vaccinesList}
         columns={columnDefs}
         search
         exportCSV
@@ -255,22 +286,100 @@ export default class VaccinesTable extends React.Component {
               <div className="d-flex ml-auto">
                 <CustomSearch className="mr-2" {...props.searchProps} />
                 <ButtonGroup>
-                  <CustomExportCSV {...props.csvProps}>Export</CustomExportCSV>
-                  <Button
-                    size="sm"
-                    outline
-                    // onClick={this.handleDeleteRow.bind(this)}
-                  >
-                    Delete
-                  </Button>
-                  <Button
-                    size="sm"
-                    outline
-                    // onClick={this.handleAddRow.bind(this)}
-                  >
+                  
+                  <Button size="sm" outline id="modalDefault301">
                     <i className="fa fa-fw fa-plus"></i>
                   </Button>
+                  <UncontrolledModal target="modalDefault301" className="modal-outline-primary">
+                    <ModalHeader tag="h5">
+                        New Vaccine                        
+                    </ModalHeader>
+                    <ModalBody>
+                      <Form>
+                        { /* START Input */}
+                        <FormGroup row>
+                            <Label for="name" sm={4}>
+                                Vaccine Name
+                            </Label>
+                            <Col sm={8}>
+                                <Input 
+                                    type="text" 
+                                    name="name" 
+                                    id="name" 
+                                    placeholder="Vaccine name"
+                                    value={this.state.name}
+                                    onChange={e => this.onChangeName(e.target.value)}
+                                />
+                                <FormText color="danger">
+                                  {this.state.name_errorMessage}
+                                </FormText>
+                            </Col>
+                        </FormGroup>
+                        { /* END Input */}
+                        { /* START Radios */}
+                        <FormGroup row>
+                            <Label for="doses_required" sm={4} className="pt-0">
+                                Doses Required
+                            </Label>
+                            <Col sm={8}>
+                                <CustomInput 
+                                    type="radio" 
+                                    id="doses_required1"
+                                    name="doses_required"
+                                    label="1"
+                                    inline
+                                    defaultChecked
+                                    value={1}
+                                    // checked={this.state.dose === 1}
+                                    onChange={e => this.onChangeDose(e.target.value)}
+                                />
+                                <CustomInput 
+                                    type="radio" 
+                                    id="doses_required2"
+                                    name="doses_required"
+                                    label="2" 
+                                    inline
+                                    value={2}
+                                    // checked={this.state.dose === 2}
+                                    onChange={e => this.onChangeDose(e.target.value)}
+                                />
+                                
+                            </Col>
+                        </FormGroup>
+                        { /* END Radios */}
+                        <FormGroup row>
+                            <Label for="message-1" sm={4}>
+                                Description
+                            </Label>
+                            <Col sm={8}>
+                                <Input 
+                                    type="textarea" 
+                                    name="text" 
+                                    maxLength="500"
+                                    id="message-1" 
+                                    placeholder="Vaccine description..." 
+                                    className="mb-2"
+                                    value={this.state.description}
+                                    onChange={e => this.onChangeDescription(e.target.value)}
+                                />
+                            </Col>
+                        </FormGroup>
+                        </Form>
+                    </ModalBody>
+                    <ModalFooter>
+                        <FormText color={this.state.color}>
+                          {this.state.authenticationMessage}
+                        </FormText>
+                        <UncontrolledModal.Close color="link">
+                          Close
+                        </UncontrolledModal.Close>
+                        <Button color="primary" onClick={() => this.addVaccine()} disabled={this.state.isLoading}>
+                          Add Vaccine
+                        </Button>
+                    </ModalFooter>
+                </UncontrolledModal>
                 </ButtonGroup>
+                
               </div>
             </div>
             <BootstrapTable

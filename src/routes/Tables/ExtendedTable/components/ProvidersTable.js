@@ -323,19 +323,7 @@ export default class ProviderTable extends React.Component {
         <CustomPaginationTotal {...{ from, to, size }} />
       ),
     });
-    // const selectRowConfig = {
-    //     mode: 'checkbox',
-    //     selected: this.state.selected,
-    //     onSelect: this.handleSelect.bind(this),
-    //     onSelectAll: this.handleSelectAll.bind(this),
-    //     selectionRenderer: ({ mode, checked, disabled }) => (
-    //         <CustomInput type={ mode } checked={ checked } disabled={ disabled } />
-    //     ),
-    //     selectionHeaderRenderer: ({ mode, checked, indeterminate }) => (
-    //         <CustomInput type={ mode } checked={ checked } innerRef={el => el && (el.indeterminate = indeterminate)} />
-    //     )
-    // };
-    // console.log(this.state.products);
+    
     return (
       <ToolkitProvider
         keyField="id"
@@ -400,7 +388,7 @@ export default class ProviderTable extends React.Component {
                                     type="email"
                                     name="emailId" 
                                     id="emailId"
-                                    placeholder="harshil@gmail.com"
+                                    placeholder="user@example.com"
                                     value={this.state.emailId}
                                     onChange={e => this.onChangeEmail(e.target.value)}
                                 />

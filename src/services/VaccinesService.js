@@ -2,7 +2,7 @@ import axios from 'axios';
 import paths from '../config/Endpoint';
 import AuthenticationService from './AuthenticationService';
 
-const getList = async (data) => {
+const getVaccines = async (data) => {
     const config = {
         headers: {
             'accept': 'application/json',
@@ -12,7 +12,7 @@ const getList = async (data) => {
         }
     }
     var response;
-    const res = await axios.get(paths.providers, config)
+    const res = await axios.get(paths.vaccines, config)
         .then(function (res){
             response = {status: true, data: res.data}
         })
@@ -24,7 +24,7 @@ const getList = async (data) => {
 }
 
 
-const createProvider = async (data) => {
+const createVaccine = async (data) => {
     const config = {
         headers: {
             'accept': 'application/json',
@@ -34,7 +34,7 @@ const createProvider = async (data) => {
         }
     }
     var response;
-    const res = await axios.post(paths.providers, data, config)
+    const res = await axios.post(paths.vaccines, data, config)
         .then(function (res){
             response = {status: true, data: res.data}
         })
@@ -47,8 +47,8 @@ const createProvider = async (data) => {
 
 
 
-const ProvidersService = {
-    getList: getList,
-    createProvider: createProvider,
+const VaccinesService = {
+    getVaccines: getVaccines,
+    createVaccine: createVaccine,
 }
-export default ProvidersService;
+export default VaccinesService;
