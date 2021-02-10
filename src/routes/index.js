@@ -16,7 +16,6 @@ import {
     Providers,
     Vaccines
 } from './Content'
-// import SidebarWithNavbar from "./Layouts/SidebarWithNavbar";
 
 export const RoutedContent = () => {
   return (

@@ -35,7 +35,6 @@ import { CustomSearch } from "./CustomSearch";
 import { CustomPaginationPanel } from "./CustomPaginationPanel";
 import { CustomSizePerPageButton } from "./CustomSizePerPageButton";
 import { CustomPaginationTotal } from "./CustomPaginationTotal";
-import ProviderService from '../../../../services/ProviderService';
 import {
     buildCustomTextFilter
 } from "../filters";
@@ -55,6 +54,16 @@ export default class ProviderTable extends React.Component {
 
         this.state = {
             providersList: [],
+            name: '',
+            emailId: '',
+            password: '',
+            name_errorMessage: '',
+            emailId_errorMessage: '',
+            password_errorMessage: '',
+            authenticationMessage: '',
+            hidePassword: true,
+            color: "black",
+            isLoading: false,
         };
 
         this.headerCheckboxRef = React.createRef();
@@ -229,7 +238,8 @@ export default class ProviderTable extends React.Component {
               password: this.state.password
           }
           try{
-              const response = await ProviderService.createProvider(postData);
+              console.log('postData >>>', postData);
+              const response = await ProvidersService.createProvider(postData);
               if (response.status == true) {
                   console.log(response.data);
                   this.setState({
@@ -238,13 +248,13 @@ export default class ProviderTable extends React.Component {
                       isLoading: false,
                   });
                   
-                  this.props.history.replace({
-                      pathname: "/providers",
-                      state: {
-                          id: 7,
-                          color: 'green'
-                      }
-                  })  
+                  // this.props.history.replace({
+                  //     pathname: "/providers",
+                  //     state: {
+                  //         id: 7,
+                  //         color: 'green'
+                  //     }
+                  // })  
                   
                   
               }
@@ -277,26 +287,11 @@ export default class ProviderTable extends React.Component {
             // align: "center",
             sortCaret,
             formatter: (cell) => <span className="text-inverse">{cell}</span>,
-            ...buildCustomTextFilter({
-                placeholder: "Enter Provider name...",
-                getFilter: (filter) => {
-                    this.nameFilter = filter;
-                },
-            }),
         },
         {
             dataField: "created_dt",
             text: "Date Added",
             formatter: (cell) => moment(cell).format("DD/MM/YYYY"),
-            filter: dateFilter({
-                className: "d-flex align-items-center",
-                comparatorClassName: "d-none",
-                dateClassName: "form-control form-control-sm",
-                comparator: Comparator.GT,
-                getFilter: (filter) => {
-                    this.stockDateFilter = filter;
-                },
-            }),
             sort: true,
             sortCaret,
         },
