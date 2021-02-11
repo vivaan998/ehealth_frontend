@@ -10,27 +10,27 @@ import _ from "lodash";
 import moment from "moment";
 import validator from 'validator';
 import {
-  // Badge,
-  Button,
-  // CustomInput,
-  // StarRating,
-  ButtonGroup,
-  UncontrolledModal,
-  ModalHeader,
-  ModalBody,
-  Col,
-  Input,
-  InputGroup,
-  InputGroupAddon,
-  FormText,
-  ModalFooter,
-  Label,
-  CustomInput,
-  Form, 
-  FormGroup, 
-  Pagination,
-  PaginationItem,
-  PaginationLink
+    // Badge,
+    Button,
+    // CustomInput,
+    // StarRating,
+    ButtonGroup,
+    UncontrolledModal,
+    ModalHeader,
+    ModalBody,
+    Col,
+    Input,
+    InputGroup,
+    InputGroupAddon,
+    FormText,
+    ModalFooter,
+    Label,
+    CustomInput,
+    Form,
+    FormGroup,
+    Pagination,
+    PaginationItem,
+    PaginationLink
 } from "../../../../components";
 import { CustomExportCSV } from "./CustomExportButton";
 import { CustomSearch } from "./CustomSearch";
@@ -82,27 +82,27 @@ export default class ProviderTable extends React.Component {
         this.headerCheckboxRef = React.createRef();
     }
 
-    getPatient = async (page=null, search=null) => {
-        try{
+    getPatient = async (page = null, search = null) => {
+        try {
             const paramData = {
                 page: page,
                 search: search
             }
             const response = await PatientsService.getPatient(paramData);
             console.log('data >>>', response.data);
-            if (response.status == true){
+            if (response.status == true) {
                 this.setState({
                     patientsList: response.data.result,
                     nextPage: response.data.next_page,
-                    previousPage: response.data.previous_page,            
+                    previousPage: response.data.previous_page,
                 });
-                console.log('providersList >>>', this.state.providersList);
+                console.log('patientsList >>>', this.state.patientsList);
                 console.log('previous page >>>', this.state.previousPage);
                 console.log('next page >>>', this.state.nextPage);
             }
-            
+
         }
-        catch(e){
+        catch (e) {
             console.log('error >>>', e);
             console.log(e, e.data);
         }
@@ -123,18 +123,18 @@ export default class ProviderTable extends React.Component {
             console.log(e, e.data);
         }
     }
-    getAllPractitioners= async (value) => {
+    getAllPractitioners = async (value) => {
         try {
             console.log('id >>>', value);
             const response = await PractitionersService.getAllPractitionersList(value);
             if (response.status == true) {
-                if (response.data.data){
+                if (response.data.data) {
                     this.setState({
                         allPractitioners: response.data.data,
                         practitioner: (response.data.data)[0].practitioner_id
                     });
                 }
-                else{
+                else {
                     this.setState({
                         allPractitioners: [],
                     });
@@ -148,35 +148,38 @@ export default class ProviderTable extends React.Component {
         }
     }
 
-    componentDidMount = async () => { 
-        if (AuthenticationService.getUser()){
+    componentDidMount = async () => {
+        if (AuthenticationService.getUser()) {
             this.getPatient();
             console.log('profile', Config.profileData);
-            if (Config.profileData.role === 100 ){                
-                this.getAllProviders(); 
-            }     
-            if (Config.profileData.role === 50){
+            if (Config.profileData.role === 100) {
+                this.getAllProviders();
+            }
+            if (Config.profileData.role === 50) {
                 this.getAllPractitioners(Config.profileData.id);
 
-            }     
+            }
         }
-        else{
+        else {
             this.props.history.push({
                 pathname: "/login",
             })
         }
-    }   
+    }
 
 
     handleMedicalRecordOnClick(cell, row) {
-        console.log("Medical Record Button clicked, rowId:", row.provider_id);
+        console.log("Medical Record Button clicked, rowId:", row.patient_id);
         // console.log(this.props);
-        this.props.history.push("/practitioners");
+        this.props.history.push({
+            pathname: "/practitioners",
+            patient_id: row.patient_id
+        });
         // return <Redirect to='/practitioners' />
         // <Link to='/practitioners' />
     }
 
-    
+
     handleArchiveOnClick(cell, row) {
         console.log("Archive button clicked, active flag:", row.active_fl);
     }
@@ -248,12 +251,12 @@ export default class ProviderTable extends React.Component {
 
     onChangeProvider(value) {
         console.log('provider_id >>>', value);
-        this.getAllPractitioners(value); 
+        this.getAllPractitioners(value);
         this.setState({
             provider: value
         })
     }
-    onChangePractitioner(value) {       
+    onChangePractitioner(value) {
         this.setState({
             practitioner: value
         })
@@ -331,7 +334,7 @@ export default class ProviderTable extends React.Component {
             });
             return
         } else {
-            if (this.state.mykad.length > 20 ) {
+            if (this.state.mykad.length > 20) {
                 this.setState({
                     mykad_errorMessage: "MyKad ID can be maximum of 20 characters",
                     isLoading: false
@@ -378,274 +381,274 @@ export default class ProviderTable extends React.Component {
 
     }
 
-  createColumnDefinitions() {
-    return [
-        {
-            dataField: "patient_id",
-            hidden: true,
-            isKey: true,
-        },
-        {
-            dataField: "first_name",
-            text: "Patient's First Name",
-            sort: true,
-            sortCaret,
-            formatter: (cell) => <span className="text-inverse">{cell}</span>,
-        },
-        {
-            dataField: "last_name",
-            text: "Patient's Last Name",
-            sort: true,
-            sortCaret,
-            formatter: (cell) => <span className="text-inverse">{cell}</span>,
-        },
-        {
-            dataField: "created_dt",
-            text: "Date Created",
-            formatter: (cell) => moment(cell).format("DD/MM/YYYY"),
-            sort: true,
-            sortCaret,
-        },
-        {
-            text: "Action",
-            formatter: this.actionColButton,
-        },
-    ];
-}
+    createColumnDefinitions() {
+        return [
+            {
+                dataField: "patient_id",
+                hidden: true,
+                isKey: true,
+            },
+            {
+                dataField: "first_name",
+                text: "Patient's First Name",
+                sort: true,
+                sortCaret,
+                formatter: (cell) => <span className="text-inverse">{cell}</span>,
+            },
+            {
+                dataField: "last_name",
+                text: "Patient's Last Name",
+                sort: true,
+                sortCaret,
+                formatter: (cell) => <span className="text-inverse">{cell}</span>,
+            },
+            {
+                dataField: "created_dt",
+                text: "Date Created",
+                formatter: (cell) => moment(cell).format("DD/MM/YYYY"),
+                sort: true,
+                sortCaret,
+            },
+            {
+                text: "Action",
+                formatter: this.actionColButton,
+            },
+        ];
+    }
 
 
-  render() {
-    const columnDefs = this.createColumnDefinitions();
-    
-    
-    return (
-        <ToolkitProvider
-            keyField="id"
-            data={this.state.patientsList}
-            columns={columnDefs}
-            search
-            exportCSV
-        >
-            {(props) => (
-            <React.Fragment>
-                <div className="d-flex justify-content-end align-items-center mb-2">
-                {/* <h6 className="my-0">
+    render() {
+        const columnDefs = this.createColumnDefinitions();
+
+
+        return (
+            <ToolkitProvider
+                keyField="id"
+                data={this.state.patientsList}
+                columns={columnDefs}
+                search
+                exportCSV
+            >
+                {(props) => (
+                    <React.Fragment>
+                        <div className="d-flex justify-content-end align-items-center mb-2">
+                            {/* <h6 className="my-0">
                                     AdvancedTable A
                                 </h6> */}
-                <div className="d-flex ml-auto">
-                    <CustomSearch className="mr-2" {...props.searchProps} />
-                    <ButtonGroup>
-                    <Button size="sm" outline id="modalDefault301">
-                        <i className="fa fa-fw fa-plus"></i>
-                    </Button>
-                    <UncontrolledModal target="modalDefault301" className="modal-outline-primary">
-                        <ModalHeader tag="h5">
-                            New Patient
+                            <div className="d-flex ml-auto">
+                                <CustomSearch className="mr-2" {...props.searchProps} />
+                                <ButtonGroup>
+                                    <Button size="sm" outline id="modalDefault301">
+                                        <i className="fa fa-fw fa-plus"></i>
+                                    </Button>
+                                    <UncontrolledModal target="modalDefault301" className="modal-outline-primary">
+                                        <ModalHeader tag="h5">
+                                            New Patient
                         </ModalHeader>
-                        <ModalBody>
-                            <Form>
-                                { /* START Input */}
-                                <FormGroup row>
-                                    <Label for="first_name" sm={4}>
-                                        First Name
+                                        <ModalBody>
+                                            <Form>
+                                                { /* START Input */}
+                                                <FormGroup row>
+                                                    <Label for="first_name" sm={4}>
+                                                        First Name
                                     </Label>
-                                    <Col sm={8}>
-                                        <Input
-                                            type="text"
-                                            name="first_name"
-                                            id="first_name"
-                                            placeholder="First Name"
-                                            value={this.state.first_name}
-                                            onChange={e => this.onChangeFirstName(e.target.value)}
-                                        />
-                                        <FormText color="danger">
-                                            {this.state.first_name_errorMessage}
-                                        </FormText>
-                                    </Col>
-                                </FormGroup>
-                                { /* END Input */}
-                                { /* START Input */}
-                                <FormGroup row>
-                                    <Label for="last_name" sm={4}>
-                                        Last Name
+                                                    <Col sm={8}>
+                                                        <Input
+                                                            type="text"
+                                                            name="first_name"
+                                                            id="first_name"
+                                                            placeholder="First Name"
+                                                            value={this.state.first_name}
+                                                            onChange={e => this.onChangeFirstName(e.target.value)}
+                                                        />
+                                                        <FormText color="danger">
+                                                            {this.state.first_name_errorMessage}
+                                                        </FormText>
+                                                    </Col>
+                                                </FormGroup>
+                                                { /* END Input */}
+                                                { /* START Input */}
+                                                <FormGroup row>
+                                                    <Label for="last_name" sm={4}>
+                                                        Last Name
                                     </Label>
-                                    <Col sm={8}>
-                                        <Input
-                                            type="text"
-                                            name="last_name"
-                                            id="last_name"
-                                            placeholder="Last Name"
-                                            value={this.state.last_name}
-                                            onChange={e => this.onChangeLastName(e.target.value)}
-                                        />
-                                        <FormText color="danger">
-                                            {this.state.last_name_errorMessage}
-                                        </FormText>
-                                    </Col>
-                                </FormGroup>
-                                { /* END Input */}
-                                { /* START Input */}
-                                <FormGroup row>
-                                    <Label for="emailId" sm={4}>
-                                        Email ID
+                                                    <Col sm={8}>
+                                                        <Input
+                                                            type="text"
+                                                            name="last_name"
+                                                            id="last_name"
+                                                            placeholder="Last Name"
+                                                            value={this.state.last_name}
+                                                            onChange={e => this.onChangeLastName(e.target.value)}
+                                                        />
+                                                        <FormText color="danger">
+                                                            {this.state.last_name_errorMessage}
+                                                        </FormText>
+                                                    </Col>
+                                                </FormGroup>
+                                                { /* END Input */}
+                                                { /* START Input */}
+                                                <FormGroup row>
+                                                    <Label for="emailId" sm={4}>
+                                                        Email ID
                                     </Label>
-                                    <Col sm={8}>
-                                        <Input
-                                            type="email"
-                                            name="emailId"
-                                            id="emailId"
-                                            placeholder="user@example.com"
-                                            value={this.state.emailId}
-                                            onChange={e => this.onChangeEmail(e.target.value)}
-                                        />
-                                        <FormText color="danger">
-                                            {this.state.emailId_errorMessage}
-                                        </FormText>
-                                    </Col>
-                                </FormGroup>
-                                { /* END Input */}
-                                { /* START Input */}
-                                <FormGroup row>
-                                    <Label for="password" sm={4}>
-                                        Password
+                                                    <Col sm={8}>
+                                                        <Input
+                                                            type="email"
+                                                            name="emailId"
+                                                            id="emailId"
+                                                            placeholder="user@example.com"
+                                                            value={this.state.emailId}
+                                                            onChange={e => this.onChangeEmail(e.target.value)}
+                                                        />
+                                                        <FormText color="danger">
+                                                            {this.state.emailId_errorMessage}
+                                                        </FormText>
+                                                    </Col>
+                                                </FormGroup>
+                                                { /* END Input */}
+                                                { /* START Input */}
+                                                <FormGroup row>
+                                                    <Label for="password" sm={4}>
+                                                        Password
                                     </Label>
-                                    <Col sm={8}>
-                                        <InputGroup>
-                                            <Input
-                                                type={(this.state.hidePassword) ? ('password') : ('text')}
-                                                name="password"
-                                                id="password"
-                                                placeholder="Password"
-                                                className="bg-white"
-                                                value={this.state.password}
-                                                onChange={e => this.onChangePassword(e.target.value)}
-                                            />
-                                            {(this.state.hidePassword) ?
-                                                <InputGroupAddon addonType="append" onClick={() => this.secureEntry()}>
-                                                    <i className="fa fa-fw fa-eye-slash"></i>
-                                                </InputGroupAddon>
-                                                :
-                                                <InputGroupAddon addonType="append" onClick={() => this.secureEntry()}>
-                                                    <i className="fa fa-fw fa-eye"></i>
-                                                </InputGroupAddon>
-                                            }
+                                                    <Col sm={8}>
+                                                        <InputGroup>
+                                                            <Input
+                                                                type={(this.state.hidePassword) ? ('password') : ('text')}
+                                                                name="password"
+                                                                id="password"
+                                                                placeholder="Password"
+                                                                className="bg-white"
+                                                                value={this.state.password}
+                                                                onChange={e => this.onChangePassword(e.target.value)}
+                                                            />
+                                                            {(this.state.hidePassword) ?
+                                                                <InputGroupAddon addonType="append" onClick={() => this.secureEntry()}>
+                                                                    <i className="fa fa-fw fa-eye-slash"></i>
+                                                                </InputGroupAddon>
+                                                                :
+                                                                <InputGroupAddon addonType="append" onClick={() => this.secureEntry()}>
+                                                                    <i className="fa fa-fw fa-eye"></i>
+                                                                </InputGroupAddon>
+                                                            }
 
-                                        </InputGroup>
-                                        <FormText color="danger">
-                                            {this.state.password_errorMessage}
-                                        </FormText>
-                                    </Col>
-                                </FormGroup>
-                                { /* END Input */}
-                                { /* START Input */}
-                                <FormGroup row>
-                                    <Label for="mykad" sm={4}>
-                                        MyKad id
+                                                        </InputGroup>
+                                                        <FormText color="danger">
+                                                            {this.state.password_errorMessage}
+                                                        </FormText>
+                                                    </Col>
+                                                </FormGroup>
+                                                { /* END Input */}
+                                                { /* START Input */}
+                                                <FormGroup row>
+                                                    <Label for="mykad" sm={4}>
+                                                        MyKad id
                                     </Label>
-                                    <Col sm={8}>
-                                        <Input
-                                            type="text"
-                                            name="mykad"
-                                            id="mykad"
-                                            placeholder="MyKad id"
-                                            value={this.state.mykad}
-                                            onChange={e => this.onChangeMyKad(e.target.value)}
-                                        />
-                                        <FormText color="danger">
-                                            {this.state.mykad_errorMessage}
-                                        </FormText>
-                                    </Col>
-                                </FormGroup>
-                                { /* END Input */}
-                                { /* START Select */}
-                                <FormGroup row>
-                                    <Label for="provider" sm={4}>
-                                        Provider
+                                                    <Col sm={8}>
+                                                        <Input
+                                                            type="text"
+                                                            name="mykad"
+                                                            id="mykad"
+                                                            placeholder="MyKad id"
+                                                            value={this.state.mykad}
+                                                            onChange={e => this.onChangeMyKad(e.target.value)}
+                                                        />
+                                                        <FormText color="danger">
+                                                            {this.state.mykad_errorMessage}
+                                                        </FormText>
+                                                    </Col>
+                                                </FormGroup>
+                                                { /* END Input */}
+                                                { /* START Select */}
+                                                <FormGroup row>
+                                                    <Label for="provider" sm={4}>
+                                                        Provider
                                     </Label>
-                                    <Col sm={8}>
+                                                    <Col sm={8}>
 
-                                        {Config.profileData.role === 100 ? (
-                                            <Input
-                                                type="select"
-                                                name="select"
-                                                id="provider"
-                                                value={this.state.provider}
-                                                onChange={e => this.onChangeProvider(e.target.value)}
-                                            >
+                                                        {Config.profileData.role === 100 ? (
+                                                            <Input
+                                                                type="select"
+                                                                name="select"
+                                                                id="provider"
+                                                                value={this.state.provider}
+                                                                onChange={e => this.onChangeProvider(e.target.value)}
+                                                            >
 
-                                                {this.state.allProviders.map((obj) => <option value={obj.provider_id}>{obj.name}</option>)}
+                                                                {this.state.allProviders.map((obj) => <option value={obj.provider_id}>{obj.name}</option>)}
 
-                                                {/* <option defaultValue="">SSG Hospital</option>
+                                                                {/* <option defaultValue="">SSG Hospital</option>
                                                 <option>KD Hospital</option> */}
-                                            </Input>
-                                        ) : (                                            
-                                            <option>{Config.profileData.name}</option>
-                                        )}
+                                                            </Input>
+                                                        ) : (
+                                                                <option>{Config.profileData.name}</option>
+                                                            )}
 
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup row>
-                                    <Label for="practitioner" sm={4}>
-                                        Practitioner
+                                                    </Col>
+                                                </FormGroup>
+                                                <FormGroup row>
+                                                    <Label for="practitioner" sm={4}>
+                                                        Practitioner
                                     </Label>
-                                    <Col sm={8}>
+                                                    <Col sm={8}>
 
-                                        {(Config.profileData.role === 100) || (Config.profileData.role === 50) ? (
-                                            <Input
-                                                type="select"
-                                                name="select"
-                                                id="practitioner"
-                                                value={this.state.practitioner}
-                                                onChange={e => this.onChangePractitioner(e.target.value)}
-                                            >
+                                                        {(Config.profileData.role === 100) || (Config.profileData.role === 50) ? (
+                                                            <Input
+                                                                type="select"
+                                                                name="select"
+                                                                id="practitioner"
+                                                                value={this.state.practitioner}
+                                                                onChange={e => this.onChangePractitioner(e.target.value)}
+                                                            >
 
-                                                {this.state.allPractitioners.map((obj) => <option value={obj.practitioner_id}>{obj.name}</option>)}
+                                                                {this.state.allPractitioners.map((obj) => <option value={obj.practitioner_id}>{obj.name}</option>)}
 
-                                            </Input>
-                                        ) : (
-                                            <option>{Config.profileData.name}</option>
-                                        )}
+                                                            </Input>
+                                                        ) : (
+                                                                <option>{Config.profileData.name}</option>
+                                                            )}
 
-                                    </Col>
-                                </FormGroup>
-                                { /* END Select */}
-                            </Form>
-                        </ModalBody>
-                        <ModalFooter>
-                            <FormText color={this.state.color}>
-                                {this.state.authenticationMessage}
-                            </FormText>
-                            <UncontrolledModal.Close color="link">
-                                Discard
+                                                    </Col>
+                                                </FormGroup>
+                                                { /* END Select */}
+                                            </Form>
+                                        </ModalBody>
+                                        <ModalFooter>
+                                            <FormText color={this.state.color}>
+                                                {this.state.authenticationMessage}
+                                            </FormText>
+                                            <UncontrolledModal.Close color="link">
+                                                Discard
                             </UncontrolledModal.Close>
-                            <Button color="primary" onClick={() => this.CreatePatient()} disabled={this.state.isLoading}>
-                                Create
+                                            <Button color="primary" onClick={() => this.CreatePatient()} disabled={this.state.isLoading}>
+                                                Create
                             </Button>
-                        </ModalFooter>
-                    </UncontrolledModal>
-                    </ButtonGroup>
-                    
-                </div>
-                </div>
-                <BootstrapTable
-                classes="table-responsive-sm"
-                bordered={false}
-                responsive
-                {...props.baseProps}
-                />
+                                        </ModalFooter>
+                                    </UncontrolledModal>
+                                </ButtonGroup>
 
-                <ButtonGroup>
-                    <Button size="sm" outline onClick = {() => {this.getPatient(this.state.previousPage, null)}} disabled={(this.state.previousPage) ? false : true}>
-                        <i className="fa fa-fw fa-chevron-left"></i>
-                    </Button>
-                    <Button size="sm" outline onClick = {() => {this.getPatient(this.state.nextPage, null)}} disabled={(this.state.nextPage) ? false : true}>
-                        <i className="fa fa-fw fa-chevron-right"></i>
-                    </Button>
-                </ButtonGroup>
-            </React.Fragment>
-            )}
-        </ToolkitProvider>
-        
-    );
-  }
+                            </div>
+                        </div>
+                        <BootstrapTable
+                            classes="table-responsive-sm"
+                            bordered={false}
+                            responsive
+                            {...props.baseProps}
+                        />
+
+                        <ButtonGroup>
+                            <Button size="sm" outline onClick={() => { this.getPatient(this.state.previousPage, null) }} disabled={(this.state.previousPage) ? false : true}>
+                                <i className="fa fa-fw fa-chevron-left"></i>
+                            </Button>
+                            <Button size="sm" outline onClick={() => { this.getPatient(this.state.nextPage, null) }} disabled={(this.state.nextPage) ? false : true}>
+                                <i className="fa fa-fw fa-chevron-right"></i>
+                            </Button>
+                        </ButtonGroup>
+                    </React.Fragment>
+                )}
+            </ToolkitProvider>
+
+        );
+    }
 }

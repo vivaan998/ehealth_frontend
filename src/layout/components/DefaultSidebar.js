@@ -67,7 +67,7 @@ class DefaultSidebar extends React.Component{
             <Sidebar>
                 { /* START SIDEBAR-OVERLAY: Close (x) */ }
                 <Sidebar.Close>
-                    <SidebarTrigger tag={ 'a' } href="javascript;">
+                    <SidebarTrigger tag={ 'a' } href="javascript:;">
                         <i className="fa fa-times-circle fa-fw"></i>
                     </SidebarTrigger>
                 </Sidebar.Close>
@@ -91,6 +91,8 @@ class DefaultSidebar extends React.Component{
                         { /* SIDEBAR: Menu */ }
                         <SidebarMiddleNav {...this.props} data={this.state}/>
                     </Sidebar.Section>
+                    <SidebarBottomA />
+
                 </Sidebar.MobileFluid>
                 { /* END SIDEBAR: Only for Mobile */ }
             </Sidebar>

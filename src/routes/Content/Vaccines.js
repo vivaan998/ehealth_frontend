@@ -7,6 +7,7 @@ import AuthenticationService from '../../services/AuthenticationService';
 class Vaccines extends React.Component{
     constructor(props){
         super(props);
+        console.log("vaccine props>>>", props);
     }
     
     componentDidMount(){
@@ -24,7 +25,7 @@ class Vaccines extends React.Component{
         return(
             <Container>
                 <HeaderMain title="Vaccines" className="mb-5 mt-4" />
-                <VaccinesTable />
+                <VaccinesTable {...this.props} />
             </Container>
         )
     }

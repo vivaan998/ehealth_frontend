@@ -16,6 +16,7 @@ import { LogoThemed } from './../../routes/components/LogoThemed/LogoThemed';
 class DefaultNavbar extends React.Component{
     constructor(props){
         super(props);
+        console.log("Default Navbar props>>>", this.props);
     }
     render(){
         return(

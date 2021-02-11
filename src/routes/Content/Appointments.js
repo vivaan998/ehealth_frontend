@@ -3,13 +3,19 @@ import AppointmentsTable from './../Tables/ExtendedTable/components/Appointments
 import { Container } from './../../components';
 import { HeaderMain } from './../components/HeaderMain';
 
-const Appointments = () => {
-    return(
-        <Container>
-            <HeaderMain title="Appointments" className="mb-5 mt-4"/>
-            <AppointmentsTable />
-        </Container>
-    );
+class Appointments extends React.Component {
+    constructor(props){
+        super(props);
+        console.log("appointments props>>>", props);
+    }
+    render() {
+        return (
+            <Container>
+                <HeaderMain title="Appointments" className="mb-5 mt-4" />
+                <AppointmentsTable {...this.props} />
+            </Container>
+        );
+    }
 }
 
 export default Appointments;

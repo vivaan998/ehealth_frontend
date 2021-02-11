@@ -73,6 +73,8 @@ export default class PractitionersTable extends React.Component {
             allProviders: [],
             provider: null,
             provide_id: null,
+            previousPage: '',
+            nextPage: '',
         };
         this.headerCheckboxRef = React.createRef();
     }
@@ -216,12 +218,12 @@ export default class PractitionersTable extends React.Component {
                 // align: "center",
                 sortCaret,
                 formatter: (cell) => <span className="text-inverse">{cell}</span>,
-                ...buildCustomTextFilter({
-                    placeholder: "Enter First name...",
-                    getFilter: (filter) => {
-                        this.nameFilter = filter;
-                    },
-                }),
+                // ...buildCustomTextFilter({
+                //     placeholder: "Enter First name...",
+                //     getFilter: (filter) => {
+                //         this.nameFilter = filter;
+                //     },
+                // }),
             },
             {
                 dataField: "last_name",
@@ -230,12 +232,12 @@ export default class PractitionersTable extends React.Component {
                 // align: "center",
                 sortCaret,
                 formatter: (cell) => <span className="text-inverse">{cell}</span>,
-                ...buildCustomTextFilter({
-                    placeholder: "Enter Last name...",
-                    getFilter: (filter) => {
-                        this.nameFilter = filter;
-                    },
-                }),
+                // ...buildCustomTextFilter({
+                //     placeholder: "Enter Last name...",
+                //     getFilter: (filter) => {
+                //         this.nameFilter = filter;
+                //     },
+                // }),
             },
             {
                 dataField: "doctor_fl",
@@ -244,26 +246,26 @@ export default class PractitionersTable extends React.Component {
                 // align: "center",
                 sortCaret,
                 formatter: (cell) => <span className="text-inverse">{(cell) ? 'Doctor' : 'Nurse'}</span>,
-                ...buildCustomTextFilter({
-                    placeholder: "Doctor",
-                    getFilter: (filter) => {
-                        this.nameFilter = filter;
-                    },
-                }),
+                // ...buildCustomTextFilter({
+                //     placeholder: "Doctor",
+                //     getFilter: (filter) => {
+                //         this.nameFilter = filter;
+                //     },
+                // }),
             },
             {
                 dataField: "created_dt",
                 text: "Date Added",
                 formatter: (cell) => moment(cell).format("DD/MM/YYYY"),
-                filter: dateFilter({
-                    className: "d-flex align-items-center",
-                    comparatorClassName: "d-none",
-                    dateClassName: "form-control form-control-sm",
-                    comparator: Comparator.GT,
-                    getFilter: (filter) => {
-                        this.stockDateFilter = filter;
-                    },
-                }),
+                // filter: dateFilter({
+                //     className: "d-flex align-items-center",
+                //     comparatorClassName: "d-none",
+                //     dateClassName: "form-control form-control-sm",
+                //     comparator: Comparator.GT,
+                //     getFilter: (filter) => {
+                //         this.stockDateFilter = filter;
+                //     },
+                // }),
                 sort: true,
                 sortCaret,
             },

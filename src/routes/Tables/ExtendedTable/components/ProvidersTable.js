@@ -125,6 +125,10 @@ export default class ProviderTable extends React.Component {
 
     handleAppointmentsOnClick(cell, row) {
         console.log("Appointments button clicked, rowId:", row.provider_id);
+        this.props.history.push({
+            pathname: "/appointments",
+            provider_id: row.provider_id
+        });
     }
 
     handleArchiveOnClick(cell, row) {
