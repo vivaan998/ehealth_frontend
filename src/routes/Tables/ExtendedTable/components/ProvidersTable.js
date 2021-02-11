@@ -97,7 +97,7 @@ export default class ProviderTable extends React.Component {
             }
             
         }
-        catch(e){
+        catch (e) {
             console.log('error >>>', e);
             console.log(e, e.data);
         }
@@ -107,18 +107,18 @@ export default class ProviderTable extends React.Component {
         if (AuthenticationService.getUser()){
             this.getList();           
         }
-        else{
+        else {
             this.props.history.push({
                 pathname: "/login",
             })
         }
-    }   
+    }
 
 
     handlePractitionersOnClick(cell, row) {
         console.log("Practitioners Button clicked, rowId:", row.provider_id);
         // console.log(this.props);
-        this.props.history.push("/practitioners");
+        this.props.history.push({ pathname: "/practitioners", provider_id: row.provider_id });
         // return <Redirect to='/practitioners' />
         // <Link to='/practitioners' />
     }
@@ -162,153 +162,153 @@ export default class ProviderTable extends React.Component {
         );
     };
 
-  secureEntry(){
-    this.setState({
-        hidePassword: !this.state.hidePassword,
-    });
-  }
-
-  onChangeName(value){
-    this.setState({
-      name: value
-    })
-  }
-
-  onChangeEmail(value){
-    this.setState({
-        emailId: value
-    });
-  }
-
-  onChangePassword(value){
-      this.setState({
-          password: value
-      })
-  }
-
-  async CreateProvider() {
-      this.setState({
-          isLoading: true,
-          authenticationMessage: '',
-      })
-      if (this.state.name == ''){
+    secureEntry() {
         this.setState({
-            name_errorMessage: "Enter Name",
-            isLoading: false
+            hidePassword: !this.state.hidePassword,
         });
-        return
-      }
-      else{          
+    }
+
+    onChangeName(value) {
         this.setState({
-            name_errorMessage: ""
-        });             
-      }
+            name: value
+        })
+    }
 
-      if (this.state.emailId == ''){
-          this.setState({
-              emailId_errorMessage: "Enter email ID",
-              isLoading: false
-          });
-          return
-      }
-      else{
-          if (validator.isEmail(this.state.emailId)){
-              this.setState({
-                  emailId_errorMessage: ""
-              });
-          }
-          else{
-              this.setState({
-                  emailId_errorMessage: "Enter a valid email ID",
-                  isLoading: false
-              })
-              return 
-          }
-          
-      }
-      if (this.state.password == ''){
-          this.setState({
-              password_errorMessage: "Enter password",
-              isLoading: false
-          });
-          return
-      }
-      else{
-          this.setState({
-              password_errorMessage: ""
-          });
-          const postData = {
-              name: this.state.name,
-              email: this.state.emailId,
-              password: this.state.password
-          }
-          try{
-              console.log('postData >>>', postData);
-              const response = await ProvidersService.createProvider(postData);
-              if (response.status == true) {
-                  console.log(response.data);
-                  this.setState({
-                      color: "success",
-                      authenticationMessage: "Successfully created provider",
-                      isLoading: false,
-                  });
-                  
-                  // this.props.history.replace({
-                  //     pathname: "/providers",
-                  //     state: {
-                  //         id: 7,
-                  //         color: 'green'
-                  //     }
-                  // })  
-                  
-                  
-              }
-              else{
-                  this.setState({
-                      color: "danger",
-                      isLoading: false,
-                      authenticationMessage: response.data.data.error
-                  });
-              }
-          }
-          catch (e){
-              console.log(e, e.data)      
-          }
-      }
+    onChangeEmail(value) {
+        this.setState({
+            emailId: value
+        });
+    }
 
-  }
+    onChangePassword(value) {
+        this.setState({
+            password: value
+        })
+    }
 
-  createColumnDefinitions() {
-    return [
-        {
-            dataField: "provider_id",
-            hidden: true,
-            isKey: true,
-        },
-        {
-            dataField: "name_tx",
-            text: "Provider Name",
-            sort: true,
-            // align: "center",
-            sortCaret,
-            formatter: (cell) => <span className="text-inverse">{cell}</span>,
-        },
-        {
-            dataField: "created_dt",
-            text: "Date Added",
-            formatter: (cell) => moment(cell).format("DD/MM/YYYY"),
-            sort: true,
-            sortCaret,
-        },
-        {
-            text: "Action",
-            // sort: true,
-            // align: "center",
-            // sortCaret,
-            formatter: this.actionColButton,
-        },
-    ];
-}
+    async CreateProvider() {
+        this.setState({
+            isLoading: true,
+            authenticationMessage: '',
+        })
+        if (this.state.name == '') {
+            this.setState({
+                name_errorMessage: "Enter Name",
+                isLoading: false
+            });
+            return
+        }
+        else {
+            this.setState({
+                name_errorMessage: ""
+            });
+        }
+
+        if (this.state.emailId == '') {
+            this.setState({
+                emailId_errorMessage: "Enter email ID",
+                isLoading: false
+            });
+            return
+        }
+        else {
+            if (validator.isEmail(this.state.emailId)) {
+                this.setState({
+                    emailId_errorMessage: ""
+                });
+            }
+            else {
+                this.setState({
+                    emailId_errorMessage: "Enter a valid email ID",
+                    isLoading: false
+                })
+                return
+            }
+
+        }
+        if (this.state.password == '') {
+            this.setState({
+                password_errorMessage: "Enter password",
+                isLoading: false
+            });
+            return
+        }
+        else {
+            this.setState({
+                password_errorMessage: ""
+            });
+            const postData = {
+                name: this.state.name,
+                email: this.state.emailId,
+                password: this.state.password
+            }
+            try {
+                console.log('postData >>>', postData);
+                const response = await ProvidersService.createProvider(postData);
+                if (response.status == true) {
+                    console.log(response.data);
+                    this.setState({
+                        color: "success",
+                        authenticationMessage: "Successfully created provider",
+                        isLoading: false,
+                    });
+
+                    // this.props.history.replace({
+                    //     pathname: "/providers",
+                    //     state: {
+                    //         id: 7,
+                    //         color: 'green'
+                    //     }
+                    // })  
+
+
+                }
+                else {
+                    this.setState({
+                        color: "danger",
+                        isLoading: false,
+                        authenticationMessage: response.data.data.error
+                    });
+                }
+            }
+            catch (e) {
+                console.log(e, e.data)
+            }
+        }
+
+    }
+
+    createColumnDefinitions() {
+        return [
+            {
+                dataField: "provider_id",
+                hidden: true,
+                isKey: true,
+            },
+            {
+                dataField: "name_tx",
+                text: "Provider Name",
+                sort: true,
+                // align: "center",
+                sortCaret,
+                formatter: (cell) => <span className="text-inverse">{cell}</span>,
+            },
+            {
+                dataField: "created_dt",
+                text: "Date Added",
+                formatter: (cell) => moment(cell).format("DD/MM/YYYY"),
+                sort: true,
+                sortCaret,
+            },
+            {
+                text: "Action",
+                // sort: true,
+                // align: "center",
+                // sortCaret,
+                formatter: this.actionColButton,
+            },
+        ];
+    }
 
 
   render() {
