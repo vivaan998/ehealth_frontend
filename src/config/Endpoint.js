@@ -8,7 +8,9 @@ const paths = {
     practitioners:      `${endpointApi}practitioners/`,
     patients:           `${endpointApi}patients/`,
     get_all_providers:  `${endpointApi}get-providers/`,
-    get_all_practitioners: `${endpointApi}get-practitioners/`
+    get_all_practitioners: `${endpointApi}get-practitioners/`,
+    get_practitioners_of_this_provider: `${endpointApi}super-user-practitioner/`
+
 
 };
 export default paths;

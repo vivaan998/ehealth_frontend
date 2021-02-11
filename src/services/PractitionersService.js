@@ -9,6 +9,10 @@ const getList = async (data) => {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
             'Authorization': 'Bearer ' + AuthenticationService.getToken(),
+        },
+        params: {
+            page: data.page,
+            search: data.search
         }
     }
     var response;
@@ -66,6 +70,28 @@ const getAllPractitionersList = async (data) => {
     return response;
 }
 
+const practitionerOfThisProvider = async (data) => {
+    const config = {
+        headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Bearer ' + AuthenticationService.getToken(),
+        }
+    }
+    var response;
+    var apiPath = paths.get_practitioners_of_this_provider + data;
+    console.log('api path >>>', apiPath);
+    const res = await axios.get(apiPath, config)
+        .then(function (res){
+            response = {status: true, data: res.data}
+        })
+        .catch(function (err) {
+            console.log(err.response);
+            response = { status: false, data: err.response };
+        });
+    return response;
+}
 
 
 
@@ -73,6 +99,7 @@ const PractitionersService = {
     getList: getList,
     createPractitioner: createPractitioner,
     getAllPractitionersList: getAllPractitionersList,
+    getPractitionerOfThisProvider: practitionerOfThisProvider
     
 }
 export default PractitionersService;

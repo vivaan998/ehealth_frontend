@@ -78,27 +78,32 @@ export default class PractitionersTable extends React.Component {
     }
 
 
-    getList = async () => {
+    getList = async (page=null, search=null) => {
         try {
-            const response = await PractitionersService.getList();
-            if (response.status == true) {
-                if (this.props.location.provider_id) {
-                    // console.log("location",response.data.result);
-                    response.data.result.map((data) => {
-                        if (data.provider_id === this.props.location.provider_id) {
-                            this.setState({
-                                practitionersList: this.state.practitionersList.concat([data])
-                            });
-                            console.log("location",this.state.practitionersList);
-                        }
-                    })
-                } else {
+            const paramData = {
+                page: page,
+                search: search
+            }
+            
+            if (this.props.location.provider_id){
+                const response = await PractitionersService.getPractitionerOfThisProvider(this.props.location.provider_id);
+                if (response.status == true){
                     this.setState({
                         practitionersList: response.data.result,
+                        nextPage: response.data.next_page,
+                        previousPage: response.data.previous_page,
                     });
                 }
-
-                console.log('practitionersList >>>', this.state.practitionersList);
+            }
+            else{
+                const response = await PractitionersService.getList(paramData);
+                if (response.status == true){
+                    this.setState({
+                        practitionersList: response.data.result,
+                        nextPage: response.data.next_page,
+                        previousPage: response.data.previous_page,
+                    });
+                }
             }
         }
         catch (e) {
@@ -442,21 +447,7 @@ export default class PractitionersTable extends React.Component {
 
     render() {
         const columnDefs = this.createColumnDefinitions();
-        const paginationDef = paginationFactory({
-            paginationSize: 5,
-            showTotal: true,
-            pageListRenderer: (props) => (
-                <CustomPaginationPanel
-                    {...props}
-                    size="sm"
-                    className="ml-md-auto mt-2 mt-md-0"
-                />
-            ),
-            sizePerPageRenderer: (props) => <CustomSizePerPageButton {...props} />,
-            paginationTotalRenderer: (from, to, size) => (
-                <CustomPaginationTotal {...{ from, to, size }} />
-            ),
-        });
+        
         return (
             <ToolkitProvider
                 keyField="id"
@@ -673,13 +664,22 @@ export default class PractitionersTable extends React.Component {
                             </div>
                         </div>
                         <BootstrapTable
-                            classes="table-responsive"
-                            pagination={paginationDef}
+                            classes="table-responsive-sm"
+                            // pagination={paginationDef}
                             filter={filterFactory()}
                             bordered={false}
                             responsive
                             {...props.baseProps}
                         />
+
+                        <ButtonGroup>
+                            <Button size="sm" outline onClick = {() => {this.getList(this.state.previousPage, null)}} disabled={(this.state.previousPage) ? false : true}>
+                                <i className="fa fa-fw fa-chevron-left"></i>
+                            </Button>
+                            <Button size="sm" outline onClick = {() => {this.getList(this.state.nextPage, null)}} disabled={(this.state.nextPage) ? false : true}>
+                                <i className="fa fa-fw fa-chevron-right"></i>
+                            </Button>
+                        </ButtonGroup>
                     </React.Fragment>
                 )}
             </ToolkitProvider>
