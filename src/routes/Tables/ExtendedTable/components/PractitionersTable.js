@@ -71,8 +71,8 @@ export default class PractitionersTable extends React.Component {
             authenticationMessage: '',
             allProviders: [],
             provider: null,
+            provide_id: null,
         };
-
         this.headerCheckboxRef = React.createRef();
     }
 
@@ -81,9 +81,22 @@ export default class PractitionersTable extends React.Component {
         try {
             const response = await PractitionersService.getList();
             if (response.status == true) {
-                this.setState({
-                    practitionersList: response.data.result,
-                });
+                if (this.props.location.provider_id) {
+                    // console.log("location",response.data.result);
+                    response.data.result.map((data) => {
+                        if (data.provider_id === this.props.location.provider_id) {
+                            this.setState({
+                                practitionersList: this.state.practitionersList.concat([data])
+                            });
+                            console.log("location",this.state.practitionersList);
+                        }
+                    })
+                } else {
+                    this.setState({
+                        practitionersList: response.data.result,
+                    });
+                }
+
                 console.log('practitionersList >>>', this.state.practitionersList);
             }
         }
@@ -378,7 +391,7 @@ export default class PractitionersTable extends React.Component {
             });
             return
         } else {
-            if (this.state.mykad.length > 20 ) {
+            if (this.state.mykad.length > 20) {
                 this.setState({
                     mykad_errorMessage: "length of MyKad id should be 20",
                     isLoading: false
@@ -634,8 +647,8 @@ export default class PractitionersTable extends React.Component {
                                                                 <option>KD Hospital</option> */}
                                                             </Input>
                                                         ) : (
-                                                            <option>{Config.profileData.name}</option>
-                                                        )}
+                                                                <option>{Config.profileData.name}</option>
+                                                            )}
 
                                                     </Col>
                                                 </FormGroup>
