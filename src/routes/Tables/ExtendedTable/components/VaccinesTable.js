@@ -58,6 +58,8 @@ export default class VaccinesTable extends React.Component {
       authenticationMessage: '',
       color: "black",
       isLoading: false,
+      nextPage: '',
+      previousPage: ''
     };
 
     this.headerCheckboxRef = React.createRef();
@@ -74,14 +76,19 @@ export default class VaccinesTable extends React.Component {
     }
   } 
 
-  getList = async () => {
+  getList = async (page=null, search=null) => {
     try{
-        const response = await VaccinesService.getVaccines();
+        const paramData = {
+            page: page,
+            search: search
+        }
+        const response = await VaccinesService.getVaccines(paramData);
         if (response.status == true){
             this.setState({
-                vaccinesList: response.data.result,                    
+                vaccinesList: response.data.result,
+                nextPage: response.data.next_page,
+                previousPage: response.data.previous_page,                      
             });
-            console.log('vaccinesList >>>', this.state.vaccinesList);
         }
     }
     catch(e){
@@ -225,15 +232,7 @@ export default class VaccinesTable extends React.Component {
                     authenticationMessage: "Successfully created vaccine",
                     isLoading: false,
                 });
-                
-                // this.props.history.replace({
-                //     pathname: "/providers",
-                //     state: {
-                //         id: 7,
-                //         color: 'green'
-                //     }
-                // })  
-                
+                this.getList();               
                 
             }
             else{
@@ -253,21 +252,6 @@ export default class VaccinesTable extends React.Component {
 
   render() {
     const columnDefs = this.createColumnDefinitions();
-    const paginationDef = paginationFactory({
-      paginationSize: 5,
-      showTotal: true,
-      pageListRenderer: (props) => (
-        <CustomPaginationPanel
-          {...props}
-          size="sm"
-          className="ml-md-auto mt-2 mt-md-0"
-        />
-      ),
-      sizePerPageRenderer: (props) => <CustomSizePerPageButton {...props} />,
-      paginationTotalRenderer: (from, to, size) => (
-        <CustomPaginationTotal {...{ from, to, size }} />
-      ),
-    });
     
     return (
       <ToolkitProvider
@@ -343,6 +327,36 @@ export default class VaccinesTable extends React.Component {
                                     // checked={this.state.dose === 2}
                                     onChange={e => this.onChangeDose(e.target.value)}
                                 />
+                                <CustomInput 
+                                    type="radio" 
+                                    id="doses_required3"
+                                    name="doses_required"
+                                    label="3" 
+                                    inline
+                                    value={3}
+                                    // checked={this.state.dose === 2}
+                                    onChange={e => this.onChangeDose(e.target.value)}
+                                />
+                                <CustomInput 
+                                    type="radio" 
+                                    id="doses_required4"
+                                    name="doses_required"
+                                    label="4" 
+                                    inline
+                                    value={4}
+                                    // checked={this.state.dose === 2}
+                                    onChange={e => this.onChangeDose(e.target.value)}
+                                />
+                                <CustomInput 
+                                    type="radio" 
+                                    id="doses_required5"
+                                    name="doses_required"
+                                    label="5" 
+                                    inline
+                                    value={5}
+                                    // checked={this.state.dose === 2}
+                                    onChange={e => this.onChangeDose(e.target.value)}
+                                />
                                 
                             </Col>
                         </FormGroup>
@@ -384,13 +398,20 @@ export default class VaccinesTable extends React.Component {
             </div>
             <BootstrapTable
               classes="table-responsive-sm"
-              pagination={paginationDef}
               filter={filterFactory()}
-              // selectRow={ selectRowConfig }
               bordered={false}
               responsive
               {...props.baseProps}
             />
+
+            <ButtonGroup>
+                <Button size="sm" outline onClick = {() => {this.getList(this.state.previousPage, null)}} disabled={(this.state.previousPage) ? false : true}>
+                    <i className="fa fa-fw fa-chevron-left"></i>
+                </Button>
+                <Button size="sm" outline onClick = {() => {this.getList(this.state.nextPage, null)}} disabled={(this.state.nextPage) ? false : true}>
+                    <i className="fa fa-fw fa-chevron-right"></i>
+                </Button>
+            </ButtonGroup>
           </React.Fragment>
         )}
       </ToolkitProvider>

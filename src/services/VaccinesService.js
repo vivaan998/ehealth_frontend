@@ -9,6 +9,10 @@ const getVaccines = async (data) => {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
             'Authorization': 'Bearer ' + AuthenticationService.getToken(),
+        },
+        params: {
+            page: data.page,
+            search: data.search
         }
     }
     var response;

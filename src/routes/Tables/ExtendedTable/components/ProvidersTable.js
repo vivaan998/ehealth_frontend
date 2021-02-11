@@ -71,7 +71,8 @@ export default class ProviderTable extends React.Component {
             isLoading: false,
             name: '',
             nextPage: '',
-            previousPage: ''
+            previousPage: '',
+            searchValue: null
         };
 
         this.headerCheckboxRef = React.createRef();
@@ -84,16 +85,12 @@ export default class ProviderTable extends React.Component {
                 search: search
             }
             const response = await ProvidersService.getList(paramData);
-            console.log('data >>>', response.data);
             if (response.status == true){
                 this.setState({
                     providersList: response.data.result,
                     nextPage: response.data.next_page,
                     previousPage: response.data.previous_page,            
                 });
-                console.log('providersList >>>', this.state.providersList);
-                console.log('previous page >>>', this.state.previousPage);
-                console.log('next page >>>', this.state.nextPage);
             }
             
         }
@@ -252,14 +249,7 @@ export default class ProviderTable extends React.Component {
                         authenticationMessage: "Successfully created provider",
                         isLoading: false,
                     });
-
-                    // this.props.history.replace({
-                    //     pathname: "/providers",
-                    //     state: {
-                    //         id: 7,
-                    //         color: 'green'
-                    //     }
-                    // })  
+                    this.getList();
 
 
                 }
@@ -309,150 +299,149 @@ export default class ProviderTable extends React.Component {
             },
         ];
     }
+    handleCallback = async (childData) =>{
+        console.log('In provider >>>', childData);
+        this.setState({searchValue: childData});
+        this.getList(null,childData);
+    }
 
+    render() {
+        const columnDefs = this.createColumnDefinitions();
+        return (
+            <ToolkitProvider
+                keyField="id"
+                data={this.state.providersList}
+                columns={columnDefs}
+                search
+                exportCSV
+            >
+                {(props) => (
+                <React.Fragment>
+                    <div className="d-flex justify-content-end align-items-center mb-2">
+                    <div className="d-flex ml-auto">
+                        <CustomSearch className="mr-2" {...props.searchProps} parentCallBack = {this.handleCallback} />
+                        <ButtonGroup>
+                        <Button size="sm" outline id="modalDefault301">
+                            <i className="fa fa-fw fa-plus"></i>
+                        </Button>
+                        <UncontrolledModal target="modalDefault301" className="modal-outline-primary">
+                            <ModalHeader tag="h5">
+                                New Provider                        
+                            </ModalHeader>
+                            <ModalBody>
+                            <Form>
+                                { /* START Input */}
+                                <FormGroup row>
+                                    <Label for="name" sm={4}>
+                                        Provider Name
+                                    </Label>
+                                    <Col sm={8}>
+                                        <Input 
+                                            type="text" 
+                                            name="name" 
+                                            id="name" 
+                                            placeholder="Full Name"
+                                            value={this.state.name}
+                                            onChange={e => this.onChangeName(e.target.value)}
+                                        />
+                                        <FormText color="danger">
+                                        {this.state.name_errorMessage}
+                                        </FormText>
+                                    </Col>
+                                </FormGroup>
+                                { /* END Input */}
+                                { /* START Input */}
+                                <FormGroup row>
+                                    <Label for="emailId" sm={4}>
+                                        Email ID
+                                    </Label>
+                                    <Col sm={8}>
+                                        <Input 
+                                            type="email"
+                                            name="emailId" 
+                                            id="emailId"
+                                            placeholder="user@example.com"
+                                            value={this.state.emailId}
+                                            onChange={e => this.onChangeEmail(e.target.value)}
+                                        />
+                                        <FormText color="danger">
+                                        {this.state.emailId_errorMessage}
+                                        </FormText>
+                                    </Col>
+                                </FormGroup>
+                                { /* END Input */}
+                                { /* START Radios */}
+                                <FormGroup row>
+                                    <Label for="password" sm={4}>
+                                        Password
+                                    </Label>
+                                    <Col sm={8}>
+                                    <InputGroup>
+                                        <Input 
+                                            type={(this.state.hidePassword) ? ('password') : ('text')}
+                                            name="password" 
+                                            id="password"
+                                            placeholder="Password" 
+                                            className="bg-white"
+                                            value={this.state.password}
+                                            onChange={e => this.onChangePassword(e.target.value)}
+                                        />
+                                        {(this.state.hidePassword) ?
+                                            <InputGroupAddon addonType="append" onClick={() => this.secureEntry()}>
+                                                <i className="fa fa-fw fa-eye-slash"></i>
+                                            </InputGroupAddon>  
+                                            :
+                                            <InputGroupAddon addonType="append" onClick={() => this.secureEntry()}>
+                                                <i className="fa fa-fw fa-eye"></i>
+                                            </InputGroupAddon>  
+                                        }
 
-  render() {
-    const columnDefs = this.createColumnDefinitions();
-    
-    
-    return (
-        <ToolkitProvider
-            keyField="id"
-            data={this.state.providersList}
-            columns={columnDefs}
-            search
-            exportCSV
-        >
-            {(props) => (
-            <React.Fragment>
-                <div className="d-flex justify-content-end align-items-center mb-2">
-                {/* <h6 className="my-0">
-                                    AdvancedTable A
-                                </h6> */}
-                <div className="d-flex ml-auto">
-                    <CustomSearch className="mr-2" {...props.searchProps} />
-                    <ButtonGroup>
-                    <Button size="sm" outline id="modalDefault301">
-                        <i className="fa fa-fw fa-plus"></i>
-                    </Button>
-                    <UncontrolledModal target="modalDefault301" className="modal-outline-primary">
-                        <ModalHeader tag="h5">
-                            New Provider                        
-                        </ModalHeader>
-                        <ModalBody>
-                        <Form>
-                            { /* START Input */}
-                            <FormGroup row>
-                                <Label for="name" sm={4}>
-                                    Provider Name
-                                </Label>
-                                <Col sm={8}>
-                                    <Input 
-                                        type="text" 
-                                        name="name" 
-                                        id="name" 
-                                        placeholder="Full Name"
-                                        value={this.state.name}
-                                        onChange={e => this.onChangeName(e.target.value)}
-                                    />
+                                    </InputGroup>
                                     <FormText color="danger">
-                                    {this.state.name_errorMessage}
+                                        {this.state.password_errorMessage}
                                     </FormText>
-                                </Col>
-                            </FormGroup>
-                            { /* END Input */}
-                            { /* START Input */}
-                            <FormGroup row>
-                                <Label for="emailId" sm={4}>
-                                    Email ID
-                                </Label>
-                                <Col sm={8}>
-                                    <Input 
-                                        type="email"
-                                        name="emailId" 
-                                        id="emailId"
-                                        placeholder="user@example.com"
-                                        value={this.state.emailId}
-                                        onChange={e => this.onChangeEmail(e.target.value)}
-                                    />
-                                    <FormText color="danger">
-                                    {this.state.emailId_errorMessage}
-                                    </FormText>
-                                </Col>
-                            </FormGroup>
-                            { /* END Input */}
-                            { /* START Radios */}
-                            <FormGroup row>
-                                <Label for="password" sm={4}>
-                                    Password
-                                </Label>
-                                <Col sm={8}>
-                                <InputGroup>
-                                    <Input 
-                                        type={(this.state.hidePassword) ? ('password') : ('text')}
-                                        name="password" 
-                                        id="password"
-                                        placeholder="Password" 
-                                        className="bg-white"
-                                        value={this.state.password}
-                                        onChange={e => this.onChangePassword(e.target.value)}
-                                    />
-                                    {(this.state.hidePassword) ?
-                                        <InputGroupAddon addonType="append" onClick={() => this.secureEntry()}>
-                                            <i className="fa fa-fw fa-eye-slash"></i>
-                                        </InputGroupAddon>  
-                                        :
-                                        <InputGroupAddon addonType="append" onClick={() => this.secureEntry()}>
-                                            <i className="fa fa-fw fa-eye"></i>
-                                        </InputGroupAddon>  
-                                    }
-
-                                </InputGroup>
-                                <FormText color="danger">
-                                    {this.state.password_errorMessage}
+                                    
+                                    </Col>
+                                    
+                                </FormGroup>
+                                { /* END Radios */}
+                            </Form>
+                            </ModalBody>
+                            <ModalFooter>
+                                <FormText color={this.state.color}>
+                                {this.state.authenticationMessage}
                                 </FormText>
-                                
-                                </Col>
-                                
-                            </FormGroup>
-                            { /* END Radios */}
-                        </Form>
-                        </ModalBody>
-                        <ModalFooter>
-                            <FormText color={this.state.color}>
-                            {this.state.authenticationMessage}
-                            </FormText>
-                            <UncontrolledModal.Close color="link">
-                                Discard
-                            </UncontrolledModal.Close>
-                            <Button color="primary" onClick={() => this.CreateProvider()} disabled={this.state.isLoading}>
-                            Create
-                            </Button>
-                        </ModalFooter>
-                    </UncontrolledModal>
-                    </ButtonGroup>
-                    
-                </div>
-                </div>
-                <BootstrapTable
-                classes="table-responsive-lg"
-                bordered={false}
-                responsive
-                {...props.baseProps}
-                />
+                                <UncontrolledModal.Close color="link">
+                                    Discard
+                                </UncontrolledModal.Close>
+                                <Button color="primary" onClick={() => this.CreateProvider()} disabled={this.state.isLoading}>
+                                Create
+                                </Button>
+                            </ModalFooter>
+                        </UncontrolledModal>
+                        </ButtonGroup>
+                        
+                    </div>
+                    </div>
+                    <BootstrapTable
+                    classes="table-responsive-lg"
+                    bordered={false}
+                    responsive
+                    {...props.baseProps}
+                    />
 
-                <ButtonGroup>
-                    <Button size="sm" outline onClick = {() => {this.getList(this.state.previousPage, null)}} disabled={(this.state.previousPage) ? false : true}>
-                        <i className="fa fa-fw fa-chevron-left"></i>
-                    </Button>
-                    <Button size="sm" outline onClick = {() => {this.getList(this.state.nextPage, null)}} disabled={(this.state.nextPage) ? false : true}>
-                        <i className="fa fa-fw fa-chevron-right"></i>
-                    </Button>
-                </ButtonGroup>
-            </React.Fragment>
-            )}
-        </ToolkitProvider>
-        
-    );
-  }
+                    <ButtonGroup>
+                        <Button size="sm" outline onClick = {() => {this.getList(this.state.previousPage, null)}} disabled={(this.state.previousPage) ? false : true}>
+                            <i className="fa fa-fw fa-chevron-left"></i>
+                        </Button>
+                        <Button size="sm" outline onClick = {() => {this.getList(this.state.nextPage, null)}} disabled={(this.state.nextPage) ? false : true}>
+                            <i className="fa fa-fw fa-chevron-right"></i>
+                        </Button>
+                    </ButtonGroup>
+                </React.Fragment>
+                )}
+            </ToolkitProvider>
+            
+        );
+    }
 }
