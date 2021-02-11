@@ -4,9 +4,11 @@ const paths = {
     login:              `${endpointApi}auth/login`,
     menu:               `${endpointApi}auth/menu`,
     providers:          `${endpointApi}providers/`,
-    practitionersGet:   `${endpointApi}practitioners/`,
     vaccines:           `${endpointApi}vaccines/`,
     practitioners:      `${endpointApi}practitioners/`,
-    get_all_providers:  `${endpointApi}get-providers/`
+    patients:           `${endpointApi}patients/`,
+    get_all_providers:  `${endpointApi}get-providers/`,
+    get_all_practitioners: `${endpointApi}get-practitioners/`
+
 };
 export default paths;

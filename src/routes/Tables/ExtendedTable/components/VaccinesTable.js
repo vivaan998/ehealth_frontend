@@ -383,7 +383,7 @@ export default class VaccinesTable extends React.Component {
               </div>
             </div>
             <BootstrapTable
-              classes="table-responsive"
+              classes="table-responsive-sm"
               pagination={paginationDef}
               filter={filterFactory()}
               // selectRow={ selectRowConfig }

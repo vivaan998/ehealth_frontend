@@ -5,7 +5,6 @@ class DashboardGeneral extends React.Component {
     constructor(props){
         super(props);
     }
-
     componentDidMount(){
         if (AuthenticationService.getUser()){
             console.log('succeed');

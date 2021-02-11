@@ -43,8 +43,7 @@ const createPractitioner = async (data) => {
         });
     return response;
 }
-
-const getAllProvidersList = async (data) => {
+const getAllPractitionersList = async (data) => {
     const config = {
         headers: {
             'accept': 'application/json',
@@ -54,7 +53,9 @@ const getAllProvidersList = async (data) => {
         }
     }
     var response;
-    const res = await axios.get(paths.get_all_providers, config)
+    var apiPath = paths.get_all_practitioners + data;
+    console.log('api path >>>', apiPath);
+    const res = await axios.get(apiPath, config)
         .then(function (res){
             response = {status: true, data: res.data}
         })
@@ -65,9 +66,13 @@ const getAllProvidersList = async (data) => {
     return response;
 }
 
+
+
+
 const PractitionersService = {
     getList: getList,
     createPractitioner: createPractitioner,
-    getAllProvidersList: getAllProvidersList
+    getAllPractitionersList: getAllPractitionersList,
+    
 }
 export default PractitionersService;

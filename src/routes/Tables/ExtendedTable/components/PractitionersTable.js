@@ -41,6 +41,7 @@ import {
 import PractitionersService from './../../../../services/PractitionersService';
 import validator from 'validator';
 import MenuListingService from './../../../../services/MenuListingService';
+import ProvidersService from "../../../../services/ProvidersService";
 
 const sortCaret = (order) => {
     if (!order) return <i className="fa fa-fw fa-sort text-muted"></i>;
@@ -66,7 +67,7 @@ export default class PractitionersTable extends React.Component {
             isLoading: false,
             mykad_errorMessage: '',
             mykad: '',
-            type: '',
+            type: 1,
             firstname_errorMessage: '',
             authenticationMessage: '',
             allProviders: [],
@@ -95,10 +96,11 @@ export default class PractitionersTable extends React.Component {
 
     getAllProviders = async () => {
         try {
-            const response = await PractitionersService.getAllProvidersList();
+            const response = await ProvidersService.getAllProvidersList();
             if (response.status == true) {
                 this.setState({
                     allProviders: response.data.data,
+                    provider: (response.data.data)[0].provider_id,
                 });
                 console.log('all Providers List >>>', this.state.allProviders);
             }
@@ -218,14 +220,14 @@ export default class PractitionersTable extends React.Component {
                 }),
             },
             {
-                dataField: "type",
-                text: "Type",
+                dataField: "doctor_fl",
+                text: "Doctor/Nurse",
                 sort: true,
                 // align: "center",
                 sortCaret,
-                formatter: (cell) => <span className="text-inverse">Doctor</span>,
+                formatter: (cell) => <span className="text-inverse">{(cell) ? 'Doctor' : 'Nurse'}</span>,
                 ...buildCustomTextFilter({
-                    placeholder: "Enter Last name...",
+                    placeholder: "Doctor",
                     getFilter: (filter) => {
                         this.nameFilter = filter;
                     },
@@ -397,7 +399,7 @@ export default class PractitionersTable extends React.Component {
             "email_tx": this.state.emailId,
             "ic_card_tx": this.state.mykad,
             "provider_id": Number(this.state.provider),
-            "doctor_fl": 0,
+            "doctor_fl": this.state.type,
             "password": this.state.password
         }
 
@@ -408,7 +410,7 @@ export default class PractitionersTable extends React.Component {
                 console.log(response.data);
                 this.setState({
                     color: "success",
-                    authenticationMessage: "Successfully created provider",
+                    authenticationMessage: response.data.message,
                     isLoading: false,
                 })
                 this.getList();
@@ -470,12 +472,12 @@ export default class PractitionersTable extends React.Component {
                                     <Button
                                         size="sm"
                                         outline
-                                        id="modal1"
+                                        id="modalDefault301"
                                     // onClick={this.handleAddRow.bind(this)}
                                     >
                                         <i className="fa fa-fw fa-plus"></i>
                                     </Button>
-                                    <UncontrolledModal target="modal1" className="modal-outline-primary">
+                                    <UncontrolledModal target="modalDefault301" className="modal-outline-primary">
                                         <ModalHeader tag="h5">
                                             New Practitioner
                                         </ModalHeader>
@@ -606,8 +608,8 @@ export default class PractitionersTable extends React.Component {
                                                             id="type"
                                                             onChange={e => this.onChangeType(e.target.value)}
                                                         >
-                                                            <option defaultValue="">Doctor</option>
-                                                            <option>Nurse</option>
+                                                            <option value={1}>Doctor</option>
+                                                            <option value={0}>Nurse</option>
                                                         </Input>
                                                     </Col>
                                                 </FormGroup>
@@ -620,7 +622,7 @@ export default class PractitionersTable extends React.Component {
                                                     </Label>
                                                     <Col sm={8}>
 
-                                                        {Config.profileData.designation === "Admin" ? (
+                                                        {Config.profileData.role === 100 ? (
                                                             <Input
                                                                 type="select"
                                                                 name="select"

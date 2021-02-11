@@ -9,17 +9,6 @@ class Providers extends React.Component {
         console.log(props);
     }
 
-    // componentDidMount(){
-    //     if (AuthenticationService.getUser()){
-    //         console.log('succeed');
-    //     }
-    //     else{
-    //         this.props.history.push({
-    //             pathname: "/login",
-    //         })
-    //     }
-    // }
-    
     render(){
         return (
             <Container>
