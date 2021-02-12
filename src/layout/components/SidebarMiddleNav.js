@@ -5,7 +5,7 @@ import AuthenticationService from '../../services/AuthenticationService';
 import FlatList from 'flatlist-react';
 
 class SidebarMiddleNav extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         // const menuDict = {
         //     DASHBOARD       : {icon: 'fa fa-fw fa-home', title: 'Dashboard', to: '/dashboard'},
@@ -32,7 +32,7 @@ class SidebarMiddleNav extends React.Component {
         //     providers: false,
         //     vaccines: false
         // }
-    }    
+    }
     // getMenu = async () => {
     //     try{
     //         const response = await MenuListingService.getMenu();
@@ -41,7 +41,7 @@ class SidebarMiddleNav extends React.Component {
     //             this.setState({
     //                 menuItems: response.data.menu,
     //                 isLoading: false,
-                    
+
     //             });
     //             console.log('menuItems >>>', this.state.menuItems);
     //             let menu;
@@ -62,7 +62,7 @@ class SidebarMiddleNav extends React.Component {
     // componentDidMount = async (props) => { 
     //     console.log('props2 >>>', props);
     // }
-    
+
     // componentWillMount = async () => {
     //     if (AuthenticationService.getUser()){
     //         this.getMenu();
@@ -86,119 +86,117 @@ class SidebarMiddleNav extends React.Component {
     //     )
     // }
 
-    dashboard(){
-        if ((this.props.data.menuList).includes('Dashboard')){
-            return(<SidebarMenu.Item
+    dashboard() {
+        if ((this.props.data.menuList).includes('Dashboard')) {
+            return (<SidebarMenu.Item
                 icon={<i className="fa fa-fw fa-home"></i>}
                 title="Dashboard"
-                to='/dashboard'                    
+                to='/dashboard'
             />);
         }
-        else{
-            return(<></>);
+        else {
+            return (<></>);
         }
     }
-    mymedicalreport(){
-        if ((this.props.data.menuList).includes('My Medical Record')){
-            return(<SidebarMenu.Item
+    mymedicalreport() {
+        if ((this.props.data.menuList).includes('My Medical Record')) {
+            return (<SidebarMenu.Item
                 icon={<i className="fa fa-fw fa-heartbeat"></i>}
                 title="My Medical Report"
                 to='/mymedicalreport'
             />);
         }
-        else{
-            return(<></>);
+        else {
+            return (<></>);
         }
 
 
     }
-    appointments(){
-        if ((this.props.data.menuList).includes('Appointments')){
-            return(<SidebarMenu.Item
+    appointments() {
+        if ((this.props.data.menuList).includes('Appointments')) {
+            return (<SidebarMenu.Item
                 icon={<i className="fa fa-fw fa-calendar"></i>}
                 title="Appointments"
                 to='/appointments'
             />);
-            }
-        else{
-            return(<></>);
+        }
+        else {
+            return (<></>);
         }
     }
-    patients(){
-        if ((this.props.data.menuList).includes('Patients')){
-            return(<SidebarMenu.Item
+    patients() {
+        if ((this.props.data.menuList).includes('Patients')) {
+            return (<SidebarMenu.Item
                 icon={<i className="fa fa-fw fa-users"></i>}
                 title="Patients"
                 to='/patients'
             />);
         }
-        else{
-            return(<></>);
+        else {
+            return (<></>);
         }
-        
+
     }
-    immunizations(){
-        if ((this.props.data.menuList).includes('Immunizations')){
-            return(<SidebarMenu.Item
+    immunizations() {
+        if ((this.props.data.menuList).includes('Immunizations')) {
+            return (<SidebarMenu.Item
                 icon={<i className="fa fa-fw fa-plus-square"></i>}
                 title="Immunizations"
                 to='/immunizations'
             />);
         }
-        else{
-            return(<></>);
+        else {
+            return (<></>);
         }
 
     }
 
-    practitioners(){
-        if ((this.props.data.menuList).includes('Practitioners')){
-            return(<SidebarMenu.Item
+    practitioners() {
+        if ((this.props.data.menuList).includes('Practitioners')) {
+            return (<SidebarMenu.Item
                 icon={<i className="fa fa-fw fa-stethoscope"></i>}
                 title="Practitioners"
                 to='/practitioners'
             />);
         }
-        else{
-            return(<></>);
+        else {
+            return (<></>);
         }
 
     }
-    providers(){
-        if ((this.props.data.menuList).includes('Providers')){
-            return(<SidebarMenu.Item
+    providers() {
+        if ((this.props.data.menuList).includes('Providers')) {
+            return (<SidebarMenu.Item
                 icon={<i className="fa fa-fw fa-medkit"></i>}
                 title="Providers"
                 to='/providers'
             />);
         }
-        else{
-            return(<></>);
+        else {
+            return (<></>);
         }
     }
-    vaccines(){
-        if ((this.props.data.menuList).includes('Vaccines')){
-            return(<SidebarMenu.Item
+    vaccines() {
+        if ((this.props.data.menuList).includes('Vaccines')) {
+            return (<SidebarMenu.Item
                 icon={<i className="fa fa-fw fa-eyedropper"></i>}
                 title="Vaccines"
                 to='/vaccines'
             />);
         }
-        else{
-            return(<SidebarMenu.Item/>);
-        }
+        return (<></>);
     }
 
-    render(){
+    render() {
         console.log(this.props);
-        return(
+        return (
 
             <SidebarMenu>
                 {/* <FlatList
                     list={this.state.test}
                     renderItem={item => <li>{item.a}</li>}
                 /> */}
-                
+
                 {this.dashboard()}
                 {this.mymedicalreport()}
                 {this.appointments()}
@@ -207,7 +205,10 @@ class SidebarMiddleNav extends React.Component {
                 {this.practitioners()}
                 {this.providers()}
                 {this.vaccines()}
-                { /* -------- Cards ---------*/ }
+
+                <SidebarMenu.Item />
+
+                { /* -------- Cards ---------*/}
                 {/* <SidebarMenu.Item
                     icon={<i className="fa fa-fw fa-clone"></i>}
                     title="Cards"
@@ -215,7 +216,7 @@ class SidebarMiddleNav extends React.Component {
                     <SidebarMenu.Item title="Cards" to='/cards/cards' exact />
                     <SidebarMenu.Item title="Cards Headers" to='/cards/cardsheaders' exact />
                 </SidebarMenu.Item> */}
-                { /* -------- Layouts ---------*/ }
+                { /* -------- Layouts ---------*/}
                 {/* <SidebarMenu.Item
                     icon={<i className="fa fa-fw fa-columns"></i>}
                     title="Layouts"
@@ -226,7 +227,7 @@ class SidebarMiddleNav extends React.Component {
                     <SidebarMenu.Item title="Sidebar With Navbar" to="/layouts/sidebar-with-navbar" exact />
                     <SidebarMenu.Item title="Drag &amp; Drop" to='/layouts/dnd-layout' exact />
                 </SidebarMenu.Item> */}
-                { /* -------- Interface ---------*/ }
+                { /* -------- Interface ---------*/}
                 {/* <SidebarMenu.Item
                     icon={<i className="fa fa-fw fa-toggle-on"></i>}
                     title="Interface"
@@ -254,14 +255,14 @@ class SidebarMiddleNav extends React.Component {
                     <SidebarMenu.Item title="Drag &amp; Drop Elements" to='/interface/drag-and-drop-elements' />
                     <SidebarMenu.Item title="Calendar" to='/interface/calendar' />
                 </SidebarMenu.Item> */}
-                { /* -------- Graphs ---------*/ }
+                { /* -------- Graphs ---------*/}
                 {/* <SidebarMenu.Item
                     icon={<i className="fa fa-fw fa-pie-chart"></i>}
                     title="Graphs"
                 >
                     <SidebarMenu.Item title="ReCharts" to='/graphs/re-charts' />
                 </SidebarMenu.Item> */}
-                { /* -------- Forms ---------*/ }
+                { /* -------- Forms ---------*/}
                 {/* <SidebarMenu.Item
                     icon={<i className="fa fa-fw fa-check-square-o"></i>}
                     title="Forms"
@@ -278,7 +279,7 @@ class SidebarMiddleNav extends React.Component {
                     <SidebarMenu.Item title="Dropzone" to='/forms/dropzone' />
                     <SidebarMenu.Item title="Sliders" to='/forms/sliders' />
                 </SidebarMenu.Item> */}
-                { /* -------- Tables ---------*/ }
+                { /* -------- Tables ---------*/}
                 {/* <SidebarMenu.Item
                     icon={<i className="fa fa-fw fa-trello"></i>}
                     title="Tables"
@@ -287,7 +288,7 @@ class SidebarMiddleNav extends React.Component {
                     <SidebarMenu.Item title="Extended Tables" to='/tables/extended-table' />
                     <SidebarMenu.Item title="AgGrid" to='/tables/ag-grid' />
                 </SidebarMenu.Item> */}
-                { /* -------- Apps ---------*/ }
+                { /* -------- Apps ---------*/}
                 {/* <SidebarMenu.Item
                     icon={<i className="fa fa-fw fa-mouse-pointer"></i>}
                     title="Apps"
@@ -336,7 +337,7 @@ class SidebarMiddleNav extends React.Component {
                     <SidebarMenu.Item title="Clients" to="/apps/clients" exact />
                     <SidebarMenu.Item title="Chat" to="/apps/chat" exact />
                 </SidebarMenu.Item> */}
-                { /* -------- Pages ---------*/ }
+                { /* -------- Pages ---------*/}
                 {/* <SidebarMenu.Item
                     icon={<i className="fa fa-fw fa-copy"></i>}
                     title="Pages"
@@ -362,7 +363,7 @@ class SidebarMiddleNav extends React.Component {
                     title="Docs"
                     href='https://webkom.gitbook.io/spin/v/airframe/airframe-react/documentation-react'
                 /> */}
-                { /* -------- Versions ---------*/ }
+                { /* -------- Versions ---------*/}
                 {/* <SidebarMenu.Item
                     icon={<i className="fa fa-fw fa-folder-open-o"></i>}
                     title="Versions"

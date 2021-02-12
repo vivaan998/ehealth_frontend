@@ -3,13 +3,19 @@ import ImmunizationsTable from "../Tables/ExtendedTable/components/Immunizations
 import { Container } from "./../../components";
 import { HeaderMain } from "./../components/HeaderMain";
 
-const Immunizations = () => {
-  return (
-    <Container>
-      <HeaderMain title="Immunizations" className="mb-5 mt-4" />
-      <ImmunizationsTable />
-    </Container>
-  );
+class Immunizations extends React.Component {
+    constructor(props) {
+        super(props);
+        console.log("Immunizations props", props);
+    }
+    render() {
+        return (
+            <Container>
+                <HeaderMain title="Immunizations" className="mb-5 mt-4" />
+                <ImmunizationsTable {...this.props} />
+            </Container>
+        );
+    }
 };
 
 export default Immunizations;

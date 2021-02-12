@@ -45,8 +45,8 @@ const sortCaret = (order) => {
 };
 
 export default class VaccinesTable extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       vaccinesList: [],
@@ -98,7 +98,11 @@ export default class VaccinesTable extends React.Component {
   }
 
   handleAdministered(cell, row){
-    console.log(row.id);
+    console.log("vaccine handle",row.vaccine_id);
+    this.props.history.push({
+      pathname: '/immunizations',
+      vaccine_id: row.vaccine_id
+    });
   }
 
   handleArchive(cell, row){
