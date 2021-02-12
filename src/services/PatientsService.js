@@ -71,11 +71,31 @@ const getAllPatientsList = async (data) => {
     return response;
 }
 
-
+const archivePatient = async (data) => {
+    const config = {
+        headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Bearer ' + AuthenticationService.getToken(),
+        }
+    }
+    var response;
+    const res = await axios.put(paths.patients,data, config)
+        .then(function (res){
+            response = {status: true, data: res.data}
+        })
+        .catch(function (err) {
+            console.log(err.response);
+            response = { status: false, data: err.response };
+        });
+    return response;
+}
 
 const ProvidersService = {
     getPatient: getPatient,
     createPatient: createPatient,
-    getAllPatientsList:getAllPatientsList
+    getAllPatientsList:getAllPatientsList,
+    archivePatient: archivePatient
 }
 export default ProvidersService;

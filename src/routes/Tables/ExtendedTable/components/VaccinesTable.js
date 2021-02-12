@@ -58,7 +58,8 @@ export default class VaccinesTable extends React.Component {
       color: "black",
       isLoading: false,
       nextPage: '',
-      previousPage: ''
+      previousPage: '',
+      archiveMessage: "",
     };
 
     this.headerCheckboxRef = React.createRef();
@@ -104,8 +105,31 @@ export default class VaccinesTable extends React.Component {
     });
   }
 
-  handleArchive(cell, row){
-    console.log(row.id);
+  async handleArchive(cell, row){
+    console.log("Archive button clicked, active flag:", row.active_fl, row.vaccine_id);
+        const data = {
+            "vaccine_id": row.vaccine_id
+        }
+        try {
+            const response = await VaccinesService.archiveVaccine(data);
+            if (response.status == true) {
+                console.log(response.data);
+                this.setState({
+                    archiveMessage: "Vaccine archived successfully"
+                });
+                this.getList();
+
+            }
+            else {
+                this.setState({
+                   archiveMessage: response.data.data.error
+                });
+            }
+            console.log("archive vaccine>>>", this.state.archiveMessage);
+        }
+        catch (e) {
+            console.log(e, e.data)
+        }
   }
   
   actionButton = (cell, row,) => {

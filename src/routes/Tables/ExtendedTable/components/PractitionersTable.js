@@ -76,6 +76,7 @@ export default class PractitionersTable extends React.Component {
             provide_id: null,
             previousPage: '',
             nextPage: '',
+            archiveMessage:""
         };
         this.headerCheckboxRef = React.createRef();
     }
@@ -89,7 +90,7 @@ export default class PractitionersTable extends React.Component {
             }
             
             if (this.props.location.provider_id){
-                const response = await PractitionersService.getPractitionerOfThisProvider(this.props.location.provider_id);
+                const response = await PractitionersService.getPractitionerOfThisProvider(paramData,this.props.location.provider_id);
                 if (response.status == true){
                     this.setState({
                         practitionersList: response.data.result,
@@ -166,14 +167,39 @@ export default class PractitionersTable extends React.Component {
 
     handleImmunizationssOnClick(cell, row) {
         console.log("Immunizations Button clicked, rowId:", row.practitioner_id);
+        this.props.history.push({ pathname: "/immunizations", practitioner_id: row.practitioner_id });
     }
 
     handleAppointmentsOnClick(cell, row) {
         console.log("Appointments button clicked, rowId:", row.practitioner_id);
+        this.props.history.push({ pathname: "/appointments", practitioner_id: row.practitioner_id });
     }
 
-    handleArchiveOnClick(cell, row) {
-        console.log("Archive button clicked, active flag:", row.active_fl);
+    async handleArchiveOnClick(cell, row) {
+        console.log("Archive button clicked, active flag:", row.active_fl, row.practitioner_id);
+        const data = {
+            "practitioner_id": row.practitioner_id
+        }
+        try {
+            const response = await PractitionersService.archivePractitioner(data);
+            if (response.status == true) {
+                console.log(response.data);
+                this.setState({
+                    archiveMessage: "Practitionenr archived successfully"
+                });
+                this.getList();
+
+            }
+            else {
+                this.setState({
+                   archiveMessage: response.data.data.error
+                });
+            }
+            console.log("archive practitioner>>>", this.state.archiveMessage);
+        }
+        catch (e) {
+            console.log(e, e.data)
+        }
     }
 
     actionColButton = (cell, row) => {

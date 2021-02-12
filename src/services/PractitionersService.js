@@ -17,8 +17,8 @@ const getList = async (data) => {
     }
     var response;
     const res = await axios.get(paths.practitioners, config)
-        .then(function (res){
-            response = {status: true, data: res.data}
+        .then(function (res) {
+            response = { status: true, data: res.data }
         })
         .catch(function (err) {
             console.log(err.response);
@@ -38,8 +38,8 @@ const createPractitioner = async (data) => {
     }
     var response;
     const res = await axios.post(paths.practitioners, data, config)
-        .then(function (res){
-            response = {status: true, data: res.data}
+        .then(function (res) {
+            response = { status: true, data: res.data }
         })
         .catch(function (err) {
             console.log(err.response);
@@ -47,6 +47,7 @@ const createPractitioner = async (data) => {
         });
     return response;
 }
+
 const getAllPractitionersList = async (data) => {
     const config = {
         headers: {
@@ -60,8 +61,8 @@ const getAllPractitionersList = async (data) => {
     var apiPath = paths.get_all_practitioners + data;
     console.log('api path >>>', apiPath);
     const res = await axios.get(apiPath, config)
-        .then(function (res){
-            response = {status: true, data: res.data}
+        .then(function (res) {
+            response = { status: true, data: res.data }
         })
         .catch(function (err) {
             console.log(err.response);
@@ -70,7 +71,34 @@ const getAllPractitionersList = async (data) => {
     return response;
 }
 
-const practitionerOfThisProvider = async (data) => {
+const practitionerOfThisProvider = async (data, provider_id) => {
+    const config = {
+        headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Bearer ' + AuthenticationService.getToken(),
+        },
+        params: {
+            page: data.page,
+            search: data.search
+        }
+    }
+    var response;
+    var apiPath = paths.get_practitioners_of_this_provider + provider_id;
+    console.log('api path >>>', apiPath);
+    const res = await axios.get(apiPath, config)
+        .then(function (res) {
+            response = { status: true, data: res.data }
+        })
+        .catch(function (err) {
+            console.log(err.response);
+            response = { status: false, data: err.response };
+        });
+    return response;
+}
+
+const archivePractitioner = async (data) => {
     const config = {
         headers: {
             'accept': 'application/json',
@@ -80,11 +108,9 @@ const practitionerOfThisProvider = async (data) => {
         }
     }
     var response;
-    var apiPath = paths.get_practitioners_of_this_provider + data;
-    console.log('api path >>>', apiPath);
-    const res = await axios.get(apiPath, config)
-        .then(function (res){
-            response = {status: true, data: res.data}
+    const res = await axios.put(paths.practitioners, data, config)
+        .then(function (res) {
+            response = { status: true, data: res.data }
         })
         .catch(function (err) {
             console.log(err.response);
@@ -93,13 +119,11 @@ const practitionerOfThisProvider = async (data) => {
     return response;
 }
 
-
-
 const PractitionersService = {
     getList: getList,
     createPractitioner: createPractitioner,
     getAllPractitionersList: getAllPractitionersList,
-    getPractitionerOfThisProvider: practitionerOfThisProvider
-    
+    getPractitionerOfThisProvider: practitionerOfThisProvider,
+    archivePractitioner: archivePractitioner
 }
 export default PractitionersService;

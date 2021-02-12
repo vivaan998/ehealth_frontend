@@ -41,13 +41,36 @@ export default class AppointmentsTable extends React.Component {
                 page: page,
                 search: search
             }
-            const response = await AppointmentsService.getList(paramData);
-            if (response.status == true){
-                this.setState({
-                    appointmentsList: response.data.result,
-                    nextPage: response.data.next_page,
-                    previousPage: response.data.previous_page,            
-                });
+            
+            if (this.props.location.provider_id){
+                console.log("provider_id in appointments",this.props.location.provider_id);
+                const response = await AppointmentsService.getPractitionerOfThisProvider(this.props.location.provider_id);
+                if (response.status == true){
+                    this.setState({
+                        appointmentsList: response.data.result,
+                        nextPage: response.data.next_page,
+                        previousPage: response.data.previous_page,
+                    });
+                }
+            }else if (this.props.location.practitioner_id){
+                console.log("practitioner_id in appointments",this.props.location.practitioner_id);
+                const response = await AppointmentsService.getPractitionerOfThisProvider(this.props.location.provider_id);
+                if (response.status == true){
+                    this.setState({
+                        appointmentsList: response.data.result,
+                        nextPage: response.data.next_page,
+                        previousPage: response.data.previous_page,
+                    });
+                }
+            }else{
+                const response = await AppointmentsService.getList(paramData);
+                if (response.status == true){
+                    this.setState({
+                        appointmentsList: response.data.result,
+                        nextPage: response.data.next_page,
+                        previousPage: response.data.previous_page,
+                    });
+                }
             }
             
         }

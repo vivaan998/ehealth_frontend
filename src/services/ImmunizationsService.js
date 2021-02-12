@@ -48,6 +48,27 @@ const createImmunizations = async (data) => {
     return response;
 }
 
+const archiveImmunization = async (data) => {
+    const config = {
+        headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Bearer ' + AuthenticationService.getToken(),
+        }
+    }
+    var response;
+    const res = await axios.put(paths.immunizations,data, config)
+        .then(function (res){
+            response = {status: true, data: res.data}
+        })
+        .catch(function (err) {
+            console.log(err.response);
+            response = { status: false, data: err.response };
+        });
+    return response;
+}
+
 // const getAllProvidersList = async (data) => {
 //     const config = {
 //         headers: {
@@ -74,5 +95,6 @@ const createImmunizations = async (data) => {
 const ImmunizationsService = {
     getList: getList,
     createImmunizations: createImmunizations,
+    archiveImmunization: archiveImmunization
 }
 export default ImmunizationsService;
