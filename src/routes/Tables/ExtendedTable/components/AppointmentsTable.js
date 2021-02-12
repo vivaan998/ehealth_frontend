@@ -30,6 +30,7 @@ export default class AppointmentsTable extends React.Component {
 
         this.state = {
             appointmentsList: [],
+            isArchiving: false
         };
 
         this.headerCheckboxRef = React.createRef();

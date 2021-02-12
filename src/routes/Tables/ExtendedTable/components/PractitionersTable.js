@@ -76,7 +76,8 @@ export default class PractitionersTable extends React.Component {
             provide_id: null,
             previousPage: '',
             nextPage: '',
-            archiveMessage:""
+            archiveMessage:"",
+            isArchiving: false
         };
         this.headerCheckboxRef = React.createRef();
     }
@@ -175,24 +176,29 @@ export default class PractitionersTable extends React.Component {
         this.props.history.push({ pathname: "/appointments", practitioner_id: row.practitioner_id });
     }
 
-    async handleArchiveOnClick(cell, row) {
+    handleArchiveOnClick = async (cell, row) => {
         console.log("Archive button clicked, active flag:", row.active_fl, row.practitioner_id);
         const data = {
             "practitioner_id": row.practitioner_id
-        }
-        try {
+        };
+        this.setState({
+            isLoading: true,
+        });
+        try {            
             const response = await PractitionersService.archivePractitioner(data);
             if (response.status == true) {
                 console.log(response.data);
                 this.setState({
-                    archiveMessage: "Practitionenr archived successfully"
+                    archiveMessage: "Practitioner archived successfully",
+                    isLoading: false
                 });
                 this.getList();
 
             }
             else {
                 this.setState({
-                   archiveMessage: response.data.data.error
+                   archiveMessage: response.data.data.error,
+                   isLoading: false
                 });
             }
             console.log("archive practitioner>>>", this.state.archiveMessage);
@@ -226,8 +232,9 @@ export default class PractitionersTable extends React.Component {
                     outline
                     color="danger"
                     onClick={() => this.handleArchiveOnClick(cell, row)}
+                    disabled={this.state.isLoading}
                 >
-                    Archive
+                {(this.state.isLoading) ? 'Archiving...' : 'Archive'}
         </Button>
             </ButtonGroup>
         );
@@ -328,7 +335,7 @@ export default class PractitionersTable extends React.Component {
     onChangeProvider(value) {
         this.setState({
             provider: value
-        })
+        });
     }
 
     async CreatePractitioner() {

@@ -60,6 +60,7 @@ export default class VaccinesTable extends React.Component {
       nextPage: '',
       previousPage: '',
       archiveMessage: "",
+      isArchiving: false
     };
 
     this.headerCheckboxRef = React.createRef();
@@ -111,18 +112,23 @@ export default class VaccinesTable extends React.Component {
             "vaccine_id": row.vaccine_id
         }
         try {
+            this.setState({
+              isArchiving: true
+            });
             const response = await VaccinesService.archiveVaccine(data);
             if (response.status == true) {
                 console.log(response.data);
                 this.setState({
-                    archiveMessage: "Vaccine archived successfully"
+                    archiveMessage: "Vaccine archived successfully",
+                    isArchiving: false
                 });
                 this.getList();
 
             }
             else {
                 this.setState({
-                   archiveMessage: response.data.data.error
+                   archiveMessage: response.data.data.error,
+                   isArchiving: false
                 });
             }
             console.log("archive vaccine>>>", this.state.archiveMessage);
@@ -138,8 +144,8 @@ export default class VaccinesTable extends React.Component {
         <Button size="sm" outline color="indigo" onClick={() => this.handleAdministered(cell, row)}>
                   Administered to
         </Button>
-        <Button size="sm" color="danger" outline onClick={() => this.handleArchive(cell, row)}>
-                  Archive
+        <Button size="sm" color="danger" outline onClick={() => this.handleArchive(cell, row)} disabled={this.state.isArchiving}>
+        {this.state.isArchiving ? 'Archiving...' : 'Archive'}
         </Button>
       </ButtonGroup>
 

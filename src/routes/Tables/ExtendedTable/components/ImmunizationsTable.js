@@ -77,6 +77,7 @@ export default class ImmunizationsTable extends React.Component {
             allVaccines: [],
             searchValue: null,
             archiveMessage: "",
+            isArchiving: false,
             datetime: new Date(),
             vaccineDate: moment(moment().utc().format("YYYY/MM/DD")).toDate(),
         };
@@ -186,6 +187,7 @@ export default class ImmunizationsTable extends React.Component {
             console.log('id >>>', value);
             const response = await PatientsService.getAllPatientsList(value);
             if (response.status == true) {
+                console.log('>>>', response.data.data);
                 if (response.data.data) {
                     this.setState({
                         allPatients: response.data.data,
@@ -210,10 +212,13 @@ export default class ImmunizationsTable extends React.Component {
         if (AuthenticationService.getUser()) {
             this.getList();
             this.getAllVaccines();
+            console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
             if (Config.profileData.role === 100) {
+                console.log('in get all 100 providers');
                 this.getAllProviders();
             }
             if (Config.profileData.role === 50) {
+                console.log('In 50');
                 this.getAllPractitioners(Config.profileData.id);
             }
             if (Config.profileData.role === 10) {
@@ -270,18 +275,23 @@ export default class ImmunizationsTable extends React.Component {
             "immunization_id": row.immunization_id
         }
         try {
+            this.setState({
+                isArchiving: true
+            });
             const response = await ImmunizationsService.archiveImmunization(data);
             if (response.status == true) {
                 console.log(response.data);
                 this.setState({
-                    archiveMessage: "Immunization archived successfully"
+                    archiveMessage: "Immunization archived successfully",
+                    isArchiving: false
                 });
                 this.getList();
 
             }
             else {
                 this.setState({
-                    archiveMessage: response.data.data.error
+                    archiveMessage: response.data.data.error,
+                    isArchiving: false
                 });
             }
             console.log("archive Immunization>>>", this.state.archiveMessage);
@@ -299,8 +309,9 @@ export default class ImmunizationsTable extends React.Component {
                     outline
                     color="danger"
                     onClick={() => this.handleArchiveOnClick(cell, row)}
+                    disabled={this.state.isArchiving}
                 >
-                    Archive
+                {this.state.isArchiving ? 'Archiving...' : 'Archive'}
         </Button>
             </ButtonGroup>
         );
@@ -452,7 +463,7 @@ export default class ImmunizationsTable extends React.Component {
                                                             value={(this.state.vaccine)}
                                                             onChange={e => this.onChangeVaccine(e.target.value)}
                                                         >
-
+                                                            {this.state.allVaccines.map((obj) => <option value={obj.vaccine_id}>{obj.name}</option>)}
                                                         </Input>
 
                                                     </Col>

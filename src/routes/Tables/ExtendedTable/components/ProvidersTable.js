@@ -70,6 +70,7 @@ export default class ProviderTable extends React.Component {
             previousPage: '',
             searchValue: null,
             archiveMessage: "",
+            isArchiving: false,
         };
 
         this.headerCheckboxRef = React.createRef();
@@ -131,18 +132,23 @@ export default class ProviderTable extends React.Component {
             "provider_id": row.provider_id
         }
         try {   
+            this.setState({
+                isArchiving: true
+            });
             const response = await ProvidersService.archiveProvider(data);
             if (response.status == true) {
                 console.log(response.data);
                 this.setState({
-                    archiveMessage: "Provider archived successfully"
+                    archiveMessage: "Provider archived successfully",
+                    isArchiving: false
                 });
                 this.getList();
 
             }
             else {
                 this.setState({
-                   archiveMessage: response.data.data.error
+                   archiveMessage: response.data.data.error,
+                   isArchiving: false
                 });
             }
             console.log("archive provider>>>", this.state.archiveMessage);
@@ -168,8 +174,9 @@ export default class ProviderTable extends React.Component {
                             outline
                             color="danger"
                             onClick={() => this.handleArchiveOnClick(cell, row)}
+                            disabled={this.state.isArchiving}
                         >
-                            Archive
+                        {this.state.isArchiving ? 'Archiving...' : 'Archive'}
                 </Button>
             </ButtonGroup>
         );
