@@ -132,7 +132,9 @@ export default class PractitionersTable extends React.Component {
     componentDidMount = async () => {
         if (AuthenticationService.getUser()) {
             this.getList();
-            this.getAllProviders();
+            if (Config.profileData.role === 100){
+                this.getAllProviders();
+            }
 
         }
         else {
@@ -444,7 +446,11 @@ export default class PractitionersTable extends React.Component {
         }
 
     }
-
+    handleCallback = async (childData) =>{
+        if (childData.length > 1){            
+            this.getList(null,childData);
+        }
+    }
     render() {
         const columnDefs = this.createColumnDefinitions();
         
@@ -463,7 +469,7 @@ export default class PractitionersTable extends React.Component {
                                 AdvancedTable A
                             </h6> */}
                             <div className="d-flex ml-auto">
-                                <CustomSearch className="mr-2" {...props.searchProps} />
+                                <CustomSearch className="mr-2" {...props.searchProps} parentCallBack = {this.handleCallback}/>
                                 <ButtonGroup>
                                     <CustomExportCSV {...props.csvProps}>Export</CustomExportCSV>
                                     <Button
@@ -537,7 +543,7 @@ export default class PractitionersTable extends React.Component {
                                                             type="email"
                                                             name="emailId"
                                                             id="emailId"
-                                                            placeholder="harshil@gmail.com"
+                                                            placeholder="user@example.com"
                                                             value={this.state.emailId}
                                                             onChange={e => this.onChangeEmail(e.target.value)}
                                                         />

@@ -2,7 +2,7 @@ import axios from 'axios';
 import paths from '../config/Endpoint';
 import AuthenticationService from './AuthenticationService';
 
-const getPatient = async (data) => {
+const getList = async (data) => {
     const config = {
         headers: {
             'accept': 'application/json',
@@ -16,7 +16,7 @@ const getPatient = async (data) => {
         }
     }
     var response;
-    const res = await axios.get(paths.patients, config)
+    const res = await axios.get(paths.immunizations, config)
         .then(function (res) {
             response = { status: true, data: res.data }
         })
@@ -27,7 +27,7 @@ const getPatient = async (data) => {
     return response;
 }
 
-const createPatient = async (data) => {
+const createImmunizations = async (data) => {
     const config = {
         headers: {
             'accept': 'application/json',
@@ -37,7 +37,7 @@ const createPatient = async (data) => {
         }
     }
     var response;
-    const res = await axios.post(paths.patients, data, config)
+    const res = await axios.post(paths.immunizations, data, config)
         .then(function (res) {
             response = { status: true, data: res.data }
         })
@@ -48,34 +48,31 @@ const createPatient = async (data) => {
     return response;
 }
 
-const getAllPatientsList = async (data) => {
-    const config = {
-        headers: {
-            'accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Authorization': 'Bearer ' + AuthenticationService.getToken(),
-        }
-    }
-    var response;
-    var apiPath = paths.get_all_patients + data;
-    console.log('api path >>>', apiPath);
-    const res = await axios.get(apiPath, config)
-        .then(function (res){
-            response = {status: true, data: res.data}
-        })
-        .catch(function (err) {
-            console.log(err.response);
-            response = { status: false, data: err.response };
-        });
-    return response;
+// const getAllProvidersList = async (data) => {
+//     const config = {
+//         headers: {
+//             'accept': 'application/json',
+//             'Content-Type': 'application/json',
+//             'Access-Control-Allow-Origin': '*',
+//             'Authorization': 'Bearer ' + AuthenticationService.getToken(),
+//         }
+//     }
+//     var response;
+//     const res = await axios.get(paths.get_all_providers, config)
+//         .then(function (res){
+//             response = {status: true, data: res.data}
+//         })
+//         .catch(function (err) {
+//             console.log(err.response);
+//             response = { status: false, data: err.response };
+//         });
+//     return response;
+// }
+
+
+
+const ImmunizationsService = {
+    getList: getList,
+    createImmunizations: createImmunizations,
 }
-
-
-
-const ProvidersService = {
-    getPatient: getPatient,
-    createPatient: createPatient,
-    getAllPatientsList:getAllPatientsList
-}
-export default ProvidersService;
+export default ImmunizationsService;

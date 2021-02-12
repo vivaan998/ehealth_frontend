@@ -249,6 +249,11 @@ export default class VaccinesTable extends React.Component {
     }
 
   }
+  handleCallback = async (childData) =>{
+    if (childData.length > 1){            
+        this.getList(null,childData);
+    }
+  }
 
   render() {
     const columnDefs = this.createColumnDefinitions();
@@ -268,7 +273,7 @@ export default class VaccinesTable extends React.Component {
                                 AdvancedTable A
                             </h6> */}
               <div className="d-flex ml-auto">
-                <CustomSearch className="mr-2" {...props.searchProps} />
+                <CustomSearch className="mr-2" {...props.searchProps} parentCallBack={this.handleCallback} />
                 <ButtonGroup>
                   
                   <Button size="sm" outline id="modalDefault301">

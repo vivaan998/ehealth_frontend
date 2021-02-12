@@ -364,7 +364,7 @@ export default class ProviderTable extends React.Component {
                     authenticationMessage: response.data.message,
                     isLoading: false,
                 })
-                this.getList();
+                this.getPatient();
             } else {
                 this.setState({
                     color: "danger",
@@ -412,6 +412,11 @@ export default class ProviderTable extends React.Component {
         },
     ];
 }
+handleCallback = async (childData) =>{
+    if (childData.length > 1){            
+        this.getPatient(null,childData);
+    }
+}
 
 
   render() {
@@ -433,7 +438,7 @@ export default class ProviderTable extends React.Component {
                                     AdvancedTable A
                                 </h6> */}
                 <div className="d-flex ml-auto">
-                    <CustomSearch className="mr-2" {...props.searchProps} />
+                    <CustomSearch className="mr-2" {...props.searchProps} parentCallBack={this.handleCallback} />
                     <ButtonGroup>
                     <Button size="sm" outline id="modalDefault301">
                         <i className="fa fa-fw fa-plus"></i>
@@ -575,8 +580,6 @@ export default class ProviderTable extends React.Component {
 
                                                 {this.state.allProviders.map((obj) => <option value={obj.provider_id}>{obj.name}</option>)}
 
-                                                {/* <option defaultValue="">SSG Hospital</option>
-                                                <option>KD Hospital</option> */}
                                             </Input>
                                         ) : (                                            
                                             <option>{Config.profileData.name}</option>

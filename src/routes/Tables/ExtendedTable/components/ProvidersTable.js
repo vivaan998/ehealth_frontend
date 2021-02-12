@@ -26,12 +26,8 @@ import {
   FormText,
   ModalFooter,
   Label,
-  CustomInput,
   Form, 
   FormGroup, 
-  Pagination,
-  PaginationItem,
-  PaginationLink
 } from "../../../../components";
 import { CustomExportCSV } from "./CustomExportButton";
 import { CustomSearch } from "./CustomSearch";
@@ -300,9 +296,9 @@ export default class ProviderTable extends React.Component {
         ];
     }
     handleCallback = async (childData) =>{
-        console.log('In provider >>>', childData);
-        this.setState({searchValue: childData});
-        this.getList(null,childData);
+        if (childData.length > 1){            
+            this.getList(null,childData);
+        }
     }
 
     render() {
@@ -312,7 +308,6 @@ export default class ProviderTable extends React.Component {
                 keyField="id"
                 data={this.state.providersList}
                 columns={columnDefs}
-                search
                 exportCSV
             >
                 {(props) => (

@@ -157,7 +157,7 @@ class Login extends React.Component {
                                         type="email"
                                         name="emailId" 
                                         id="emailId"
-                                        placeholder="harshil@gmail.com" 
+                                        placeholder="user@example.com" 
                                         className="bg-white"
                                         value={this.state.emailId}
                                         onChange={e => this.onChangeEmail(e.target.value)}
