@@ -89,7 +89,7 @@ export default class PractitionersTable extends React.Component {
             }
             
             if (this.props.location.provider_id){
-                const response = await PractitionersService.getPractitionerOfThisProvider(this.props.location.provider_id);
+                const response = await PractitionersService.getPractitionerOfThisProvider(paramData,this.props.location.provider_id);
                 if (response.status == true){
                     this.setState({
                         practitionersList: response.data.result,
@@ -166,10 +166,12 @@ export default class PractitionersTable extends React.Component {
 
     handleImmunizationssOnClick(cell, row) {
         console.log("Immunizations Button clicked, rowId:", row.practitioner_id);
+        this.props.history.push({ pathname: "/immunizations", practitioner_id: row.practitioner_id });
     }
 
     handleAppointmentsOnClick(cell, row) {
         console.log("Appointments button clicked, rowId:", row.practitioner_id);
+        this.props.history.push({ pathname: "/appointments", practitioner_id: row.practitioner_id });
     }
 
     async handleArchiveOnClick(cell, row) {
