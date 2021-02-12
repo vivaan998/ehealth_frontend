@@ -68,7 +68,8 @@ export default class ProviderTable extends React.Component {
             name: '',
             nextPage: '',
             previousPage: '',
-            searchValue: null
+            searchValue: null,
+            archiveMessage: "",
         };
 
         this.headerCheckboxRef = React.createRef();
@@ -124,8 +125,31 @@ export default class ProviderTable extends React.Component {
         });
     }
 
-    handleArchiveOnClick(cell, row) {
-        console.log("Archive button clicked, active flag:", row.active_fl);
+    async handleArchiveOnClick(cell, row) {
+        console.log("Archive button clicked, active flag:", row.active_fl, row.provider_id);
+        const data = {
+            "provider_id": row.provider_id
+        }
+        try {   
+            const response = await ProvidersService.archiveProvider(data);
+            if (response.status == true) {
+                console.log(response.data);
+                this.setState({
+                    archiveMessage: "Provider archived successfully"
+                });
+                this.getList();
+
+            }
+            else {
+                this.setState({
+                   archiveMessage: response.data.data.error
+                });
+            }
+            console.log("archive provider>>>", this.state.archiveMessage);
+        }
+        catch (e) {
+            console.log(e, e.data)
+        }
     }
 
     actionColButton = (cell, row) => {

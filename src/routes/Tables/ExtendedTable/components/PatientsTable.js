@@ -76,6 +76,7 @@ export default class ProviderTable extends React.Component {
             allProviders: [],
             allPractitioners: [],
             nextPage: '',
+            archiveMessage: "",
             previousPage: ''
         };
 
@@ -180,9 +181,31 @@ export default class ProviderTable extends React.Component {
     }
 
 
-    handleArchiveOnClick(cell, row) {
-        console.log("Archive button clicked, active flag:", row.active_fl);
-    }
+    async handleArchiveOnClick(cell, row) {
+        console.log("Archive button clicked, active flag:", row.active_fl, row.patient_id);
+        const data = {
+            "patient_id": row.patient_id
+        }
+        try {
+            const response = await PatientsService.archivePatient(data);
+            if (response.status == true) {
+                console.log(response.data);
+                this.setState({
+                    archiveMessage: "Patient archived successfully"
+                });
+                this.getPatient();
+
+            }
+            else {
+                this.setState({
+                   archiveMessage: response.data.data.error
+                });
+            }
+            console.log("archive Patient>>>", this.state.archiveMessage);
+        }
+        catch (e) {
+            console.log(e, e.data)
+        }    }
 
     actionColButton = (cell, row) => {
         return (

@@ -47,6 +47,7 @@ const createPractitioner = async (data) => {
         });
     return response;
 }
+
 const getAllPractitionersList = async (data) => {
     const config = {
         headers: {
@@ -93,13 +94,32 @@ const practitionerOfThisProvider = async (data) => {
     return response;
 }
 
-
+const archivePractitioner = async (data) => {
+    const config = {
+        headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Bearer ' + AuthenticationService.getToken(),
+        }
+    }
+    var response;
+    const res = await axios.put(paths.practitioners,data, config)
+        .then(function (res){
+            response = {status: true, data: res.data}
+        })
+        .catch(function (err) {
+            console.log(err.response);
+            response = { status: false, data: err.response };
+        });
+    return response;
+}
 
 const PractitionersService = {
     getList: getList,
     createPractitioner: createPractitioner,
     getAllPractitionersList: getAllPractitionersList,
-    getPractitionerOfThisProvider: practitionerOfThisProvider
-    
+    getPractitionerOfThisProvider: practitionerOfThisProvider,
+    archivePractitioner: archivePractitioner
 }
 export default PractitionersService;

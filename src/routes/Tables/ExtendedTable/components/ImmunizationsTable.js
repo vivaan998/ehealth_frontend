@@ -76,6 +76,7 @@ export default class ImmunizationsTable extends React.Component {
       allPatients: [],
       allVaccines: [],
       searchValue: null,
+      archiveMessage: "",
       vaccineDate: moment( moment().utc().format( "YYYY/MM/DD" )).toDate(),
     };
 
@@ -240,8 +241,31 @@ export default class ImmunizationsTable extends React.Component {
     this.setState({ vaccineDate:startDate })
   ) 
 
-  handleArchiveOnClick(cell, row) {
-    console.log("Archive button clicked, active flag:", row.active_fl);
+  async handleArchiveOnClick(cell, row) {
+    console.log("Archive button clicked, active flag:", row.active_fl, row.immunization_id);
+        const data = {
+            "immunization_id": row.immunization_id
+        }
+        try {
+            const response = await ImmunizationsService.archiveImmunization(data);
+            if (response.status == true) {
+                console.log(response.data);
+                this.setState({
+                    archiveMessage: "Immunization archived successfully"
+                });
+                this.getList();
+
+            }
+            else {
+                this.setState({
+                   archiveMessage: response.data.data.error
+                });
+            }
+            console.log("archive Immunization>>>", this.state.archiveMessage);
+        }
+        catch (e) {
+            console.log(e, e.data)
+        }
   }
 
   actionColButton = (cell, row) => {
