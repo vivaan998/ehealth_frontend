@@ -14,6 +14,7 @@ import AuthenticationService from './../../../../services/AuthenticationService'
 import Config from './../../../../config/Config';
 
 import {
+    Badge,
     Button,
     ButtonGroup,
     UncontrolledModal,
@@ -217,65 +218,40 @@ export default class PractitionersTable extends React.Component {
                 dataField: "first_name",
                 text: "First Name",
                 sort: true,
-                // align: "center",
                 sortCaret,
                 formatter: (cell) => <span className="text-inverse">{cell}</span>,
-                // ...buildCustomTextFilter({
-                //     placeholder: "Enter First name...",
-                //     getFilter: (filter) => {
-                //         this.nameFilter = filter;
-                //     },
-                // }),
             },
             {
                 dataField: "last_name",
                 text: "Last Name",
                 sort: true,
-                // align: "center",
                 sortCaret,
                 formatter: (cell) => <span className="text-inverse">{cell}</span>,
-                // ...buildCustomTextFilter({
-                //     placeholder: "Enter Last name...",
-                //     getFilter: (filter) => {
-                //         this.nameFilter = filter;
-                //     },
-                // }),
             },
             {
                 dataField: "doctor_fl",
                 text: "Doctor/Nurse",
                 sort: true,
-                // align: "center",
                 sortCaret,
-                formatter: (cell) => <span className="text-inverse">{(cell) ? 'Doctor' : 'Nurse'}</span>,
-                // ...buildCustomTextFilter({
-                //     placeholder: "Doctor",
-                //     getFilter: (filter) => {
-                //         this.nameFilter = filter;
-                //     },
-                // }),
+                formatter: (cell) => <span className="text-inverse">{(cell) ? 
+                    <Badge color='indigo'>
+                        Doctor
+                    </Badge>
+                : 
+                    <Badge color='primary'>
+                        Nurse
+                    </Badge>
+                }</span>,
             },
             {
                 dataField: "created_dt",
                 text: "Date Added",
                 formatter: (cell) => moment(cell).format("DD/MM/YYYY"),
-                // filter: dateFilter({
-                //     className: "d-flex align-items-center",
-                //     comparatorClassName: "d-none",
-                //     dateClassName: "form-control form-control-sm",
-                //     comparator: Comparator.GT,
-                //     getFilter: (filter) => {
-                //         this.stockDateFilter = filter;
-                //     },
-                // }),
                 sort: true,
                 sortCaret,
             },
             {
                 text: "Action",
-                // sort: true,
-                // align: "center",
-                // sortCaret,
                 formatter: this.actionColButton,
             },
         ];
@@ -448,10 +424,8 @@ export default class PractitionersTable extends React.Component {
         }
 
     }
-    handleCallback = async (childData) =>{
-        if (childData.length > 1){            
-            this.getList(null,childData);
-        }
+    handleCallback = async (childData) =>{   
+        this.getList(null,childData);
     }
     render() {
         const columnDefs = this.createColumnDefinitions();
@@ -473,14 +447,7 @@ export default class PractitionersTable extends React.Component {
                             <div className="d-flex ml-auto">
                                 <CustomSearch className="mr-2" {...props.searchProps} parentCallBack = {this.handleCallback}/>
                                 <ButtonGroup>
-                                    <CustomExportCSV {...props.csvProps}>Export</CustomExportCSV>
-                                    <Button
-                                        size="sm"
-                                        outline
-                                    // onClick={this.handleDeleteRow.bind(this)}
-                                    >
-                                        Delete
-                                    </Button>
+                                   
                                     <Button
                                         size="sm"
                                         outline
@@ -664,7 +631,7 @@ export default class PractitionersTable extends React.Component {
                                                 Discard
                                             </UncontrolledModal.Close>
                                             <Button color="primary" onClick={() => this.CreatePractitioner()} disabled={this.state.isLoading}>
-                                                Create
+                                            {this.state.isLoading ? 'Creating practitioner...' : 'Create Practitioner'} 
                                             </Button>
                                         </ModalFooter>
                                     </UncontrolledModal>

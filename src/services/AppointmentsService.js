@@ -16,7 +16,7 @@ const getList = async (data) => {
         }
     }
     var response;
-    const res = await axios.get(paths.practitioners, config)
+    const res = await axios.get(paths.appointments, config)
         .then(function (res){
             response = {status: true, data: res.data}
         })

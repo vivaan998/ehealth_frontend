@@ -127,8 +127,7 @@ export default class ImmunizationsTable extends React.Component {
               this.setState({
                   allProviders: response.data.data,
                   provider: (response.data.data)[0].provider_id,
-              });
-              console.log('all Providers List >>>', this.state.allProviders);              
+              });       
               this.getAllPractitioners(this.state.provider);
           }
       }
@@ -408,23 +407,7 @@ export default class ImmunizationsTable extends React.Component {
                                         </Input>                                 
                                     </Col>
                               </FormGroup>
-                              {/* <FormGroup row>
-                                    <Label for="vaccine" sm={4}>
-                                        Date
-                                    </Label>
-                                    <Col sm={8}>                                        
-                                    <TextField
-                                      id="datetime-local"
-                                      label="Next appointment"
-                                      type="datetime-local"
-                                      defaultValue="2017-05-24T10:30"
-                                      className={classes.textField}
-                                      InputLabelProps={{
-                                        shrink: true,
-                                      }}
-                                    />                              
-                                    </Col>
-                              </FormGroup> */}
+                              
                             
                             </Form>
                         </ModalBody>

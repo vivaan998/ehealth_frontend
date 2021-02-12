@@ -8,6 +8,7 @@ const paths = {
     practitioners:      `${endpointApi}practitioners/`,
     patients:           `${endpointApi}patients/`,
     immunizations:      `${endpointApi}immunizations/`,
+    appointments:       `${endpointApi}appointments/`,
     get_all_providers:  `${endpointApi}get-providers/`,
     get_all_practitioners: `${endpointApi}get-practitioners/`,
     get_all_patients:   `${endpointApi}get-patients/`,

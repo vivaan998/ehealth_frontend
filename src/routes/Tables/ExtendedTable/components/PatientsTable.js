@@ -115,7 +115,7 @@ export default class ProviderTable extends React.Component {
                     allProviders: response.data.data,
                     provider: (response.data.data)[0].provider_id,
                 });
-                console.log('all Providers List >>>', this.state.allProviders);
+                this.getAllPractitioners(this.state.provider);
             }
         }
         catch (e) {
@@ -157,7 +157,6 @@ export default class ProviderTable extends React.Component {
             }
             if (Config.profileData.role === 50) {
                 this.getAllPractitioners(Config.profileData.id);
-
             }
         }
         else {
@@ -415,10 +414,9 @@ export default class ProviderTable extends React.Component {
         },
     ];
 }
-handleCallback = async (childData) =>{
-    if (childData.length > 1){            
-        this.getPatient(null,childData);
-    }
+handleCallback = async (childData) =>{         
+    this.getPatient(null,childData);
+
 }
 
     render() {
@@ -622,10 +620,10 @@ handleCallback = async (childData) =>{
                                             </FormText>
                                             <UncontrolledModal.Close color="link">
                                                 Discard
-                            </UncontrolledModal.Close>
+                                            </UncontrolledModal.Close>
                                             <Button color="primary" onClick={() => this.CreatePatient()} disabled={this.state.isLoading}>
-                                                Create
-                            </Button>
+                                            {this.state.isLoading ? 'Creating patient...' : 'Create Patient'} 
+                                            </Button>
                                         </ModalFooter>
                                     </UncontrolledModal>
                                 </ButtonGroup>

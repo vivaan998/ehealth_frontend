@@ -140,7 +140,7 @@ class Login extends React.Component {
                 <EmptyLayout.Section center>
                     { /* START Header */}
                     <HeaderAuth 
-                        title="Sign In"
+                        title="Login"
                     />
                     { /* END Header */}
                     { /* START Form */}
@@ -212,7 +212,7 @@ class Login extends React.Component {
                                     onClick={() => this.Authenticate()}
                                     disabled={this.state.isLoading}
                                 >
-                                    Sign In
+                                {this.state.isLoading ? ('Logging In...') : ('Login')}
                                 </Button>
                             )
                         }
@@ -223,17 +223,7 @@ class Login extends React.Component {
                         </FormText>
                         
                     </Form>
-                    { /* END Form */}
-                    { /* START Bottom Links */}
-                    {/* <div className="d-flex mb-5">
-                        <Link to="/pages/forgotpassword" className="text-decoration-none">
-                            Forgot Password
-                        </Link>
-                    </div> */}
-                    { /* END Bottom Links */}
-                    { /* START Footer */}
                     <FooterAuth />
-                    { /* END Footer */}
                 </EmptyLayout.Section>
             </EmptyLayout>
         );

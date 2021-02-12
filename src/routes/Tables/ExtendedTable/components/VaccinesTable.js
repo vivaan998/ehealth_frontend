@@ -232,7 +232,7 @@ export default class VaccinesTable extends React.Component {
                 console.log(response.data);
                 this.setState({
                     color: "success",
-                    authenticationMessage: "Successfully created vaccine",
+                    authenticationMessage: response.data.message,
                     isLoading: false,
                 });
                 this.getList();               
@@ -253,9 +253,7 @@ export default class VaccinesTable extends React.Component {
 
   }
   handleCallback = async (childData) =>{
-    if (childData.length > 1){            
-        this.getList(null,childData);
-    }
+    this.getList(null,childData);
   }
 
   render() {
@@ -396,7 +394,7 @@ export default class VaccinesTable extends React.Component {
                           Close
                         </UncontrolledModal.Close>
                         <Button color="primary" onClick={() => this.addVaccine()} disabled={this.state.isLoading}>
-                          Add Vaccine
+                         {this.state.isLoading ? 'Adding Vaccine...' : 'Add Vaccine'} 
                         </Button>
                     </ModalFooter>
                 </UncontrolledModal>

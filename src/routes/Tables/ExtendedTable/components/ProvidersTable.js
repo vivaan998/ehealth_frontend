@@ -138,23 +138,15 @@ export default class ProviderTable extends React.Component {
                     onClick={() => this.handlePractitionersOnClick(cell, row)}
                 >
                     Practitioners
-        </Button>
-                <Button
-                    size="sm"
-                    outline
-                    color="purple"
-                    onClick={() => this.handleAppointmentsOnClick(cell, row)}
-                >
-                    Appointments
-        </Button>
-                <Button
-                    size="sm"
-                    outline
-                    color="danger"
-                    onClick={() => this.handleArchiveOnClick(cell, row)}
-                >
-                    Archive
-        </Button>
+                </Button>
+                        <Button
+                            size="sm"
+                            outline
+                            color="danger"
+                            onClick={() => this.handleArchiveOnClick(cell, row)}
+                        >
+                            Archive
+                </Button>
             </ButtonGroup>
         );
     };
@@ -246,12 +238,10 @@ export default class ProviderTable extends React.Component {
                     console.log(response.data);
                     this.setState({
                         color: "success",
-                        authenticationMessage: "Successfully created provider",
+                        authenticationMessage: response.data.message,
                         isLoading: false,
                     });
                     this.getList();
-
-
                 }
                 else {
                     this.setState({
@@ -299,10 +289,8 @@ export default class ProviderTable extends React.Component {
             },
         ];
     }
-    handleCallback = async (childData) =>{
-        if (childData.length > 1){            
-            this.getList(null,childData);
-        }
+    handleCallback = async (childData) =>{    
+        this.getList(null,childData);
     }
 
     render() {
@@ -312,7 +300,6 @@ export default class ProviderTable extends React.Component {
                 keyField="id"
                 data={this.state.providersList}
                 columns={columnDefs}
-                exportCSV
             >
                 {(props) => (
                 <React.Fragment>
@@ -414,7 +401,7 @@ export default class ProviderTable extends React.Component {
                                     Discard
                                 </UncontrolledModal.Close>
                                 <Button color="primary" onClick={() => this.CreateProvider()} disabled={this.state.isLoading}>
-                                Create
+                                {this.state.isLoading ? 'Creating provider...' : 'Create Provider'} 
                                 </Button>
                             </ModalFooter>
                         </UncontrolledModal>
