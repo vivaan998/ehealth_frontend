@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { withPageConfig } from './../Layout';
 
 const SidebarTrigger = (props) => {
-    console.log("Sidebar Trigger props>>>",props.pageConfig);
+    console.log("Sidebar Trigger props>>>",props);
     const { tag: Tag, pageConfig, ...otherProps } = props;
     return (
         <Tag

@@ -91,7 +91,6 @@ class DefaultSidebar extends React.Component{
                         { /* SIDEBAR: Menu */ }
                         <SidebarMiddleNav {...this.props} data={this.state}/>
                     </Sidebar.Section>
-                    <SidebarBottomA />
 
                 </Sidebar.MobileFluid>
                 { /* END SIDEBAR: Only for Mobile */ }
