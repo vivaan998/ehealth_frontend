@@ -45,7 +45,7 @@ export default class AppointmentsTable extends React.Component {
             
             if (this.props.location.provider_id){
                 console.log("provider_id in appointments",this.props.location.provider_id);
-                const response = await AppointmentsService.getPractitionerOfThisProvider(paramData,this.props.location.provider_id);
+                const response = await AppointmentsService.appointmentsOfThisProvider(paramData,this.props.location.provider_id);
                 if (response.status == true){
                     this.setState({
                         appointmentsList: response.data.result,
