@@ -6,7 +6,6 @@ const setProfileData = (data) => {
 const getProfileData = () => {
     var profileData;
     profileData = JSON.parse(localStorage.getItem('profileData'));
-    console.log('>>> PD >>>', profileData);
     return profileData
 }
 

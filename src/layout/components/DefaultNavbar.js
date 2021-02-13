@@ -32,10 +32,10 @@ class DefaultNavbar extends React.Component{
                     </NavItem>
                     <NavItem className="d-none d-md-block">
                         <span className="navbar-text">
+                            <h4>eHealth</h4>
                             {/* <Link to="/">
                                 <i className="fa fa-home"></i>
                             </Link> */}
-                            <h5>eHealth.my</h5>
                         </span>
                         {/* <span className="navbar-text px-2">
                             <i className="fa fa-angle-right"></i>
