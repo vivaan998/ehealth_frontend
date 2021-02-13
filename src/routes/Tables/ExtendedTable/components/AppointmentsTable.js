@@ -45,7 +45,7 @@ export default class AppointmentsTable extends React.Component {
             
             if (this.props.location.provider_id){
                 console.log("provider_id in appointments",this.props.location.provider_id);
-                const response = await AppointmentsService.getPractitionerOfThisProvider(this.props.location.provider_id);
+                const response = await AppointmentsService.getPractitionerOfThisProvider(paramData,this.props.location.provider_id);
                 if (response.status == true){
                     this.setState({
                         appointmentsList: response.data.result,
@@ -55,7 +55,7 @@ export default class AppointmentsTable extends React.Component {
                 }
             }else if (this.props.location.practitioner_id){
                 console.log("practitioner_id in appointments",this.props.location.practitioner_id);
-                const response = await AppointmentsService.getPractitionerOfThisProvider(this.props.location.provider_id);
+                const response = await AppointmentsService.appointmentsOfThisPractitioner(paramData,this.props.location.practitioner_id);
                 if (response.status == true){
                     this.setState({
                         appointmentsList: response.data.result,
@@ -94,8 +94,36 @@ export default class AppointmentsTable extends React.Component {
     }
 
 
-    handleArchiveOnClick(cell, row) {
-        console.log("Archive button clicked, active flag:", row.active_fl);
+    async handleArchiveOnClick(cell, row) {
+        console.log("Archive button clicked, active flag:", row.appointment_id);
+        const data = {
+            "appointment_id": row.appointment_id
+        }
+        try {
+            this.setState({
+                isArchiving: true
+            });
+            const response = await AppointmentsService.archiveAppointment(data);
+            if (response.status == true) {
+                console.log(response.data);
+                this.setState({
+                    archiveMessage: "Appointment archived successfully",
+                    isArchiving: false
+                });
+                this.getList();
+
+            }
+            else {
+                this.setState({
+                   archiveMessage: response.data.data.error,
+                   isArchiving: false
+                });
+            }
+            console.log("archive Appointment>>>", this.state.archiveMessage);
+        }
+        catch (e) {
+            console.log(e, e.data)
+        } 
     }
 
     actionColButton = (cell, row) => {

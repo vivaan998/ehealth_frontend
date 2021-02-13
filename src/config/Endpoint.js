@@ -13,8 +13,9 @@ const paths = {
     get_all_practitioners: `${endpointApi}get-practitioners/`,
     get_all_patients:   `${endpointApi}get-patients/`,
     get_all_vaccines:   `${endpointApi}get-vaccines/`,
-    get_practitioners_of_this_provider: `${endpointApi}super-user-practitioner/`
-
-
+    get_practitioners_of_this_provider: `${endpointApi}super-user-practitioner/`,
+    get_immunizations_of_this_vaccine: `${endpointApi}vaccine-administered-to/`,
+    get_immunizations_of_this_practitioner: `${endpointApi}get-immunizations-practitioner/`,
+    get_appointments_of_this_practitioner: `${endpointApi}get-appointments-practitioner/`
 };
 export default paths;
