@@ -218,11 +218,11 @@ export default class ProviderTable extends React.Component {
                 <Button
                     size="sm"
                     outline
-                    color="indigo"
+                    color="primary"
                     onClick={() => this.handleMedicalRecordOnClick(cell, row)}
                 >
                     Medical Record
-        </Button>
+                </Button>
                 <Button
                     size="sm"
                     outline
@@ -230,7 +230,7 @@ export default class ProviderTable extends React.Component {
                     onClick={() => this.handleArchiveOnClick(cell, row)}
                     disabled={this.state.isArchiving}
                 >
-                {this.state.isArchiving ? 'Archiving...' : 'Archive'}
+                {this.state.isArchiving ? ('Archiving...') : ('Archive')}
         </Button>
             </ButtonGroup>
         );
