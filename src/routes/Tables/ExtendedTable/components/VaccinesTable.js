@@ -35,9 +35,6 @@ import { CustomPaginationTotal } from "./CustomPaginationTotal";
 import VaccinesService from './../../../../services/VaccinesService';
 import AuthenticationService from './../../../../services/AuthenticationService';
 
-
-const INITIAL_PRODUCTS_COUNT = 500;
-
 const sortCaret = (order) => {
     if (!order) return <i className="fa fa-fw fa-sort text-muted"></i>;
     if (order) return <i className={`fa fa-fw text-muted fa-sort-${order}`}></i>;
@@ -62,8 +59,6 @@ export default class VaccinesTable extends React.Component {
             archiveMessage: "",
             isArchiving: false
         };
-
-        this.headerCheckboxRef = React.createRef();
     }
     componentDidMount = async () => {
         if (AuthenticationService.getUser()) {

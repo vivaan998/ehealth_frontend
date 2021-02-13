@@ -275,7 +275,7 @@ export default class ImmunizationsTable extends React.Component {
     )
 
     async handleArchiveOnClick(cell, row) {
-        console.log("Archive button clicked, active flag:", row.active_fl, row.immunization_id);
+        console.log("Archive button clicked:", row.immunization_id);
         const data = {
             "immunization_id": row.immunization_id
         }

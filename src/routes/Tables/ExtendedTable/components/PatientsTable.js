@@ -173,7 +173,7 @@ export default class ProviderTable extends React.Component {
         console.log("Medical Record Button clicked, rowId:", row.patient_id);
         // console.log(this.props);
         this.props.history.push({
-            pathname: "/practitioners",
+            pathname: "/mymedicalreport",
             patient_id: row.patient_id
         });
         // return <Redirect to='/practitioners' />
