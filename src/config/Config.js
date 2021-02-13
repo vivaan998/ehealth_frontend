@@ -1,7 +1,19 @@
-const Config = {
-    access_token: '',
-    role_id: '',
-    profileData: '',
+const setProfileData = (data) => {
+    console.log('setItem >>>', data);
+    localStorage.setItem('profileData', JSON.stringify(data));
 }
+
+const getProfileData = () => {
+    var profileData;
+    profileData = JSON.parse(localStorage.getItem('profileData'));
+    console.log('>>> PD >>>', profileData);
+    return profileData
+}
+
+const Config = {
+    setProfileData: setProfileData,
+    getProfileData: getProfileData
+}
+
 
 export default Config;

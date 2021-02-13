@@ -93,8 +93,6 @@ export default class ImmunizationsTable extends React.Component {
             }
 
             if (this.props.location.practitioner_id) {
-                console.log('immunization ma practitioner_id >>>', this.props.location.practitioner_id);
-
                 const response = await ImmunizationsService.getList(paramData);
                 if (response.status == true) {
                     this.setState({
@@ -106,7 +104,6 @@ export default class ImmunizationsTable extends React.Component {
 
             } else {
                 const response = await ImmunizationsService.getList(paramData);
-
                 if (response.status == true) {
                     this.setState({
                         immunizationsList: response.data.result,
@@ -212,17 +209,16 @@ export default class ImmunizationsTable extends React.Component {
         if (AuthenticationService.getUser()) {
             this.getList();
             this.getAllVaccines();
-            console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-            if (Config.profileData.role === 100) {
+            if ( Config.getProfileData().role === 100) {
                 console.log('in get all 100 providers');
                 this.getAllProviders();
             }
-            if (Config.profileData.role === 50) {
+            if ( Config.getProfileData().role === 50) {
                 console.log('In 50');
-                this.getAllPractitioners(Config.profileData.id);
+                this.getAllPractitioners( Config.getProfileData().id);
             }
-            if (Config.profileData.role === 10) {
-                this.getAllPatients(Config.profileData.id);
+            if ( Config.getProfileData().role === 10) {
+                this.getAllPatients( Config.getProfileData().id);
             }
         }
         else {
@@ -387,7 +383,7 @@ export default class ImmunizationsTable extends React.Component {
                                                         Provider Name
                                     </Label>
                                                     <Col sm={8}>
-                                                        {Config.profileData.role === 100 ? (
+                                                        { Config.getProfileData().role === 100 ? (
                                                             <Input
                                                                 type="select"
                                                                 name="select"
@@ -400,7 +396,7 @@ export default class ImmunizationsTable extends React.Component {
 
                                                             </Input>
                                                         ) : (
-                                                                <option>{Config.profileData.name}</option>
+                                                                <option>{Config.getProfileData().name}</option>
                                                             )}
 
                                                     </Col>
@@ -410,7 +406,7 @@ export default class ImmunizationsTable extends React.Component {
                                                         Practitioner Name
                                     </Label>
                                                     <Col sm={8}>
-                                                        {(Config.profileData.role === 100) || (Config.profileData.role === 50) ? (
+                                                        {( Config.getProfileData().role === 100) || ( Config.getProfileData().role === 50) ? (
                                                             <Input
                                                                 type="select"
                                                                 name="select"
@@ -423,7 +419,7 @@ export default class ImmunizationsTable extends React.Component {
 
                                                             </Input>
                                                         ) : (
-                                                                <option>{Config.profileData.name}</option>
+                                                                <option>{ Config.getProfileData().name}</option>
                                                             )}
 
                                                     </Col>
@@ -433,7 +429,7 @@ export default class ImmunizationsTable extends React.Component {
                                                         Patient Name
                                     </Label>
                                                     <Col sm={8}>
-                                                        {(Config.profileData.role === 100) || (Config.profileData.role === 50) || (Config.profileData.role === 10) ? (
+                                                        {( Config.getProfileData().role === 100) || ( Config.getProfileData().role === 50) || ( Config.getProfileData().role === 10) ? (
                                                             <Input
                                                                 type="select"
                                                                 name="select"
@@ -446,7 +442,7 @@ export default class ImmunizationsTable extends React.Component {
 
                                                             </Input>
                                                         ) : (
-                                                                <option>{Config.profileData.name}</option>
+                                                                <option>{ Config.getProfileData().name}</option>
                                                             )}
 
                                                     </Col>

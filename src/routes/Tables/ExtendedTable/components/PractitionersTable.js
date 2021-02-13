@@ -137,7 +137,7 @@ export default class PractitionersTable extends React.Component {
     componentDidMount = async () => {
         if (AuthenticationService.getUser()) {
             this.getList();
-            if (Config.profileData.role === 100){
+            if (Config.getProfileData().role === 100){
                 this.getAllProviders();
             }
 
@@ -634,7 +634,7 @@ export default class PractitionersTable extends React.Component {
                                                     </Label>
                                                     <Col sm={8}>
 
-                                                        {Config.profileData.role === 100 ? (
+                                                        {Config.getProfileData().role === 100 ? (
                                                             <Input
                                                                 type="select"
                                                                 name="select"
@@ -648,7 +648,7 @@ export default class PractitionersTable extends React.Component {
                                                                 <option>KD Hospital</option> */}
                                                             </Input>
                                                         ) : (
-                                                                <option>{Config.profileData.name}</option>
+                                                                <option>{Config.getProfileData().name}</option>
                                                             )}
 
                                                     </Col>

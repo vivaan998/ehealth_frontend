@@ -153,12 +153,12 @@ export default class ProviderTable extends React.Component {
     componentDidMount = async () => {
         if (AuthenticationService.getUser()) {
             this.getPatient();
-            console.log('profile', Config.profileData);
-            if (Config.profileData.role === 100) {
+            console.log('profile', Config.getProfileData());
+            if (Config.getProfileData().role === 100) {
                 this.getAllProviders();
             }
-            if (Config.profileData.role === 50) {
-                this.getAllPractitioners(Config.profileData.id);
+            if (Config.getProfileData().role === 50) {
+                this.getAllPractitioners(Config.getProfileData().id);
             }
         }
         else {
@@ -599,7 +599,7 @@ handleCallback = async (childData) =>{
                                     </Label>
                                                     <Col sm={8}>
 
-                                                        {Config.profileData.role === 100 ? (
+                                                        {Config.getProfileData().role === 100 ? (
                                                             <Input
                                                                 type="select"
                                                                 name="select"
@@ -612,7 +612,7 @@ handleCallback = async (childData) =>{
 
                                             </Input>
                                         ) : (                                            
-                                            <option>{Config.profileData.name}</option>
+                                            <option>{Config.getProfileData().name}</option>
                                         )}
 
                                     </Col>
@@ -623,7 +623,7 @@ handleCallback = async (childData) =>{
                                     </Label>
                                                     <Col sm={8}>
 
-                                                        {(Config.profileData.role === 100) || (Config.profileData.role === 50) ? (
+                                                        {(Config.getProfileData().role === 100) || (Config.getProfileData().role === 50) ? (
                                                             <Input
                                                                 type="select"
                                                                 name="select"
@@ -636,7 +636,7 @@ handleCallback = async (childData) =>{
 
                                                             </Input>
                                                         ) : (
-                                                                <option>{Config.profileData.name}</option>
+                                                                <option>{Config.getProfileData().name}</option>
                                                             )}
 
                                                     </Col>

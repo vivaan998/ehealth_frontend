@@ -33,8 +33,7 @@ class DefaultSidebar extends React.Component{
                     isLoading: false,
                     
                 });
-                Config.profileData = this.state.profileData;
-                console.log('menuItems >>>', this.state.menuItems);
+                Config.setProfileData(this.state.profileData);
                 let menu;
                 var temp = this.state.menuItems;
                 menu = (temp).map(o => o.title);
@@ -52,8 +51,8 @@ class DefaultSidebar extends React.Component{
 
     componentDidMount = async () => { 
         if (AuthenticationService.getUser()){
-            this.getMenu();
-            
+            console.log('getting menu did mount' );
+            this.getMenu();            
         }
         else{
             this.props.history.push({

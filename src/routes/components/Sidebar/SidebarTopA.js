@@ -17,7 +17,6 @@ const avatarImg = randomAvatar();
 class SidebarTopA extends React.Component{
     constructor(props){
         super(props);
-        console.log('props in sideA >>>', props);
     }
     render(){
         return(
