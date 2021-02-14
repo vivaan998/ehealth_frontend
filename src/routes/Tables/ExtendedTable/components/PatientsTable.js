@@ -78,6 +78,7 @@ export default class ProviderTable extends React.Component {
       archiveMessage: "",
       previousPage: "",
       isArchiving: false,
+      isGettingData: false
     };
 
     this.headerCheckboxRef = React.createRef();
@@ -85,6 +86,9 @@ export default class ProviderTable extends React.Component {
 
   getPatient = async (page = null, search = null) => {
     try {
+      this.setState({
+        isGettingData: true
+      });
       const paramData = {
         page: page,
         search: search,
@@ -96,6 +100,7 @@ export default class ProviderTable extends React.Component {
           patientsList: response.data.result,
           nextPage: response.data.next_page,
           previousPage: response.data.previous_page,
+          isGettingData: false
         });
         console.log("patientsList >>>", this.state.patientsList);
         console.log("previous page >>>", this.state.previousPage);
@@ -156,6 +161,12 @@ export default class ProviderTable extends React.Component {
       }
       if (Config.getProfileData().role === 50) {
         this.getAllPractitioners(Config.getProfileData().id);
+      }
+      if (Config.getProfileData().role === 10) {
+          this.setState({
+              provider: null,
+              practitioner: null
+          })
       }
     } else {
       this.props.history.push({
@@ -384,7 +395,7 @@ export default class ProviderTable extends React.Component {
       };
 
       try {
-        console.log(postData);
+        console.log('post data >>> ', postData);
         const response = await PatientsService.createPatient(postData);
         if (response.status == true) {
           console.log(response.data);
@@ -444,6 +455,18 @@ export default class ProviderTable extends React.Component {
   handleCallback = async (childData) => {
     this.getPatient(null, childData);
   };
+
+  clearState(){
+      this.setState({
+        first_name: "",
+        last_name: "",
+        emailId: "",
+        password: "",
+        mykad: "",
+        provider: null,
+        practitioner: "",
+      });
+  }
 
   render() {
     const columnDefs = this.createColumnDefinitions();
@@ -673,7 +696,7 @@ export default class ProviderTable extends React.Component {
                       <FormText color={this.state.color}>
                         {this.state.authenticationMessage}
                       </FormText>
-                      <UncontrolledModal.Close color="link">
+                      <UncontrolledModal.Close color="link" data = {this.state}>
                         Discard
                       </UncontrolledModal.Close>
                       <Button
@@ -694,6 +717,7 @@ export default class ProviderTable extends React.Component {
               classes="table-responsive-sm"
               bordered={false}
               responsive
+              noDataIndication={this.state.isGettingData ? 'Getting patients...' : 'No patients found!'}
               {...props.baseProps}
             />
 

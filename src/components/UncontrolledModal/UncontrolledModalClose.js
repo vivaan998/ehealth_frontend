@@ -7,7 +7,6 @@ import { Consumer } from './context';
 const UncontrolledModalClose = (props) => {
     const { tag, ...otherProps } = props;
     const Tag = tag;
-
     return (
         <Consumer>
         {

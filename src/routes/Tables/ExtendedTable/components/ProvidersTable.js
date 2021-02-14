@@ -67,7 +67,7 @@ export default class ProviderTable extends React.Component {
       previousPage: "",
       searchValue: null,
       archiveMessage: "",
-      isArchiving: false,
+      isGettingData: false
     };
 
     this.headerCheckboxRef = React.createRef();
@@ -75,6 +75,9 @@ export default class ProviderTable extends React.Component {
 
   getList = async (page = null, search = null) => {
     try {
+      this.setState({
+        isGettingData: true
+      });
       const paramData = {
         page: page,
         search: search,
@@ -85,6 +88,7 @@ export default class ProviderTable extends React.Component {
           providersList: response.data.result,
           nextPage: response.data.next_page,
           previousPage: response.data.previous_page,
+          isGettingData: false
         });
       }
     } catch (e) {
@@ -172,8 +176,7 @@ export default class ProviderTable extends React.Component {
           color="danger"
           onClick={() => this.handleArchiveOnClick(cell, row)}
           disabled={this.state.isArchiving}
-        >
-          {this.state.isArchiving ? "Archiving..." : "Archive"}
+        >Archive
         </Button>
       </ButtonGroup>
     );
@@ -454,6 +457,7 @@ export default class ProviderTable extends React.Component {
               classes="table-responsive-lg"
               bordered={false}
               responsive
+              noDataIndication={this.state.isGettingData ? 'Getting providers...' : 'No providers found!'}
               {...props.baseProps}
             />
 

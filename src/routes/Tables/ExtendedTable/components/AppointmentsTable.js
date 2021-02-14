@@ -74,6 +74,7 @@ export default class AppointmentsTable extends React.Component {
       archiveMessage: "",
       isArchiving: false,
       datetime: new Date(),
+      isGettingData: false,
     };
 
     this.headerCheckboxRef = React.createRef();
@@ -81,6 +82,9 @@ export default class AppointmentsTable extends React.Component {
 
   getList = async (page = null, search = null) => {
     try {
+      this.setState({
+        isGettingData: true
+      });
       const paramData = {
         page: page,
         search: search,
@@ -99,6 +103,7 @@ export default class AppointmentsTable extends React.Component {
             appointmentsList: response.data.result,
             nextPage: response.data.next_page,
             previousPage: response.data.previous_page,
+            isGettingData: false
           });
         }
       } else if (this.props.location.practitioner_id) {
@@ -114,6 +119,7 @@ export default class AppointmentsTable extends React.Component {
             appointmentsList: response.data.result,
             nextPage: response.data.next_page,
             previousPage: response.data.previous_page,
+            isGettingData: false
           });
         }
       } else {
@@ -123,6 +129,7 @@ export default class AppointmentsTable extends React.Component {
             appointmentsList: response.data.result,
             nextPage: response.data.next_page,
             previousPage: response.data.previous_page,
+            isGettingData: false
           });
         }
       }
@@ -531,6 +538,7 @@ export default class AppointmentsTable extends React.Component {
                             <DateTimePicker
                               value={this.state.datetime}
                               onChange={(value) => this.onChangeDatetime(value)}
+                              minDate={moment().toDate()}
                             />
                             <FormText color="danger">
                               {this.state.date_errorMessage}
@@ -565,6 +573,7 @@ export default class AppointmentsTable extends React.Component {
               filter={filterFactory()}
               bordered={false}
               responsive
+              noDataIndication={this.state.isGettingData ? 'Getting appointments...' : 'No appointments found!'}
               {...props.baseProps}
             />
 

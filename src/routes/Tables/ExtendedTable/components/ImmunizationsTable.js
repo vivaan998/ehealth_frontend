@@ -79,6 +79,7 @@ export default class ImmunizationsTable extends React.Component {
       archiveMessage: "",
       isArchiving: false,
       datetime: new Date(),
+      isGettingData: false
     };
 
     this.headerCheckboxRef = React.createRef();
@@ -86,6 +87,9 @@ export default class ImmunizationsTable extends React.Component {
 
   getList = async (page = null, search = null) => {
     try {
+      this.setState({
+        isGettingData: true
+      });
       const paramData = {
         page: page,
         search: search,
@@ -98,6 +102,7 @@ export default class ImmunizationsTable extends React.Component {
             immunizationsList: response.data.result,
             nextPage: response.data.next_page,
             previousPage: response.data.previous_page,
+            isGettingData: false
           });
         }
       } else {
@@ -107,6 +112,7 @@ export default class ImmunizationsTable extends React.Component {
             immunizationsList: response.data.result,
             nextPage: response.data.next_page,
             previousPage: response.data.previous_page,
+            isGettingData: false
           });
         }
       }
@@ -593,6 +599,7 @@ export default class ImmunizationsTable extends React.Component {
                             <DateTimePicker
                               value={this.state.datetime}
                               onChange={(value) => this.onChangeDatetime(value)}
+                              maxDate={moment().toDate()}
                             />
                             <FormText color="danger">
                               {this.state.date_errorMessage}
@@ -627,6 +634,7 @@ export default class ImmunizationsTable extends React.Component {
               filter={filterFactory()}
               bordered={false}
               responsive
+              noDataIndication={this.state.isGettingData ? 'Getting immunizations...' : 'No immunizations found!'}
               {...props.baseProps}
             />
             <ButtonGroup>

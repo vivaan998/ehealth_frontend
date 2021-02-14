@@ -60,6 +60,7 @@ export default class VaccinesTable extends React.Component {
       previousPage: "",
       archiveMessage: "",
       isArchiving: false,
+      isGettingData: false
     };
 
     this.headerCheckboxRef = React.createRef();
@@ -76,6 +77,9 @@ export default class VaccinesTable extends React.Component {
 
   getList = async (page = null, search = null) => {
     try {
+      this.setState({
+        isGettingData: true
+      });
       const paramData = {
         page: page,
         search: search,
@@ -86,6 +90,7 @@ export default class VaccinesTable extends React.Component {
           vaccinesList: response.data.result,
           nextPage: response.data.next_page,
           previousPage: response.data.previous_page,
+          isGettingData: false
         });
       }
     } catch (e) {
@@ -457,6 +462,7 @@ export default class VaccinesTable extends React.Component {
               filter={filterFactory()}
               bordered={false}
               responsive
+              noDataIndication={this.state.isGettingData ? 'Getting vaccines...' : 'No vaccines found!'}
               {...props.baseProps}
             />
 

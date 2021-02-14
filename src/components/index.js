@@ -24,6 +24,10 @@ import UncontrolledPopover from './UncontrolledPopover';
 import CustomInput from './CustomInput';
 import EmptyLayout from './EmptyLayout';
 import UncontrolledModal from './UncontrolledModal';
+import Card from './Card';
+import CardHeader from './CardHeader';
+import FloatGrid from './FloatGrid';
+import Progress from './Progress';
 
 export {
     Alert,
@@ -122,5 +126,9 @@ export {
     InputGroupAddon,
     SidebarMenu,
     UncontrolledPopover,
-    UncontrolledModal
+    UncontrolledModal,
+    Card,
+    CardHeader,
+    FloatGrid,
+    Progress,
 };

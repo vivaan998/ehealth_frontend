@@ -13,17 +13,17 @@ import {
 import NavbarUser from './NavbarUser';
 import { LogoThemed } from './../../routes/components/LogoThemed/LogoThemed';
 
-class DefaultNavbar extends React.Component{
-    constructor(props){
+class DefaultNavbar extends React.Component {
+    constructor(props) {
         super(props);
         console.log("Default Navbar props>>>", this.props);
     }
-    render(){
-        return(
+    render() {
+        return (
             <Navbar light expand="xs" fluid>
                 <Nav navbar>
                     <NavItem className="mr-3">
-                        <SidebarTrigger/>
+                        <SidebarTrigger />
                     </NavItem>
                     <NavItem className="navbar-brand d-lg-none">
                         <Link to="/">
@@ -37,24 +37,10 @@ class DefaultNavbar extends React.Component{
                                 <i className="fa fa-home"></i>
                             </Link> */}
                         </span>
-                        {/* <span className="navbar-text px-2">
-                            <i className="fa fa-angle-right"></i>
-                        </span>
-                        <span className="navbar-text">
-                            <Link to="/">Start</Link>
-                        </span>
-                        <span className="navbar-text px-2">
-                            <i className="fa fa-angle-right"></i>
-                        </span>
-                        <span className="navbar-text">
-                            Page Link
-                        </span> */}
                     </NavItem>
                 </Nav>
                 <Nav navbar className="ml-auto">
-                    {/* <NavbarActivityFeed />
-                    <NavbarMessages className="ml-2" /> */}
-                    <NavbarUser className="ml-2" {...this.props}/>
+                    <NavbarUser className="ml-2" {...this.props} />
                 </Nav>
             </Navbar>
         );
