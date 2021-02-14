@@ -39,6 +39,7 @@ import PractitionersService from "../../../../services/PractitionersService";
 import PatientsService from "../../../../services/PatientsService";
 import VaccinesService from "../../../../services/VaccinesService";
 import DateTimePicker from "react-datetime-picker";
+import MedicalReportService from "../../../../services/MedicalReportService";
 
 const sortCaret = (order) => {
     if (!order) return <i className="fa fa-fw fa-sort text-muted"></i>;
@@ -74,7 +75,7 @@ export default class AppointmentsTable extends React.Component {
             archiveMessage: "",
             isArchiving: false,
             datetime: new Date(),
-            isGettingData: false,
+            isGettingData:true,
         };
 
         this.headerCheckboxRef = React.createRef();
@@ -98,7 +99,7 @@ export default class AppointmentsTable extends React.Component {
                         previousPage: response.data.previous_page,
                     });
                 }
-            } else if (this.props.location.practitioner_id) {
+            }else if (this.props.location.practitioner_id) {
                 console.log("practitioner_id in appointments", this.props.location.practitioner_id);
                 const response = await AppointmentsService.appointmentsOfThisPractitioner(paramData, this.props.location.practitioner_id);
                 if (response.status == true) {
@@ -119,50 +120,6 @@ export default class AppointmentsTable extends React.Component {
                 }
             }
 
-            if (this.props.location.provider_id) {
-                console.log(
-                    "provider_id in appointments",
-                    this.props.location.provider_id
-                );
-                const response = await AppointmentsService.getPractitionerOfThisProvider(
-                    this.props.location.provider_id
-                );
-                if (response.status == true) {
-                    this.setState({
-                        appointmentsList: response.data.result,
-                        nextPage: response.data.next_page,
-                        previousPage: response.data.previous_page,
-                        isGettingData: false
-                    });
-                }
-            } else if (this.props.location.practitioner_id) {
-                console.log(
-                    "practitioner_id in appointments",
-                    this.props.location.practitioner_id
-                );
-                const response = await AppointmentsService.getPractitionerOfThisProvider(
-                    this.props.location.provider_id
-                );
-                if (response.status == true) {
-                    this.setState({
-                        appointmentsList: response.data.result,
-                        nextPage: response.data.next_page,
-                        previousPage: response.data.previous_page,
-                        isGettingData: false
-                    });
-
-                }
-            } else {
-                const response = await AppointmentsService.getList(paramData);
-                if (response.status == true) {
-                    this.setState({
-                        appointmentsList: response.data.result,
-                        nextPage: response.data.next_page,
-                        previousPage: response.data.previous_page,
-                        isGettingData: false
-                    });
-                }
-            }
         } catch (e) {
             console.log("error >>>", e);
             console.log(e, e.data);
@@ -407,10 +364,6 @@ export default class AppointmentsTable extends React.Component {
         }
     }
 
-    handleArchiveOnClick(cell, row) {
-        console.log("Archive button clicked, active flag:", row.active_fl);
-    }
-
     actionColButton = (cell, row) => {
         return (
             <Button
@@ -508,7 +461,7 @@ export default class AppointmentsTable extends React.Component {
                                                 <FormGroup row>
                                                     <Label for="provider" sm={4}>
                                                         Provider Name
-                          </Label>
+                                                    </Label>
                                                     <Col sm={8}>
                                                         {Config.getProfileData().role === 100 ? (
                                                             <Input
@@ -537,7 +490,7 @@ export default class AppointmentsTable extends React.Component {
                                                 <FormGroup row>
                                                     <Label for="practitioner" sm={4}>
                                                         Practitioner Name
-                          </Label>
+                                                    </Label>
                                                     <Col sm={8}>
                                                         {Config.getProfileData().role === 100 ||
                                                             Config.getProfileData().role === 50 ? (

@@ -44,6 +44,7 @@ import {
 import DateTimePicker from 'react-datetime-picker';
 import ImmunizationsService from './../../../../services/ImmunizationsService';
 import VaccinesService from './../../../../services/VaccinesService';
+import AppointmentsService from './../../../../services/AppointmentsService';
 
 const sortCaret = (order) => {
     if (!order) return <i className="fa fa-fw fa-sort text-muted"></i>;
@@ -88,7 +89,9 @@ export default class MedicalReportTable extends React.Component {
             allVaccines: [],
             datetime: new Date(),
             datetime_errorMessage: "",
-
+            isGettingVitalData: true,
+            isGettingImmunizationData: true,
+            isGettingAppointmentsData: true,
         }
         console.log("medical report table>>>", this.props);
     }
@@ -727,6 +730,84 @@ export default class MedicalReportTable extends React.Component {
         }
     }
 
+    async createAppointment() {
+        this.setState({
+            isLoading: true,
+            authenticationMessage: "",
+        });
+
+        if (this.state.provider == "") {
+            this.setState({
+                provider_errorMessage: "Provider not available",
+                isLoading: false,
+            });
+            return;
+        } else {
+            this.setState({
+                provider_errorMessage: "",
+            });
+        }
+
+        if (this.state.practitioner == "") {
+            this.setState({
+                practitioner_errorMessage: "Practitioner not available",
+                isLoading: false,
+            });
+            return;
+        } else {
+            this.setState({
+                practitioner_errorMessage: "",
+            });
+        }
+
+        if (this.state.datetime == "") {
+            this.setState({
+                datetime_errorMessage: "Date not available",
+                isLoading: false,
+            });
+            return;
+        } else {
+            this.setState({
+                datetime_errorMessage: "",
+            });
+        }
+
+        var formatedDateTime = moment
+            .utc(moment(this.state.datetime, "YYYY-MM-DD HH:MM:SS"))
+            .format();
+        formatedDateTime = formatedDateTime.replace("T", " ").replace("Z", "");
+        const postData = {
+            provider_id: Number(this.state.provider),
+            practitioner_id: Number(this.state.practitioner),
+            patient_id: this.props.location.patient_id,
+            appointment_date: formatedDateTime,
+        };
+        try {
+            console.log(">>>>>>>>>>>",postData);
+            const response = await AppointmentsService.createAppointment(
+                postData
+            );
+            if (response.status == true) {
+                console.log(response.data);
+                this.setState({
+                    color: "success",
+                    authenticationMessage: response.data.message,
+                    isLoading: false,
+                });
+                this.getAppointment();
+            } else {
+                this.setState({
+                    color: "danger",
+                    isLoading: false,
+                    authenticationMessage: response.data.data.error,
+                });
+            }
+        } catch (e) {
+            console.log(e, e.data);
+        }
+
+    }
+
     render() {
         const vitalColumnDefs = this.createVitalColumnDefinitions();
         const immunizationsColumnDefs = this.createImmunizationsColumnDefinitions();
@@ -928,6 +1009,7 @@ export default class MedicalReportTable extends React.Component {
                                     filter={filterFactory()}
                                     bordered={false}
                                     responsive
+                                    noDataIndication={this.state.isGettingVitalData ? 'Getting Vital details...' : 'No Vitals found!'}
                                     {...props.baseProps}
                                 />
 
@@ -944,7 +1026,7 @@ export default class MedicalReportTable extends React.Component {
                         )
                     }
                 </ToolkitProvider>
-                <br/><br/><br/>
+                <br /><br /><br />
                 <ToolkitProvider
                     keyField="patient_id"
                     data={this.state.immunizationsList}
@@ -1086,6 +1168,7 @@ export default class MedicalReportTable extends React.Component {
                                     filter={filterFactory()}
                                     bordered={false}
                                     responsive
+                                    noDataIndication={this.state.isGettingImmunizationData ? 'Getting Immunization details...' : 'No Immunizations found!'}
                                     {...props.baseProps}
                                 />
 
@@ -1102,7 +1185,7 @@ export default class MedicalReportTable extends React.Component {
                         )
                     }
                 </ToolkitProvider>
-                <br/><br/><br/>
+                <br /><br /><br />
                 <ToolkitProvider
                     keyField="patient_id"
                     data={this.state.appointmentsList}
@@ -1118,11 +1201,113 @@ export default class MedicalReportTable extends React.Component {
                                             <Button
                                                 size="sm"
                                                 outline
+                                                id="newAppointment"
                                             // onClick={this.handleAddRow.bind(this)}
                                             >
                                                 {/* <i className="fa fa-fw fa-plus"></i> */}
                                                 Add New Appointment
                                             </Button>
+                                            <UncontrolledModal
+                                                target="newAppointment"
+                                                className="modal-outline-primary"
+                                            >
+                                                <ModalHeader tag="h5">New Appointment</ModalHeader>
+                                                <ModalBody>
+                                                    <Form>
+                                                        <FormGroup row>
+                                                            <Label for="provider" sm={4}>
+                                                                Provider Name
+                                                            </Label>
+                                                            <Col sm={8}>
+                                                                {Config.getProfileData().role === 100 ? (
+                                                                    <Input
+                                                                        type="select"
+                                                                        name="select"
+                                                                        id="provider"
+                                                                        value={(this.state.provider)}
+                                                                        onChange={e => this.onChangeProvider(e.target.value)}
+                                                                    >
+
+                                                                        {this.state.allProviders.map((obj) => <option value={obj.provider_id}>{obj.name}</option>)}
+
+                                                                    </Input>
+                                                                ) : (
+                                                                        Config.getProfileData().role === 50 ? (
+                                                                            <option>{Config.getProfileData().name}</option>
+                                                                        ) : (
+                                                                                Config.getProfileData().role === 10 ? (
+                                                                                    <option>{Config.getProfileData().name}</option>
+                                                                                ) : (
+                                                                                        <option>{Config.getProfileData().name}</option>
+                                                                                    )
+                                                                            )
+
+                                                                    )}
+                                                                <FormText color="danger">
+                                                                    {this.state.provider_errorMessage}
+                                                                </FormText>
+                                                            </Col>
+                                                        </FormGroup>
+                                                        <FormGroup row>
+                                                            <Label for="practitioner" sm={4}>
+                                                                Practitioner Name
+                                                    </Label>
+                                                            <Col sm={8}>
+                                                                {(Config.getProfileData().role === 100) || (Config.getProfileData().role === 50) ? (
+                                                                    <Input
+                                                                        type="select"
+                                                                        name="select"
+                                                                        id="practitioner"
+                                                                        value={(this.state.practitioner)}
+                                                                        onChange={e => this.onChangePractitioner(e.target.value)}
+                                                                    >
+
+                                                                        {this.state.allPractitioners.map((obj) => <option value={obj.practitioner_id}>{obj.name}</option>)}
+
+                                                                    </Input>
+                                                                ) : (
+                                                                        <option>{Config.getProfileData().name}</option>
+                                                                    )}
+                                                                <FormText color="danger">
+                                                                    {this.state.practitioner_errorMessage}
+                                                                </FormText>
+                                                            </Col>
+                                                        </FormGroup>
+                                                        <FormGroup row>
+                                                            <Label for="datetime" sm={4}>
+                                                                Date and Time
+                                                            </Label>
+                                                            <Col sm={8}>
+                                                                <DateTimePicker
+                                                                    value={this.state.datetime}
+                                                                    onChange={(value) => this.onChangeDatetime(value)}
+                                                                    minDate={moment().toDate()}
+                                                                />
+                                                                <FormText color="danger">
+                                                                    {this.state.datetime_errorMessage}
+                                                                </FormText>
+                                                            </Col>
+                                                        </FormGroup>
+                                                    </Form>
+                                                </ModalBody>
+                                                <ModalFooter>
+                                                    <FormText color={this.state.color}>
+                                                        {this.state.authenticationMessage}
+                                                    </FormText>
+                                                    <UncontrolledModal.Close color="link">
+                                                        Discard
+                                                    </UncontrolledModal.Close>
+                                                    <Button
+                                                        color="primary"
+                                                        onClick={() => this.createAppointment()}
+                                                        disabled={this.state.isLoading}
+                                                    >
+                                                        {this.state.isLoading
+                                                            ? "Creating Appointment..."
+                                                            : "Create Appointment"}
+                                                    </Button>
+                                                </ModalFooter>
+                                            </UncontrolledModal>
                                         </ButtonGroup>
                                     </div>
                                 </div>
@@ -1131,6 +1316,7 @@ export default class MedicalReportTable extends React.Component {
                                     filter={filterFactory()}
                                     bordered={false}
                                     responsive
+                                    noDataIndication={this.state.isGettingAppointmentsData ? 'Getting Appointments...' : 'No Appointments found!'}
                                     {...props.baseProps}
                                 />
 
