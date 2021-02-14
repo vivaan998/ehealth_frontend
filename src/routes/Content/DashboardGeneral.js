@@ -3,6 +3,7 @@ import Config from '../../config/Config'
 import AuthenticationService from '../../services/AuthenticationService'
 import { Container } from './../../components';
 import { HeaderMain } from './../components/HeaderMain';
+import ReCharts from './../Graphs/ReCharts/ReCharts';
 class DashboardGeneral extends React.Component {
     constructor(props){
         super(props);
@@ -20,9 +21,7 @@ class DashboardGeneral extends React.Component {
     
     render(){
         return (
-            <Container>
-                <HeaderMain title="General Dashboard" className="mb-5 mt-4" />
-            </Container>
+            <ReCharts/>
         )
     }
 }

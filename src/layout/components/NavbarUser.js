@@ -11,7 +11,6 @@ import { constant } from 'lodash';
 class NavbarUser extends React.Component{
     constructor(props){
         super(props);
-        console.log('props >>>',props);
         this.state = {
             isLoading: false
         }
@@ -19,7 +18,6 @@ class NavbarUser extends React.Component{
 
     doLogout(){
         AuthenticationService.deleteToken();
-        console.log('logged out >>>', AuthenticationService.getToken());
         this.props.history.push({
             pathname: "/login",
         })
@@ -37,17 +35,5 @@ class NavbarUser extends React.Component{
 }
 
 
-
-// const NavbarUser = (props) => (
-//     <NavItem { ...props }>
-//         <NavLink tag={ Link } to="/login">
-//             <i className="fa fa-power-off"></i>
-//         </NavLink>
-//     </NavItem>
-// );
-// NavbarUser.propTypes = {
-//     className: PropTypes.string,
-//     style: PropTypes.object
-// };
 
 export default NavbarUser;
