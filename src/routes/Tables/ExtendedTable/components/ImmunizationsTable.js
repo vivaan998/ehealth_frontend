@@ -274,6 +274,109 @@ export default class ImmunizationsTable extends React.Component {
         this.setState({ vaccineDate: startDate })
     )
 
+    async createImmunization() {
+        this.setState({
+            isLoading: true,
+            authenticationMessage: "",
+        });
+
+        if (this.state.provider == "") {
+            this.setState({
+                provider_errorMessage: "Provider not available",
+                isLoading: false,
+            });
+            return;
+        } else {
+            this.setState({
+                provider_errorMessage: "",
+            });
+        }
+
+        if (this.state.practitioner == "") {
+            this.setState({
+                practitioner_errorMessage: "Practitioner not available",
+                isLoading: false,
+            });
+            return;
+        } else {
+            this.setState({
+                practitioner_errorMessage: "",
+            });
+        }
+
+        if (this.state.patient == "") {
+            this.setState({
+                patient_errorMessage: "Patient not available",
+                isLoading: false,
+            });
+            return;
+        } else {
+            this.setState({
+                patient_errorMessage: "",
+            });
+        }
+
+        if (this.state.vaccine == "") {
+            this.setState({
+                vaccine_errorMessage: "Vaccine not available",
+                isLoading: false,
+            });
+            return;
+        } else {
+            this.setState({
+                vaccine_errorMessage: "",
+            });
+        }
+
+        if (this.state.datetime == "") {
+            this.setState({
+                date_errorMessage: "Date not available",
+                isLoading: false,
+            });
+            return;
+        } else {
+            this.setState({
+                date_errorMessage: "",
+            });
+            var formatedDateTime = moment
+                .utc(moment(this.state.datetime, "YYYY-MM-DD HH:MM:SS"))
+                .format();
+            formatedDateTime = formatedDateTime.replace("T", " ").replace("Z", "");
+
+            const postData = {
+                provider_id: Number(this.state.provider),
+                practitioner_id: this.state.practitioner,
+                patient_id: this.state.patient,
+                administered_dt: formatedDateTime,
+                vaccine_id: Number(this.state.vaccine),
+            };
+            try {
+                console.log(postData);
+                const response = await ImmunizationsService.createImmunizations(
+                    postData
+                );
+                if (response.status == true) {
+                    console.log(response.data);
+                    this.setState({
+                        color: "success",
+                        authenticationMessage: response.data.message,
+                        isLoading: false,
+                    });
+                    this.getList();
+                } else {
+                    this.setState({
+                        color: "danger",
+                        isLoading: false,
+                        authenticationMessage: response.data.data.error,
+                    });
+                }
+            } catch (e) {
+                console.log(e, e.data);
+            }
+        }
+    }
+
+
     async handleArchiveOnClick(cell, row) {
         console.log("Archive button clicked:", row.immunization_id);
         const data = {
@@ -485,6 +588,9 @@ export default class ImmunizationsTable extends React.Component {
                                                             onChange={value => this.onChangeDatetime(value)}
 
                                                         />
+                                                        <FormText color="danger">
+                                                            {this.state.date_errorMessage}
+                                                        </FormText>
                                                     </Col>
                                                 </FormGroup>
                                                 {/* <FormGroup row>
