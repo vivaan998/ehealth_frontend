@@ -579,7 +579,7 @@ export default class MedicalReportTable extends React.Component {
         }
 
         const postData = {
-            "provider_id": this.state.provider,
+            "provider_id": Number(this.state.provider),
             "practitioner_id": this.state.practitioner,
             "patient_id": this.props.location.patient_id,
             "bp_systolic": this.state.bpSys,
@@ -625,7 +625,7 @@ export default class MedicalReportTable extends React.Component {
         })
     }
 
-    async createImmunization(){
+    async createImmunization() {
         this.setState({
             isLoading: true,
             authenticationMessage: "",
@@ -744,10 +744,10 @@ export default class MedicalReportTable extends React.Component {
                                 <div className="d-flex justify-content-end align-items-center mb-2">
                                     <h3>Table of Vitals</h3>
                                     <div className="d-flex ml-auto">
-                                        <CustomSearch className="mr-2" {...props.searchProps} parentCallBack={this.handleCallback} />
                                         <ButtonGroup>
                                             <Button size="sm" outline id="newVitalButton">
-                                                <i className="fa fa-fw fa-plus"></i>
+                                                {/* <i className="fa fa-fw fa-plus"></i> */}
+                                                Add New Vital
                                             </Button>
                                             <UncontrolledModal target="newVitalButton" className="modal-outline-primary">
                                                 <ModalHeader tag="h5">
@@ -944,6 +944,7 @@ export default class MedicalReportTable extends React.Component {
                         )
                     }
                 </ToolkitProvider>
+                <br/><br/><br/>
                 <ToolkitProvider
                     keyField="patient_id"
                     data={this.state.immunizationsList}
@@ -955,14 +956,14 @@ export default class MedicalReportTable extends React.Component {
                                 <div className="d-flex justify-content-end align-items-center mb-2">
                                     <h3>Table of Immunizations</h3>
                                     <div className="d-flex ml-auto">
-                                        <CustomSearch className="mr-2" {...props.searchProps} parentCallBack={this.handleCallback} />
                                         <ButtonGroup>
                                             <Button
                                                 size="sm"
                                                 outline
                                                 id="createImmunization"
                                             >
-                                                <i className="fa fa-fw fa-plus"></i>
+                                                {/* <i className="fa fa-fw fa-plus"></i> */}
+                                                Add New Immunization
                                             </Button>
                                             <UncontrolledModal target="createImmunization" className="modal-outline-primary">
                                                 <ModalHeader tag="h5">
@@ -974,57 +975,60 @@ export default class MedicalReportTable extends React.Component {
                                                             <Label for="provider" sm={4}>
                                                                 Provider Name
                                                             </Label>
-                                                            {Config.getProfileData().role === 100 ? (
-                                                                <Input
-                                                                    type="select"
-                                                                    name="select"
-                                                                    id="provider"
-                                                                    value={(this.state.provider)}
-                                                                    onChange={e => this.onChangeProvider(e.target.value)}
-                                                                >
+                                                            <Col sm={8}>
+                                                                {Config.getProfileData().role === 100 ? (
+                                                                    <Input
+                                                                        type="select"
+                                                                        name="select"
+                                                                        id="provider"
+                                                                        value={(this.state.provider)}
+                                                                        onChange={e => this.onChangeProvider(e.target.value)}
+                                                                    >
 
-                                                                    {this.state.allProviders.map((obj) => <option value={obj.provider_id}>{obj.name}</option>)}
+                                                                        {this.state.allProviders.map((obj) => <option value={obj.provider_id}>{obj.name}</option>)}
 
-                                                                </Input>
-                                                            ) : (
-                                                                    Config.getProfileData().role === 50 ? (
-                                                                        <option>{Config.getProfileData().name}</option>
-                                                                    ) : (
-                                                                            Config.getProfileData().role === 10 ? (
-                                                                                <option>{Config.getProfileData().name}</option>
-                                                                            ) : (
+                                                                    </Input>
+                                                                ) : (
+                                                                        Config.getProfileData().role === 50 ? (
+                                                                            <option>{Config.getProfileData().name}</option>
+                                                                        ) : (
+                                                                                Config.getProfileData().role === 10 ? (
                                                                                     <option>{Config.getProfileData().name}</option>
-                                                                                )
-                                                                        )
+                                                                                ) : (
+                                                                                        <option>{Config.getProfileData().name}</option>
+                                                                                    )
+                                                                            )
 
-                                                                )}
-                                                            <FormText color="danger">
-                                                                {this.state.provider_errorMessage}
-                                                            </FormText>
+                                                                    )}
+                                                                <FormText color="danger">
+                                                                    {this.state.provider_errorMessage}
+                                                                </FormText>
+                                                            </Col>
                                                         </FormGroup>
                                                         <FormGroup row>
                                                             <Label for="practitioner" sm={4}>
                                                                 Practitioner Name
                                                             </Label>
-                                                            {(Config.getProfileData().role === 100) || (Config.getProfileData().role === 50) ? (
-                                                                <Input
-                                                                    type="select"
-                                                                    name="select"
-                                                                    id="practitioner"
-                                                                    value={(this.state.practitioner)}
-                                                                    onChange={e => this.onChangePractitioner(e.target.value)}
-                                                                >
+                                                            <Col sm={8}>
+                                                                {(Config.getProfileData().role === 100) || (Config.getProfileData().role === 50) ? (
+                                                                    <Input
+                                                                        type="select"
+                                                                        name="select"
+                                                                        id="practitioner"
+                                                                        value={(this.state.practitioner)}
+                                                                        onChange={e => this.onChangePractitioner(e.target.value)}
+                                                                    >
 
-                                                                    {this.state.allPractitioners.map((obj) => <option value={obj.practitioner_id}>{obj.name}</option>)}
+                                                                        {this.state.allPractitioners.map((obj) => <option value={obj.practitioner_id}>{obj.name}</option>)}
 
-                                                                </Input>
-                                                            ) : (
-                                                                    <option>{Config.getProfileData().name}</option>
-                                                                )}
-                                                            <FormText color="danger">
-                                                                {this.state.practitioner_errorMessage}
-                                                            </FormText>
-
+                                                                    </Input>
+                                                                ) : (
+                                                                        <option>{Config.getProfileData().name}</option>
+                                                                    )}
+                                                                <FormText color="danger">
+                                                                    {this.state.practitioner_errorMessage}
+                                                                </FormText>
+                                                            </Col>
                                                         </FormGroup>
                                                         <FormGroup row>
                                                             <Label for="vaccine" sm={4}>
@@ -1098,6 +1102,7 @@ export default class MedicalReportTable extends React.Component {
                         )
                     }
                 </ToolkitProvider>
+                <br/><br/><br/>
                 <ToolkitProvider
                     keyField="patient_id"
                     data={this.state.appointmentsList}
@@ -1109,14 +1114,14 @@ export default class MedicalReportTable extends React.Component {
                                 <div className="d-flex justify-content-end align-items-center mb-2">
                                     <h3>Table of Appointments</h3>
                                     <div className="d-flex ml-auto">
-                                        <CustomSearch className="mr-2" {...props.searchProps} parentCallBack={this.handleCallback} />
                                         <ButtonGroup>
                                             <Button
                                                 size="sm"
                                                 outline
                                             // onClick={this.handleAddRow.bind(this)}
                                             >
-                                                <i className="fa fa-fw fa-plus"></i>
+                                                {/* <i className="fa fa-fw fa-plus"></i> */}
+                                                Add New Appointment
                                             </Button>
                                         </ButtonGroup>
                                     </div>

@@ -48,8 +48,9 @@ class MedicalReport extends React.Component {
     render() {
         return (
             <Container>
-                <HeaderMain title={this.state.patient_detail.first_name+" "+this.state.patient_detail.last_name} className="mb-1 mt-1" />
-                <HeaderMain title={this.state.patient_detail.email_tx} className="mb-1 mt-1" />
+                
+                <h5>Patient Name: {this.state.patient_detail.first_name+" "+this.state.patient_detail.last_name} </h5>
+                <h5>Patient Email: {this.state.patient_detail.email_tx} </h5> <br/><br/>
                 <MedicalReportTable {...this.props} />
             </Container>
         );
