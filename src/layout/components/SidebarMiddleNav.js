@@ -3,6 +3,7 @@ import MenuListingService from '../../services/MenuListingService'
 import { SidebarMenu } from './../../components';
 import AuthenticationService from '../../services/AuthenticationService';
 import FlatList from 'flatlist-react';
+import Config from './../../config/Config';
 
 class SidebarMiddleNav extends React.Component {
     constructor(props) {

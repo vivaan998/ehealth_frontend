@@ -102,9 +102,6 @@ class Login extends React.Component {
                     });
 
                     AuthenticationService.setToken(response.data.access_token);
-                    // Config.access_token = response.data.access_token;
-                    // Config.role_id = 100;
-                    
                     this.props.history.replace({
                         pathname: "/dashboard",
                         state: {

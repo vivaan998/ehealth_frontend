@@ -25,5 +25,6 @@ const paths = {
     get_monthly_immunizations:  `${endpointApi}monthly-immunizations/`,
     get_provider_immunizations:  `${endpointApi}provider-immunizations/`,
     get_patient_name_email: `${endpointApi}get-patient-detail/`,
+    get_weekly_immunizations:   `${endpointApi}weekly-appointments/`
 };
 export default paths;

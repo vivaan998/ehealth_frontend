@@ -13,8 +13,9 @@ import { HeaderMain } from "../../components/HeaderMain"
 import SimpleBarChart from "./components/SimpleBarChart";
 import SpecifiedDomainRadarChart from "./components/SpecifiedDomainRadarChart";
 import ProviderImmunizationsChartTable from './../../Tables/ExtendedTable/components/ProviderImmunizationsChartTable';
-
+import SimpleLineChart from "./components/SimpleLineChart";
 import ChartsService from '../../../services/ChartsService';
+import Config from '../../../config/Config';
 class ReCharts extends React.Component {
     constructor(props) {
         super(props);
@@ -23,8 +24,10 @@ class ReCharts extends React.Component {
             isLoadingBarMonthImmunization: false,
             radarProviderImmunization: [],
             tableProviderImmunization: [],
+            lineProviderImmunization: [],
             isLoadingTableProviderImmunization: false,
-            isLoadingRadarProviderImmunization: false
+            isLoadingRadarProviderImmunization: false,
+            isLoadingLineWeeklyImmunization: false
         }
     }
     
@@ -77,9 +80,34 @@ class ReCharts extends React.Component {
         }
     }
 
-    componentDidMount(){
+    getLineWeeklyImmunization = async () => {
+        this.setState({
+            isLoadingLineWeeklyImmunization: true
+        })
+        try{
+            const response = await ChartsService.getWeeklyImmunization();
+            if (response.status == true) {
+                
+                this.setState({
+                    lineProviderImmunization: response.data.result,
+                    isLoadingLineWeeklyImmunization: false
+                });
+            }
+            else{
+                this.setState({
+                    isLoadingLineWeeklyImmunization: false
+                });
+            }
+        }
+        catch(e){
+            console.log('error >>>', e);
+        }
+    }
+
+    componentDidMount(){        
         this.getBarMonthImmunization();
         this.getRadarProviderImmunization();
+        this.getLineWeeklyImmunization();
     }
 
     render() {
@@ -154,6 +182,26 @@ class ReCharts extends React.Component {
                             {this.state.isLoadingTableProviderImmunization ? 'Loading data...' : <ProviderImmunizationsChartTable data={this.state.tableProviderImmunization}/>}
                         </CardBody>
                     </Card>
+                    { /* START Card Graph */}
+                </CardDeck>
+                <CardDeck>
+                    { /* START Card Graph */}
+                    <Card className="mb-3">
+                        <CardBody>
+                            <div className="d-flex">
+                                <div>
+                                    <h6 className="card-title mb-1">
+                                    Upcoming Weeks Vs Appointments
+                                    </h6>
+                                    <p>Shows appointments scheduled in upcoming 6 weeks</p>
+                                </div>
+                            </div>
+                            <br/>
+                            {this.state.isLoadingLineWeeklyImmunization ? 'Loading data...' : <SimpleLineChart  data={this.state.lineProviderImmunization}/>}
+                            
+                        </CardBody>
+                    </Card>
+                    
                     { /* START Card Graph */}
                 </CardDeck>
 

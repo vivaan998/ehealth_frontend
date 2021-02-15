@@ -44,6 +44,7 @@ class DefaultSidebar extends React.Component{
                     this.setState({
                         menuList: menu
                 });
+
                 if (Config.getProfileData().role === 0){
                     this.props.history.push({
                         pathname: "/mymedicalreport",
@@ -57,6 +58,11 @@ class DefaultSidebar extends React.Component{
                 if (Config.getProfileData().role === 50){
                     this.props.history.push({
                         pathname: "/practitioners",
+                    })
+                }
+                if (Config.getProfileData().role != 100){
+                    this.setState({
+                        menuList: (this.state.menuList).filter(e => e !== 'Dashboard')
                     })
                 }
 

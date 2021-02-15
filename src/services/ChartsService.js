@@ -44,10 +44,31 @@ const getProviderImmunization = async () => {
     return response;
 }
 
+const getWeeklyImmunization = async () => {
+    const config = {
+        headers: {
+            'accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Bearer ' + AuthenticationService.getToken(),
+        }
+    }
+    var response;
+    const res = await axios.get(paths.get_weekly_immunizations, config)
+        .then(function (res){
+            response = {status: true, data: res.data}
+        })
+        .catch(function (err) {
+            console.log(err.response);
+            response = { status: false, data: err.response };
+        });
+    return response;
+}
 
 
 const ChartsService = {
     getMonthlyImmunization: getMonthlyImmunization,
-    getProviderImmunization: getProviderImmunization
+    getProviderImmunization: getProviderImmunization,
+    getWeeklyImmunization: getWeeklyImmunization
 }
 export default ChartsService;
