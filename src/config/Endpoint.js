@@ -21,6 +21,8 @@ const paths = {
     vitals: `${endpointApi}vitals/`,
     get_immunizations_of_patient: `${endpointApi}get-immunizations-patient/`,
     get_appointmentd_of_patient : `${endpointApi}get-appointments-patient/`,
-    get_appointments_of_provider : `${endpointApi}get-appointments-provider/`
+    get_appointments_of_provider : `${endpointApi}get-appointments-provider/`,
+    get_monthly_immunizations:  `${endpointApi}monthly-immunizations/`,
+    get_provider_immunizations:  `${endpointApi}provider-immunizations/`
 };
 export default paths;

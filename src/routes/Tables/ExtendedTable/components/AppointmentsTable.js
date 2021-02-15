@@ -76,6 +76,7 @@ export default class AppointmentsTable extends React.Component {
             isArchiving: false,
             datetime: new Date(),
             isGettingData:true,
+            providerName: ''
         };
 
         this.headerCheckboxRef = React.createRef();
@@ -97,6 +98,7 @@ export default class AppointmentsTable extends React.Component {
                         appointmentsList: response.data.result,
                         nextPage: response.data.next_page,
                         previousPage: response.data.previous_page,
+                        isGettingData: false
                     });
                 }
             }else if (this.props.location.practitioner_id) {
@@ -107,6 +109,7 @@ export default class AppointmentsTable extends React.Component {
                         appointmentsList: response.data.result,
                         nextPage: response.data.next_page,
                         previousPage: response.data.previous_page,
+                        isGettingData: false
                     });
                 }
             } else {
@@ -116,6 +119,7 @@ export default class AppointmentsTable extends React.Component {
                         appointmentsList: response.data.result,
                         nextPage: response.data.next_page,
                         previousPage: response.data.previous_page,
+                        isGettingData: false
                     });
                 }
             }
@@ -236,9 +240,15 @@ export default class AppointmentsTable extends React.Component {
             if (Config.getProfileData().role === 50) {
                 console.log("In 50");
                 this.getAllPractitioners(Config.getProfileData().id);
+                this.setState({
+                    providerName: Config.getProfileData().name
+                })
             }
             if (Config.getProfileData().role === 10) {
                 this.getAllPatients(Config.getProfileData().id);
+                this.setState({
+                    providerName: Config.getProfileData().provider
+                })
             }
         } else {
             this.props.history.push({
@@ -480,7 +490,7 @@ export default class AppointmentsTable extends React.Component {
                                                                 ))}
                                                             </Input>
                                                         ) : (
-                                                                <option>{Config.getProfileData().name}</option>
+                                                                <option>{this.state.providerName}</option>
                                                             )}
                                                         <FormText color="danger">
                                                             {this.state.provider_errorMessage}

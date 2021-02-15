@@ -78,7 +78,8 @@ export default class ProviderTable extends React.Component {
             archiveMessage: "",
             previousPage: "",
             isArchiving: false,
-            isGettingData: false
+            isGettingData: false,
+            providerName: ''
         };
 
         this.headerCheckboxRef = React.createRef();
@@ -161,11 +162,15 @@ export default class ProviderTable extends React.Component {
             }
             if (Config.getProfileData().role === 50) {
                 this.getAllPractitioners(Config.getProfileData().id);
+                this.setState({
+                    providerName: Config.getProfileData().name
+                })
             }
             if (Config.getProfileData().role === 10) {
                 this.setState({
                     provider: null,
-                    practitioner: null
+                    practitioner: null,
+                    providerName: Config.getProfileData().provider
                 })
             }
         } else {
@@ -176,7 +181,6 @@ export default class ProviderTable extends React.Component {
     };
 
     handleMedicalRecordOnClick(cell, row) {
-        console.log("Medical Record Button clicked, rowId:", row.patient_id);
         this.props.history.push({
             pathname: "/mymedicalreport",
             patient_id: row.patient_id,
@@ -655,7 +659,7 @@ export default class ProviderTable extends React.Component {
                                                                 ))}
                                                             </Input>
                                                         ) : (
-                                                                <option>{Config.getProfileData().name}</option>
+                                                                <option>{this.state.providerName}</option>
                                                             )}
                                                     </Col>
                                                 </FormGroup>

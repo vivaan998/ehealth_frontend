@@ -21,17 +21,21 @@ class DefaultSidebar extends React.Component{
             profileData: 'Default User',
             menuItems: '',
             menuList: '',
+            isDataGetting: false,
         }
     }
     getMenu = async () => {
         try{
+            this.setState({
+                isDataGetting: true
+            });
             const response = await MenuListingService.getMenu();
             if (response.status == true){
                 this.setState({
                     profileData: response.data.data,
                     menuItems: response.data.menu,
                     isLoading: false,
-                    
+                    isDataGetting: false                    
                 });
                 Config.setProfileData(this.state.profileData);
                 let menu;
@@ -83,9 +87,10 @@ class DefaultSidebar extends React.Component{
                 { /* END SIDEBAR: Only for Desktop */ }
 
                 { /* START SIDEBAR: Only for Mobile */ }
+                
                 <Sidebar.MobileFluid>
                     <SidebarTopA data={this.state} {...this.props}/>
-                    
+                    {this.state.isDataGetting ? 'Loading menu...': ''}
                     <Sidebar.Section fluid cover>
                         { /* SIDEBAR: Menu */ }
                         <SidebarMiddleNav {...this.props} data={this.state}/>

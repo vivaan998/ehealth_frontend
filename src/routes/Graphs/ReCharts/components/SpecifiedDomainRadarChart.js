@@ -20,17 +20,31 @@ const data = [
     { subject: 'History', A: 65, B: 85, fullMark: 150 },
 ];
 
-const SpecifiedDomainRadarChart = () => (
-    <ResponsiveContainer width='100%' aspect={ 1/1 }>
-        <RadarChart outerRadius={150} data={data}>
-          <PolarGrid stroke={ colors['400'] } />
-          <PolarAngleAxis dataKey="subject" />
-          <PolarRadiusAxis angle={30} domain={[0, 150]} />
-          <Radar name="Mike" dataKey="A" stroke={ colors['primary'] } fill={ colors['primary'] } fillOpacity={0.3}/>
-          <Radar name="Lily" dataKey="B" stroke={ colors['500'] } fill={ colors['500'] } fillOpacity={0.3}/>
-          <Legend />
-        </RadarChart>
-    </ResponsiveContainer>
-);
+class SpecifiedDomainRadarChart extends React.Component{
+    constructor(props){
+        super(props);
+        console.log('radar >>>', props.data);
+        this.state = {
+            data: props.data,
+            
+        }
 
-export { SpecifiedDomainRadarChart };
+    }
+    render(){        
+        var max = Math.max.apply(Math, (this.state.data).map(function(o) { return o.total_immunizations; }));
+        var min = Math.min.apply(Math, (this.state.data).map(function(o) { return o.total_immunizations; }));
+        return(
+            <ResponsiveContainer width='100%' aspect={ 1/1 }>
+                <RadarChart outerRadius={120} data={this.state.data}>
+                <PolarGrid stroke='#CED4DA' />
+                <PolarAngleAxis dataKey="provider" />
+                <PolarRadiusAxis angle={0} domain={[max, min]} />
+                <Radar name="Immunizations" dataKey="total_immunizations" stroke='#6610f2' fill='#6610f2' fillOpacity={0.3}/>
+                <Legend />
+                </RadarChart>
+            </ResponsiveContainer>
+        )
+    }
+}
+
+export default SpecifiedDomainRadarChart;

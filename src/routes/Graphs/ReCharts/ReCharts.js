@@ -6,13 +6,13 @@ import {
     Col,
     Card,
     CardBody,
-    CardDeck, 
+    CardDeck,
     Button
 } from './../../../components'
 import { HeaderMain } from "../../components/HeaderMain";
 import { HeaderDemo } from "../../components/HeaderDemo";
 
-import { SimpleBarChart } from "./components/SimpleBarChart";
+import SimpleBarChart from "./components/SimpleBarChart";
 import { StackedBarChart } from "./components/StackedBarChart";
 import { MixBarChart } from "./components/MixBarChart";
 import { PositiveAndNegativeBarChart } from "./components/PositiveAndNegativeBarChart";
@@ -31,7 +31,7 @@ import { StraightAnglePieChart } from "./components/StraightAnglePieChart";
 import { PieChartWithCustomizedLabel } from "./components/PieChartWithCustomizedLabel";
 import { PieChartWithPaddingAngle } from "./components/PieChartWithPaddingAngle";
 import { PieChartWithPaddingAngleHalf } from "./components/PieChartWithPaddingAngleHalf";
-import { SpecifiedDomainRadarChart } from "./components/SpecifiedDomainRadarChart";
+import SpecifiedDomainRadarChart from "./components/SpecifiedDomainRadarChart";
 import { SimpleRadialBarChart } from './components/SimpleRadialBarChart';
 import { LineBarAreaComposedChart } from "./components/LineBarAreaComposedChart";
 import { TinyLineChart } from "./components/TinyLineChart";
@@ -40,277 +40,158 @@ import { TinyBarChart } from './components/TinyBarChart';
 import { TinyPieChart } from './components/TinyPieChart';
 import { TinyDonutChart } from './components/TinyDonutChart';
 import { VerticalComposedChart } from './components/VerticalComposedChart';
+import ProviderImmunizationsChartTable from './../../Tables/ExtendedTable/components/ProviderImmunizationsChartTable';
 
-export const ReCharts = () => (
-    <Container>
-        <HeaderMain 
-            title="Dashboard"
-            className="mb-4 mt-4"
-        />
+import ChartsService from '../../../services/ChartsService';
+class ReCharts extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            barMonthImmunization: [],
+            isLoadingBarMonthImmunization: false,
+            radarProviderImmunization: [],
+            tableProviderImmunization: [],
+            isLoadingTableProviderImmunization: false,
+            isLoadingRadarProviderImmunization: false
+        }
+    }
+    
+    getBarMonthImmunization = async () => {
+        this.setState({
+            isLoadingBarMonthImmunization: true
+        })
+        try{
+            const response = await ChartsService.getMonthlyImmunization();
+            if (response.status == true) {
+                console.log(response.data);
+                this.setState({
+                    barMonthImmunization: response.data.result,
+                    isLoadingBarMonthImmunization: false
+                });
+            }
+            else{
+                this.setState({
+                    isLoadingBarMonthImmunization: false
+                });
+            }
+        }
+        catch(e){
+            console.log('error >>>', e);
+        }
+    }
 
-        { /* START Header 1 */}
-        <Row>
-            <Col lg={ 12 }>
-                <HeaderDemo 
-                    no={1} 
-                    title="Bar Charts" 
-                    subTitle={(
-                        <React.Fragment>
-                            Quickly build your charts with decoupled, reusable React components.
-                        </React.Fragment>
-                    )}
-                />
-            </Col>
-        </Row>
-        { /* END Header 1 */}
-        { /* START Section 1 */}
-        <CardDeck>
-            { /* START Card Graph */}
-            <Card className="mb-3">
-                <CardBody>
-                    <div className="d-flex">
-                        <div>
-                            <h6 className="card-title mb-1">
-                                StackedBarChart
-                                <span className="small ml-1 text-muted">
-                                    #1.02
-                                </span>
-                            </h6>
-                            <p>Bar Charts</p>
-                        </div>
-                        <span className="ml-auto">
-                            <Button color="link" href="https://jsfiddle.net/alidingling/90v76x08/" target="_blank">
-                                <i className="fa fa-external-link"></i>
-                            </Button>
-                        </span>
-                    </div>
-                    <SimpleBarChart />
-                </CardBody>
-            </Card>
-            {/* <Card className="mb-3">
-                <CardBody>
-                    <div className="d-flex">
-                        <div>
-                            <h6 className="card-title mb-1">
-                                StackedBarChart
-                                <span className="small ml-1 text-muted">
-                                    #1.02
-                                </span>
-                            </h6>
-                            <p>Bar Charts</p>
-                        </div>
-                        <span className="ml-auto">
-                            <Button color="link" href="https://jsfiddle.net/alidingling/90v76x08/" target="_blank">
-                                <i className="fa fa-external-link"></i>
-                            </Button>
-                        </span>
-                    </div>
-                    <StackedBarChart />
-                </CardBody>
-            </Card> */}
-            { /* START Card Graph */}
-        </CardDeck>
+    getRadarProviderImmunization = async () => {
+        this.setState({
+            isLoadingRadarProviderImmunization: true,
+            isLoadingTableProviderImmunization: true
+        })
+        try{
+            const response = await ChartsService.getProviderImmunization();
+            if (response.status == true) {
+                console.log(response.data);
+                this.setState({
+                    radarProviderImmunization: response.data.result,
+                    tableProviderImmunization: response.data.result,
+                    isLoadingRadarProviderImmunization: false,
+                    isLoadingTableProviderImmunization: false
+                });
+            }
+            else{
+                this.setState({
+                    isLoadingTableProviderImmunization: false,
+                    isLoadingRadarProviderImmunization: false
+                });
+            }
+        }
+        catch(e){
+            console.log('error >>>', e);
+        }
+    }
 
-        { /* START Header 2 */}
-        <Row>
-            <Col lg={ 12 }>
-                <HeaderDemo 
-                    no={2} 
-                    title="Line Charts" 
-                    className="mt-5"
-                    subTitle={(
-                        <React.Fragment>
-                            Quickly build your charts with decoupled, reusable React components.
-                        </React.Fragment>
-                    )}
-                />
-            </Col>
-        </Row>
-        { /* END Header 2 */}
-        { /* START Section 2 */}
-        <CardDeck>
-            { /* START Card Graph */}
-            <Card className="mb-3">
-                <CardBody>
-                    <div className="d-flex">
-                        <div>
-                            <h6 className="card-title mb-1">
-                                SimpleLineChart
-                                <span className="small ml-1 text-muted">
-                                    #2.01
-                                </span>
-                            </h6>
-                            <p>Line Charts</p>
-                        </div>
-                        <span className="ml-auto">
-                            <Button color="link" href="https://jsfiddle.net/alidingling/xqjtetw0/" target="_blank">
-                                <i className="fa fa-external-link"></i>
-                            </Button>
-                        </span>
-                    </div>
-                    <SimpleLineChart />
-                </CardBody>
-            </Card>
-            { /* START Card Graph */}
-            { /* START Card Graph */}
-            <Card className="mb-3">
-                <CardBody>
-                    <div className="d-flex">
-                        <div>
-                            <h6 className="card-title mb-1">
-                                DashedLineChart
-                                <span className="small ml-1 text-muted">
-                                    #2.02
-                                </span>
-                            </h6>
-                            <p>Line Charts</p>
-                        </div>
-                        <span className="ml-auto">
-                            <Button color="link" href="https://jsfiddle.net/alidingling/nptzh7ez/" target="_blank">
-                                <i className="fa fa-external-link"></i>
-                            </Button>
-                        </span>
-                    </div>
-                    <DashedLineChart />
-                </CardBody>
-            </Card>
-            { /* START Card Graph */}
-        </CardDeck>
-        
-        { /* START Header 3 */}
-        <Row>
-            <Col lg={ 12 }>
-                <HeaderDemo 
-                    no={3} 
-                    title="Area Charts" 
-                    className="mt-5"
-                    subTitle={(
-                        <React.Fragment>
-                            Quickly build your charts with decoupled, reusable React components.
-                        </React.Fragment>
-                    )}
-                />
-            </Col>
-        </Row>
-        { /* END Header 3 */}
-        { /* START Section 3 */}
-        <CardDeck>
-            { /* START Card Graph */}
-            <Card className="mb-3">
-                <CardBody>
-                    <div className="d-flex">
-                        <div>
-                            <h6 className="card-title mb-1">
-                                SimpleAreaChart
-                                <span className="small ml-1 text-muted">
-                                    #3.01
-                                </span>
-                            </h6>
-                            <p>Area Charts</p>
-                        </div>
-                        <span className="ml-auto">
-                            <Button color="link" href="https://jsfiddle.net/alidingling/Lrffmzfc/" target="_blank">
-                                <i className="fa fa-external-link"></i>
-                            </Button>
-                        </span>
-                    </div>
-                    <SimpleAreaChart />
-                </CardBody>
-            </Card>
-            { /* START Card Graph */}
-            { /* START Card Graph */}
-            <Card className="mb-3">
-                <CardBody>
-                    <div className="d-flex">
-                        <div>
-                            <h6 className="card-title mb-1">
-                                StackedAreaChart
-                                <span className="small ml-1 text-muted">
-                                    #3.02
-                                </span>
-                            </h6>
-                            <p>Area Charts</p>
-                        </div>
-                        <span className="ml-auto">
-                            <Button color="link" href="https://jsfiddle.net/alidingling/c1rLyqj1/" target="_blank">
-                                <i className="fa fa-external-link"></i>
-                            </Button>
-                        </span>
-                    </div>
-                    <StackedAreaChart />
-                </CardBody>
-            </Card>
-            { /* START Card Graph */}
-        </CardDeck>
-        { /* START Section 3 */}
+    componentDidMount(){
+        this.getBarMonthImmunization();
+        this.getRadarProviderImmunization();
+    }
 
-        { /* START Header 4 */}
-        <Row>
-            <Col lg={ 12 }>
-                <HeaderDemo 
-                    no={4} 
-                    title="Pie Charts" 
-                    className="mt-5"
-                    subTitle={(
-                        <React.Fragment>
-                            Quickly build your charts with decoupled, reusable React components.
-                        </React.Fragment>
-                    )}
+    render() {
+        return (
+            <Container>
+                <HeaderMain
+                    title="Dashboard"
+                    className="mb-4 mt-4"
                 />
-            </Col>
-        </Row>
-        { /* END Header 4 */}
-        { /* START Section 4 */}
-        <CardDeck>
-            { /* START Card Graph */}
-            <Card className="mb-3">
-                <CardBody>
-                    <div className="d-flex">
-                        <div>
-                            <h6 className="card-title mb-1">
-                                TwoLevelPieChart
-                                <span className="small ml-1 text-muted">
-                                    #4.01
-                                </span>
-                            </h6>
-                            <p>Pie Charts</p>
-                        </div>
-                        <span className="ml-auto">
-                            <Button color="link" href="https://jsfiddle.net/alidingling/w6wsrc52/" target="_blank">
-                                <i className="fa fa-external-link"></i>
-                            </Button>
-                        </span>
-                    </div>
-                    <TwoLevelPieChart />
-                </CardBody>
-            </Card>
-            { /* START Card Graph */}
-            { /* START Card Graph */}
-            <Card className="mb-3">
-                <CardBody>
-                    <div className="d-flex">
-                        <div>
-                            <h6 className="card-title mb-1">
-                                StraightAnglePieChart
-                                <span className="small ml-1 text-muted">
-                                    #4.02
-                                </span>
-                            </h6>
-                            <p>Pie Charts</p>
-                        </div>
-                        <span className="ml-auto">
-                            <Button color="link" href="https://jsfiddle.net/alidingling/pb1jwdt1/" target="_blank">
-                                <i className="fa fa-external-link"></i>
-                            </Button>
-                        </span>
-                    </div>
-                    <StraightAnglePieChart />
-                </CardBody>
-            </Card>
-            { /* START Card Graph */}
-        </CardDeck>
-        
-    </Container>
-);
+
+                { /* START Header 1 */}
+                <Row>
+                    
+                </Row>
+                { /* END Header 1 */}
+                { /* START Section 1 */}
+                <CardDeck>
+                    { /* START Card Graph */}
+                    <Card className="mb-3">
+                        <CardBody>
+                            <div className="d-flex">
+                                <div>
+                                    <h6 className="card-title mb-1">
+                                    Month Vs Total Immunizations
+                                    </h6>
+                                    <p>The below bar graph shows the analytics of total immunizations done in a per month fashion.</p>
+                                </div>
+                            </div>
+                            <br/>
+                            {this.state.isLoadingBarMonthImmunization ? 'Loading data...' : <SimpleBarChart data={this.state.barMonthImmunization}/>}
+                            
+                        </CardBody>
+                    </Card>
+                    
+                    { /* START Card Graph */}
+                </CardDeck>
+
+                { /* START Header 2 */}
+                <Row>
+                    
+                </Row>
+                { /* END Header 2 */}
+                { /* START Section 2 */}
+                <CardDeck>
+                    { /* START Card Graph */}
+                    <Card className="mb-3">
+                        <CardBody>
+                            <div className="d-flex">
+                                <div>
+                                    <h6 className="card-title mb-1">
+                                        Provider Vs Immunizations
+                                    </h6>
+                                    <p>Radar chart demonstrates the data of total immunization done by a specific provider</p>
+                                </div>
+                            </div>
+                            {this.state.isLoadingRadarProviderImmunization ? 'Loading data...' : <SpecifiedDomainRadarChart data={this.state.radarProviderImmunization}/>}
+                        </CardBody>
+                    </Card>
+                    
+                    { /* START Card Graph */}
+                    { /* START Card Graph */}
+                     <Card className="mb-3">
+                        <CardBody>
+                            <div className="d-flex">
+                                <div>
+                                    <h6 className="card-title mb-1">
+                                        Provider Vs Immunizations
+                                    </h6>
+                                    <p>Tabular visualization of provider and their number of immunizations done</p>
+                                </div>
+                            </div>
+                            {this.state.isLoadingTableProviderImmunization ? 'Loading data...' : <ProviderImmunizationsChartTable data={this.state.tableProviderImmunization}/>}
+                        </CardBody>
+                    </Card>
+                    { /* START Card Graph */}
+                </CardDeck>
+
+            </Container>
+        )
+    }
+}
+
 
 export default ReCharts;

@@ -121,10 +121,10 @@ class SidebarMiddleNav extends React.Component {
     }
 
     render() {
-        console.log(this.props);
         return (
-
+            
             <SidebarMenu>
+                
                 {this.dashboard()}
                 {this.mymedicalreport()}
                 {this.appointments()}

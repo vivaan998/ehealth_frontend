@@ -36,6 +36,20 @@ class Login extends React.Component {
         }
     }
 
+    componentDidMount(){
+        if (AuthenticationService.getUser()){
+            console.log('succeed');
+            this.props.history.push({
+                pathname: "/dashboard",
+            })
+        }
+        else{
+            this.props.history.push({
+                pathname: "/login",
+            })
+        }
+    }
+
     async Authenticate() {
         this.setState(({
             isLoading: true,

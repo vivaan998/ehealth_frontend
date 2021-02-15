@@ -89,16 +89,17 @@ export default class MedicalReportTable extends React.Component {
             allVaccines: [],
             datetime: new Date(),
             datetime_errorMessage: "",
-            isGettingVitalData: true,
-            isGettingImmunizationData: true,
-            isGettingAppointmentsData: true,
+            isGettingVitalData: false,
+            isGettingImmunizationData: false,
+            isGettingAppointmentsData: false,
         }
-        console.log("medical report table>>>", this.props);
     }
 
     getVital = async (page = null, search = null) => {
         try {
-            console.log("immunizationsss", this.props.location.patient_id);
+            this.setState({
+                isGettingVitalData: true
+            });
             const paramData = {
                 page: page,
                 search: search,
@@ -110,9 +111,9 @@ export default class MedicalReportTable extends React.Component {
                     vitalsList: response.data.result,
                     nextPageVital: response.data.next_page,
                     previousPageVital: response.data.previous_page,
+                    isGettingVitalData: false
                 });
             }
-            console.log("getVitals>>>", this.state.vitalsList);
         }
         catch (e) {
             console.log('error >>>', e);
@@ -122,7 +123,9 @@ export default class MedicalReportTable extends React.Component {
 
     getImmunization = async (page = null, search = null) => {
         try {
-            console.log("immunizationsss", this.props.location.patient_id);
+            this.setState({
+                isGettingImmunizationData: true
+            });
             const paramData = {
                 page: page,
                 search: search
@@ -133,9 +136,9 @@ export default class MedicalReportTable extends React.Component {
                     immunizationsList: response.data.result,
                     nextPageImmunizations: response.data.next_page,
                     previousPageImmunizations: response.data.previous_page,
+                    isGettingImmunizationData: false
                 });
             }
-            console.log("getImmunizations>>>", this.state.immunizationsList);
         }
         catch (e) {
             console.log('error >>>', e);
@@ -145,7 +148,9 @@ export default class MedicalReportTable extends React.Component {
 
     getAppointment = async (page = null, search = null) => {
         try {
-            console.log("appointmentsss", this.props.location.patient_id);
+            this.setState({
+                isGettingAppointmentsData: true
+            });
             const paramData = {
                 page: page,
                 search: search
@@ -156,9 +161,9 @@ export default class MedicalReportTable extends React.Component {
                     appointmentsList: response.data.result,
                     nextPageAppointments: response.data.next_page,
                     previousPageAppointments: response.data.previous_page,
+                    isGettingAppointmentsData: false
                 });
             }
-            console.log("getAppointmentss>>>", this.state.appointmentsList);
         }
         catch (e) {
             console.log('error >>>', e);
@@ -169,7 +174,6 @@ export default class MedicalReportTable extends React.Component {
     async getNameandEmailOfPatient() {
         try {
             const response = await MedicalReportService.getPatient(this.props.location.patient_id);
-            console.log('data Medical Report Table >>>', response.data);
             if (response.status == true) {
                 this.setState({
                     patient_detail: response.data.result[0],
@@ -191,7 +195,6 @@ export default class MedicalReportTable extends React.Component {
         if (AuthenticationService.getUser()) {
             this.getNameandEmailOfPatient();
             if (Config.getProfileData().role === 100) {
-                console.log('in get all 100 providers');
                 this.getAllProviders();
             }
             this.getAllVaccines();
@@ -389,7 +392,6 @@ export default class MedicalReportTable extends React.Component {
                     allVaccines: response.data.data,
                     vaccine: (response.data.data)[0].vaccine_id,
                 });
-                console.log('all Vaccines List >>>', this.state.allVaccines);
             }
         }
         catch (e) {
@@ -407,7 +409,6 @@ export default class MedicalReportTable extends React.Component {
                     provider: (response.data.data)[0].provider_id,
                 });
                 this.getAllPractitioners(this.state.provider);
-                console.log('all Providers List >>>', this.state.allProviders);
             }
         }
         catch (e) {
@@ -418,7 +419,6 @@ export default class MedicalReportTable extends React.Component {
 
     getAllPractitioners = async (value) => {
         try {
-            console.log('id >>>', value);
             const response = await PractitionersService.getAllPractitionersList(value);
             if (response.status == true) {
                 if (response.data.data) {
@@ -433,7 +433,6 @@ export default class MedicalReportTable extends React.Component {
                         allPractitioners: [],
                     });
                 }
-                console.log('all practitioner List >>>', this.state.allPractitioners);
             }
         }
         catch (e) {
@@ -457,7 +456,6 @@ export default class MedicalReportTable extends React.Component {
     }
 
     onChangeBpSys(value) {
-        console.log("onchange BP>>>", value);
         this.setState({
             bpSys: "" + value
         })
@@ -593,10 +591,8 @@ export default class MedicalReportTable extends React.Component {
         }
 
         try {
-            console.log(postData);
             const response = await MedicalReportService.createVital(postData);
             if (response.status == true) {
-                console.log(response.data);
                 this.setState({
                     color: "success",
                     authenticationMessage: response.data.message,
@@ -705,12 +701,10 @@ export default class MedicalReportTable extends React.Component {
                 "vaccine_id": Number(this.state.vaccine),
             };
             try {
-                console.log(postData);
                 const response = await ImmunizationsService.createImmunizations(
                     postData
                 );
                 if (response.status == true) {
-                    console.log(response.data);
                     this.setState({
                         color: "success",
                         authenticationMessage: response.data.message,
@@ -783,12 +777,10 @@ export default class MedicalReportTable extends React.Component {
             appointment_date: formatedDateTime,
         };
         try {
-            console.log(">>>>>>>>>>>",postData);
             const response = await AppointmentsService.createAppointment(
                 postData
             );
             if (response.status == true) {
-                console.log(response.data);
                 this.setState({
                     color: "success",
                     authenticationMessage: response.data.message,
