@@ -337,18 +337,6 @@ export default class MedicalReportTable extends React.Component {
                 sort: true,
                 sortCaret
             },
-            // {
-            //     dataField: 'patient',
-            //     text: 'Patient Name',
-            //     sort: true,
-            //     // align: "center",
-            //     sortCaret,
-            //     formatter: (cell) => (
-            //         <span className="text-inverse">
-            //             { cell}
-            //         </span>
-            //     ),
-            // },
             {
                 dataField: 'practitioner',
                 text: 'Scheduled By',

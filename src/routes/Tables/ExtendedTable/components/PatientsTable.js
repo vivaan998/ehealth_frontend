@@ -156,7 +156,6 @@ export default class ProviderTable extends React.Component {
     componentDidMount = async () => {
         if (AuthenticationService.getUser()) {
             this.getPatient();
-            console.log("profile", Config.getProfileData());
             if (Config.getProfileData().role === 100) {
                 this.getAllProviders();
             }

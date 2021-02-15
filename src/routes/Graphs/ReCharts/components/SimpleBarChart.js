@@ -17,7 +17,6 @@ import colors from './../../../../colors';
 class SimpleBarChart extends React.Component {
     constructor(props) {
         super(props);
-        console.log('in cons', props);
         this.state = {
             data: props.data
         }
@@ -25,7 +24,7 @@ class SimpleBarChart extends React.Component {
 
     render() {
         return (
-            <ResponsiveContainer width='100%' aspect={6.0 / 2.0}>
+            <ResponsiveContainer width='90%' aspect={1/0.3}>
                 <BarChart
                     data={this.state.data}
                     margin={{ top: 5, right: 30, left: 20, bottom: 5 }}

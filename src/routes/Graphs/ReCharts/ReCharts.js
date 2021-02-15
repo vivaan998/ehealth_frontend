@@ -9,37 +9,9 @@ import {
     CardDeck,
     Button
 } from './../../../components'
-import { HeaderMain } from "../../components/HeaderMain";
-import { HeaderDemo } from "../../components/HeaderDemo";
-
+import { HeaderMain } from "../../components/HeaderMain"
 import SimpleBarChart from "./components/SimpleBarChart";
-import { StackedBarChart } from "./components/StackedBarChart";
-import { MixBarChart } from "./components/MixBarChart";
-import { PositiveAndNegativeBarChart } from "./components/PositiveAndNegativeBarChart";
-import { BarChartStackedBySign } from "./components/BarChartStackedBySign";
-import { BarChartHasBackground } from "./components/BarChartHasBackground";
-import { SimpleLineChart } from "./components/SimpleLineChart";
-import { DashedLineChart } from "./components/DashedLineChart";
-import { VerticalLineChart } from "./components/VerticalLineChart";
-import { CustomizedLabelLineChart } from './components/CustomizedLabelLineChart';
-import { SimpleAreaChart } from "./components/SimpleAreaChart";
-import { StackedAreaChart } from "./components/StackedAreaChart";
-import { PercentAreaChart } from "./components/PercentAreaChart";
-import { AreaChartFillByValue } from "./components/AreaChartFillByValue";
-import { TwoLevelPieChart } from "./components/TwoLevelPieChart";
-import { StraightAnglePieChart } from "./components/StraightAnglePieChart";
-import { PieChartWithCustomizedLabel } from "./components/PieChartWithCustomizedLabel";
-import { PieChartWithPaddingAngle } from "./components/PieChartWithPaddingAngle";
-import { PieChartWithPaddingAngleHalf } from "./components/PieChartWithPaddingAngleHalf";
 import SpecifiedDomainRadarChart from "./components/SpecifiedDomainRadarChart";
-import { SimpleRadialBarChart } from './components/SimpleRadialBarChart';
-import { LineBarAreaComposedChart } from "./components/LineBarAreaComposedChart";
-import { TinyLineChart } from "./components/TinyLineChart";
-import { TinyAreaChart } from "./components/TinyAreaChart";
-import { TinyBarChart } from './components/TinyBarChart';
-import { TinyPieChart } from './components/TinyPieChart';
-import { TinyDonutChart } from './components/TinyDonutChart';
-import { VerticalComposedChart } from './components/VerticalComposedChart';
 import ProviderImmunizationsChartTable from './../../Tables/ExtendedTable/components/ProviderImmunizationsChartTable';
 
 import ChartsService from '../../../services/ChartsService';

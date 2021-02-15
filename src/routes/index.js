@@ -3,8 +3,7 @@ import { Route, Switch, Redirect } from "react-router";
 import DefaultNavbar from "./../layout/components/DefaultNavbar";
 import DefaultSidebar from "./../layout/components/DefaultSidebar";
 import Login from './Pages/Login';
-
-
+import Config from './../config/Config';
 
 import {
     Appointments,
