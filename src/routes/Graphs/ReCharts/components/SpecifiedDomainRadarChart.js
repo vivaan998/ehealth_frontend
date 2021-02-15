@@ -24,7 +24,6 @@ const data = [
 class SpecifiedDomainRadarChart extends React.Component{
     constructor(props){
         super(props);
-        console.log('radar >>>', props.data);
         this.state = {
             data: props.data,
             

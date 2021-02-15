@@ -95,7 +95,6 @@ export default class ProviderTable extends React.Component {
                 search: search,
             };
             const response = await PatientsService.getPatient(paramData);
-            console.log("data >>>", response.data);
             if (response.status == true) {
                 this.setState({
                     patientsList: response.data.result,
@@ -103,9 +102,6 @@ export default class ProviderTable extends React.Component {
                     previousPage: response.data.previous_page,
                     isGettingData: false
                 });
-                console.log("patientsList >>>", this.state.patientsList);
-                console.log("previous page >>>", this.state.previousPage);
-                console.log("next page >>>", this.state.nextPage);
             }
         } catch (e) {
             console.log("error >>>", e);
@@ -129,7 +125,6 @@ export default class ProviderTable extends React.Component {
     };
     getAllPractitioners = async (value) => {
         try {
-            console.log("id >>>", value);
             const response = await PractitionersService.getAllPractitionersList(
                 value
             );
@@ -145,7 +140,6 @@ export default class ProviderTable extends React.Component {
                         practitioner: "",
                     });
                 }
-                console.log("all practitioner List >>>", this.state.allPractitioners);
             }
         } catch (e) {
             console.log("error >>>", e);
@@ -189,11 +183,7 @@ export default class ProviderTable extends React.Component {
     }
 
     async handleArchiveOnClick(cell, row) {
-        console.log(
-            "Archive button clicked, active flag:",
-            row.active_fl,
-            row.patient_id
-        );
+        
         const data = {
             patient_id: row.patient_id,
         };
@@ -203,7 +193,6 @@ export default class ProviderTable extends React.Component {
             });
             const response = await PatientsService.archivePatient(data);
             if (response.status == true) {
-                console.log(response.data);
                 this.setState({
                     archiveMessage: "Patient archived successfully",
                     isArchiving: false,
@@ -215,7 +204,6 @@ export default class ProviderTable extends React.Component {
                     isArchiving: false,
                 });
             }
-            console.log("archive Patient>>>", this.state.archiveMessage);
         } catch (e) {
             console.log(e, e.data);
         }
@@ -288,7 +276,6 @@ export default class ProviderTable extends React.Component {
     }
 
     onChangeProvider(value) {
-        console.log("provider_id >>>", value);
         this.getAllPractitioners(value);
         this.setState({
             provider: parseInt(value),
@@ -400,10 +387,8 @@ export default class ProviderTable extends React.Component {
             };
 
             try {
-                console.log('post data >>> ', postData);
                 const response = await PatientsService.createPatient(postData);
                 if (response.status == true) {
-                    console.log(response.data);
                     this.setState({
                         color: "success",
                         authenticationMessage: response.data.message,

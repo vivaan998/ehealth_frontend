@@ -129,7 +129,6 @@ export default class PractitionersTable extends React.Component {
                     allProviders: response.data.data,
                     provider: response.data.data[0].provider_id,
                 });
-                console.log("all Providers List >>>", this.state.allProviders);
             }
         } catch (e) {
             console.log("error >>>", e);
@@ -160,7 +159,6 @@ export default class PractitionersTable extends React.Component {
 
 
     handleImmunizationssOnClick(cell, row) {
-        console.log("Immunizations Button clicked, rowId:", row.practitioner_id);
         this.props.history.push({
             pathname: "/immunizations",
             practitioner_id: row.practitioner_id,
@@ -168,7 +166,6 @@ export default class PractitionersTable extends React.Component {
     }
 
     handleAppointmentsOnClick(cell, row) {
-        console.log("Appointments button clicked, rowId:", row.practitioner_id);
         this.props.history.push({
             pathname: "/appointments",
             practitioner_id: row.practitioner_id,
@@ -176,11 +173,7 @@ export default class PractitionersTable extends React.Component {
     }
 
     handleArchiveOnClick = async (cell, row) => {
-        console.log(
-            "Archive button clicked, active flag:",
-            row.active_fl,
-            row.practitioner_id
-        );
+       
         const data = {
             practitioner_id: row.practitioner_id,
         };
@@ -190,7 +183,6 @@ export default class PractitionersTable extends React.Component {
         try {
             const response = await PractitionersService.archivePractitioner(data);
             if (response.status == true) {
-                console.log(response.data);
                 this.setState({
                     archiveMessage: "Practitioner archived successfully",
                     isArchiving: false,
@@ -202,7 +194,6 @@ export default class PractitionersTable extends React.Component {
                     isArchiving: false,
                 });
             }
-            console.log("archive practitioner>>>", this.state.archiveMessage);
         } catch (e) {
             console.log(e, e.data);
         }
@@ -431,10 +422,8 @@ export default class PractitionersTable extends React.Component {
         };
 
         try {
-            console.log(postData);
             const response = await PractitionersService.createPractitioner(postData);
             if (response.status == true) {
-                console.log(response.data);
                 this.setState({
                     color: "success",
                     authenticationMessage: response.data.message,

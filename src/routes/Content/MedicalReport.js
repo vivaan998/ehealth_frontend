@@ -7,28 +7,25 @@ import Config from './../../config/Config';
 import MedicalReportTable from '../Tables/ExtendedTable/components/MedicalReportTable';
 
 class MedicalReport extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        console.log("Medical report props>>>", this.props);
         this.state = {
             patient_detail: '',
             isGettingPatientDetails: false
         }
     }
 
-    async getNameandEmailOfPatient(){
+    async getNameandEmailOfPatient() {
         try {
-            if (Config.getProfileData().role === 0){
+            if (Config.getProfileData().role === 0) {
                 const response = await MedicalReportService.getPatient(Config.getProfileData().id);
-                console.log('data Medical Report >>>', response.data);
                 if (response.status == true) {
                     this.setState({
                         patient_detail: response.data,
                     });
                 }
-            }else{
+            } else {
                 const response = await MedicalReportService.getPatient(this.props.location.patient_id);
-                console.log('data Medical Report >>>', response.data);
                 if (response.status == true) {
                     this.setState({
                         patient_detail: response.data,
@@ -37,7 +34,6 @@ class MedicalReport extends React.Component {
             }
         }
         catch (e) {
-            console.log('error >>>', e);
             console.log(e, e.data);
         }
 
@@ -45,7 +41,6 @@ class MedicalReport extends React.Component {
 
     componentDidMount = async () => {
         if (AuthenticationService.getUser()) {
-            console.log('profile', Config.getProfileData());
             this.getNameandEmailOfPatient();
         }
         else {
@@ -58,9 +53,9 @@ class MedicalReport extends React.Component {
     render() {
         return (
             <Container>
-                
+
                 <h5>Patient Name: {this.state.patient_detail.patient_name} </h5>
-                <h5>Patient Email: {this.state.patient_detail.patient_email} </h5> <br/><br/>
+                <h5>Patient Email: {this.state.patient_detail.patient_email} </h5> <br /><br />
                 <MedicalReportTable {...this.props} />
             </Container>
         );

@@ -108,7 +108,6 @@ export default class ProviderTable extends React.Component {
     };
 
     async handleArchiveOnClick(cell, row) {
-        console.log("Archive button clicked, active flag:", row.active_fl, row.provider_id);
         const data = {
             "provider_id": row.provider_id
         }
@@ -118,7 +117,6 @@ export default class ProviderTable extends React.Component {
             });
             const response = await ProvidersService.archiveProvider(data);
             if (response.status == true) {
-                console.log(response.data);
                 this.setState({
                     archiveMessage: "Provider archived successfully",
                     isArchiving: false
@@ -132,7 +130,6 @@ export default class ProviderTable extends React.Component {
                     isArchiving: false
                 });
             }
-            console.log("archive provider>>>", this.state.archiveMessage);
         }
         catch (e) {
             console.log(e, e.data)
@@ -140,18 +137,13 @@ export default class ProviderTable extends React.Component {
     }
 
     handlePractitionersOnClick(cell, row) {
-        console.log("Practitioners Button clicked, rowId:", row.provider_id);
-        // console.log(this.props);
         this.props.history.push({
           pathname: "/practitioners",
           provider_id: row.provider_id,
         });
-        // return <Redirect to='/practitioners' />
-        // <Link to='/practitioners' />
       }
     
       handleAppointmentsOnClick(cell, row) {
-        console.log("Appointments button clicked, rowId:", row.provider_id);
         this.props.history.push({
           pathname: "/appointments",
           provider_id: row.provider_id,
@@ -267,10 +259,8 @@ export default class ProviderTable extends React.Component {
                 password: this.state.password,
             };
             try {
-                console.log("postData >>>", postData);
                 const response = await ProvidersService.createProvider(postData);
                 if (response.status == true) {
-                    console.log(response.data);
                     this.setState({
                         color: "success",
                         authenticationMessage: response.data.message,

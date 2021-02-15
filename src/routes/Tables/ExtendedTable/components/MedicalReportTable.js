@@ -95,7 +95,6 @@ export default class MedicalReportTable extends React.Component {
             immunizationErrorMessage: '',
             appointmentsErrorMessage: ''
         }
-        console.log("medical report table props>>>", this.props);
     }
 
     getVital = async (page = null, search = null) => {
@@ -126,9 +125,7 @@ export default class MedicalReportTable extends React.Component {
                     search: search,
                     patient_id: (this.state.patient_detail).patient_id
                 }
-                console.log("get vital function", paramData);
                 const response = await MedicalReportService.getVitals(paramData);
-                console.log("vital response>>>", response);
 
                 if (response.status == true) {
                     this.setState({
@@ -153,13 +150,11 @@ export default class MedicalReportTable extends React.Component {
             });
             if (Config.getProfileData().role === 0) {
                 const patient_id = Config.getProfileData().id;
-                console.log("immunizationsss patient_id", patient_id);
                 const paramData = {
                     page: page,
                     search: search
                 }
                 const response = await MedicalReportService.getImmunizations(paramData, patient_id);
-                console.log(" imm response>>>", response)
                 if (response.status == true) {
                     this.setState({
                         immunizationsList: response.data.result,
@@ -170,7 +165,6 @@ export default class MedicalReportTable extends React.Component {
                 }
             } else {
                 const patient_id = (this.state.patient_detail).patient_id;
-                console.log("immunizationsss patient_id", patient_id);
                 const paramData = {
                     page: page,
                     search: search
@@ -187,7 +181,6 @@ export default class MedicalReportTable extends React.Component {
 
             }
 
-            console.log("getImmunizations>>>", this.state.immunizationsList);
         }
         catch (e) {
             console.log('error >>>', e);
@@ -202,7 +195,6 @@ export default class MedicalReportTable extends React.Component {
             });
             if (Config.getProfileData().role === 0) {
                 const patient_id = Config.getProfileData().id;
-                console.log("appointmentsss patient_id", patient_id);
                 const paramData = {
                     page: page,
                     search: search
@@ -218,7 +210,6 @@ export default class MedicalReportTable extends React.Component {
                 }
             } else {
                 const patient_id = (this.state.patient_detail).patient_id;
-                console.log("appointmentsss patient_id", patient_id);
                 const paramData = {
                     page: page,
                     search: search
@@ -234,7 +225,6 @@ export default class MedicalReportTable extends React.Component {
                 }
             }
 
-            console.log("getAppointmentss>>>", this.state.appointmentsList);
         }
         catch (e) {
             console.log('error >>>', e);
@@ -245,7 +235,6 @@ export default class MedicalReportTable extends React.Component {
     async getNameandEmailOfPatient() {
         try {
             const response = await MedicalReportService.getPatient(this.props.location.patient_id);
-            console.log('response >>>', response);
             if (response.status == true) {
                 this.setState({
                     patient_detail: response.data,

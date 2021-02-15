@@ -91,7 +91,6 @@ export default class AppointmentsTable extends React.Component {
             }
 
             if (this.props.location.provider_id) {
-                console.log("provider_id in appointments", this.props.location.provider_id);
                 const response = await AppointmentsService.appointmentsOfThisProvider(paramData, this.props.location.provider_id);
                 if (response.status == true) {
                     this.setState({
@@ -102,7 +101,6 @@ export default class AppointmentsTable extends React.Component {
                     });
                 }
             }else if (this.props.location.practitioner_id) {
-                console.log("practitioner_id in appointments", this.props.location.practitioner_id);
                 const response = await AppointmentsService.appointmentsOfThisPractitioner(paramData, this.props.location.practitioner_id);
                 if (response.status == true) {
                     this.setState({
@@ -138,7 +136,6 @@ export default class AppointmentsTable extends React.Component {
                     allProviders: response.data.data,
                     provider: response.data.data[0].provider_id,
                 });
-                console.log("all Providers List >>>", this.state.allProviders);
                 this.getAllPractitioners(this.state.provider);
             }
         } catch (e) {
@@ -166,7 +163,6 @@ export default class AppointmentsTable extends React.Component {
                         patient: null,
                     });
                 }
-                console.log("all practitioner List >>>", this.state.allPractitioners);
             }
         } catch (e) {
             console.log("error >>>", e);
@@ -188,7 +184,6 @@ export default class AppointmentsTable extends React.Component {
                         patient: null,
                     });
                 }
-                console.log("all patients List >>>", this.state.allPatients);
             }
         } catch (e) {
             console.log("error >>>", e);
@@ -199,7 +194,6 @@ export default class AppointmentsTable extends React.Component {
 
 
     async handleArchiveOnClick(cell, row) {
-        console.log("Archive button clicked, active flag:", row.appointment_id);
         const data = {
             "appointment_id": row.appointment_id
         }
@@ -223,7 +217,6 @@ export default class AppointmentsTable extends React.Component {
                     isArchiving: false
                 });
             }
-            console.log("archive Appointment>>>", this.state.archiveMessage);
         }
         catch (e) {
             console.log(e, e.data)
@@ -234,11 +227,9 @@ export default class AppointmentsTable extends React.Component {
         if (AuthenticationService.getUser()) {
             this.getList();
             if (Config.getProfileData().role === 100) {
-                console.log("in get all 100 providers");
                 this.getAllProviders();
             }
             if (Config.getProfileData().role === 50) {
-                console.log("In 50");
                 this.getAllPractitioners(Config.getProfileData().id);
                 this.setState({
                     providerName: Config.getProfileData().name
@@ -259,7 +250,6 @@ export default class AppointmentsTable extends React.Component {
     };
 
     onChangeProvider(value) {
-        console.log("provider_id >>>", value);
         this.getAllPractitioners(value);
         this.setState({
             provider: parseInt(value),
@@ -267,7 +257,6 @@ export default class AppointmentsTable extends React.Component {
     }
 
     onChangePractitioner(value) {
-        console.log("provider_id >>>", value);
         this.getAllPatients(value);
         this.setState({
             practitioner: parseInt(value),

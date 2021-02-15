@@ -95,7 +95,6 @@ class Login extends React.Component {
             try{
                 const response = await AuthenticationService.Login(postData);
                 if (response.status == true) {
-                    console.log(response.data);
                     this.setState({
                         color: "success",
                         authenticationMessage: "Login successful",

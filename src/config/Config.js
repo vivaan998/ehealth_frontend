@@ -1,5 +1,4 @@
 const setProfileData = (data) => {
-    console.log('setItem >>>', data);
     localStorage.setItem('profileData', JSON.stringify(data));
 }
 

@@ -129,7 +129,6 @@ export default class ImmunizationsTable extends React.Component {
                     });
                 }
             }
-            console.log("immunizationList >>>", this.state.immunizationsList);
         } catch (e) {
             console.log("error >>>", e);
             console.log(e, e.data);
@@ -143,7 +142,6 @@ export default class ImmunizationsTable extends React.Component {
                     allVaccines: response.data.data,
                     vaccine: response.data.data[0].vaccine_id,
                 });
-                console.log("all Vaccines List >>>", this.state.allVaccines);
             }
         } catch (e) {
             console.log("error >>>", e);
@@ -159,7 +157,6 @@ export default class ImmunizationsTable extends React.Component {
                     allProviders: response.data.data,
                     provider: response.data.data[0].provider_id,
                 });
-                console.log("all Providers List >>>", this.state.allProviders);
                 this.getAllPractitioners(this.state.provider);
             }
         } catch (e) {
@@ -187,7 +184,6 @@ export default class ImmunizationsTable extends React.Component {
                         patient: null,
                     });
                 }
-                console.log("all practitioner List >>>", this.state.allPractitioners);
             }
         } catch (e) {
             console.log("error >>>", e);
@@ -209,7 +205,6 @@ export default class ImmunizationsTable extends React.Component {
                         patient: null,
                     });
                 }
-                console.log("all patients List >>>", this.state.allPatients);
             }
         } catch (e) {
             console.log("error >>>", e);
@@ -222,11 +217,9 @@ export default class ImmunizationsTable extends React.Component {
             this.getList();
             this.getAllVaccines();
             if (Config.getProfileData().role === 100) {
-                console.log("in get all 100 providers");
                 this.getAllProviders();
             }
             if (Config.getProfileData().role === 50) {
-                console.log("In 50");
                 this.getAllPractitioners(Config.getProfileData().id);
                 this.setState({
                     providerName: Config.getProfileData().name
@@ -245,7 +238,6 @@ export default class ImmunizationsTable extends React.Component {
         }
     };
     onChangeProvider(value) {
-        console.log("provider_id >>>", value);
         this.getAllPractitioners(value);
         this.setState({
             provider: parseInt(value),
@@ -253,7 +245,6 @@ export default class ImmunizationsTable extends React.Component {
     }
 
     onChangePractitioner(value) {
-        console.log("provider_id >>>", value);
         this.getAllPatients(value);
         this.setState({
             practitioner: parseInt(value),
@@ -354,7 +345,6 @@ export default class ImmunizationsTable extends React.Component {
                 vaccine_id: this.state.vaccine,
             };
             try {
-                console.log(postData);
                 const response = await ImmunizationsService.createImmunizations(
                     postData
                 );
@@ -382,11 +372,7 @@ export default class ImmunizationsTable extends React.Component {
     _handleChangeStart = (startDate) => this.setState({ vaccineDate: startDate });
 
     async handleArchiveOnClick(cell, row) {
-        console.log(
-            "Archive button clicked, active flag:",
-            row.active_fl,
-            row.immunization_id
-        );
+        
         const data = {
             immunization_id: row.immunization_id,
         };
@@ -408,7 +394,6 @@ export default class ImmunizationsTable extends React.Component {
                     isArchiving: false,
                 });
             }
-            console.log("archive Immunization>>>", this.state.archiveMessage);
         } catch (e) {
             console.log(e, e.data);
         }

@@ -7,7 +7,6 @@ import FlatList from 'flatlist-react';
 class SidebarMiddleNav extends React.Component {
     constructor(props) {
         super(props);
-        console.log('props in middleNav>>>', this.props);
     }
 
 

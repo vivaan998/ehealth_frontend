@@ -42,7 +42,6 @@ const appointmentsOfThisPractitioner = async (data, practitioner_id) => {
     }
     var response;
     var apiPath = paths.get_appointments_of_this_practitioner + practitioner_id;
-    // console.log('api path >>>', apiPath);
     const res = await axios.get(apiPath, config)
         .then(function (res) {
             response = { status: true, data: res.data }
@@ -69,7 +68,6 @@ const appointmentsOfThisProvider = async (data, provider_id) => {
     }
     var response;
     var apiPath = paths.get_appointments_of_provider + provider_id;
-    // console.log('api path >>>', apiPath);
     const res = await axios.get(apiPath, config)
         .then(function (res) {
             response = { status: true, data: res.data }

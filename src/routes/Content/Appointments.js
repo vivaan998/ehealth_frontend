@@ -6,7 +6,6 @@ import { HeaderMain } from './../components/HeaderMain';
 class Appointments extends React.Component {
     constructor(props){
         super(props);
-        console.log("appointments props>>>", props);
     }
     render() {
         return (

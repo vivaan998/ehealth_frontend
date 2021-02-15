@@ -6,7 +6,6 @@ import { HeaderMain } from "./../components/HeaderMain";
 class Practitioners extends React.Component {
     constructor(props){
         super(props);
-        console.log("practitioners props>>>", this.props);
     }
 
     render() {

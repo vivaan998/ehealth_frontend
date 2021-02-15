@@ -59,7 +59,6 @@ const getAllPractitionersList = async (data) => {
     }
     var response;
     var apiPath = paths.get_all_practitioners + data;
-    console.log('api path >>>', apiPath);
     const res = await axios.get(apiPath, config)
         .then(function (res) {
             response = { status: true, data: res.data }
@@ -86,7 +85,6 @@ const practitionerOfThisProvider = async (data, provider_id) => {
     }
     var response;
     var apiPath = paths.get_practitioners_of_this_provider + provider_id;
-    console.log('api path >>>', apiPath);
     const res = await axios.get(apiPath, config)
         .then(function (res) {
             response = { status: true, data: res.data }

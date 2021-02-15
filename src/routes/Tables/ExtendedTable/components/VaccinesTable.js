@@ -98,7 +98,6 @@ export default class VaccinesTable extends React.Component {
   };
 
   handleAdministered(cell, row) {
-    console.log("vaccine handle", row.vaccine_id);
     this.props.history.push({
       pathname: "/immunizations",
       vaccine_id: row.vaccine_id,
@@ -106,11 +105,7 @@ export default class VaccinesTable extends React.Component {
   }
 
   async handleArchive(cell, row) {
-    console.log(
-      "Archive button clicked, active flag:",
-      row.active_fl,
-      row.vaccine_id
-    );
+    
     const data = {
       vaccine_id: row.vaccine_id,
     };
@@ -132,7 +127,6 @@ export default class VaccinesTable extends React.Component {
           isArchiving: false,
         });
       }
-      console.log("archive vaccine>>>", this.state.archiveMessage);
     } catch (e) {
       console.log(e, e.data);
     }
@@ -201,10 +195,6 @@ export default class VaccinesTable extends React.Component {
       {
         text: "Action",
 
-        // events: {
-        //   onClick: (e, column, row, rowIndex) => {console.log(rowIndex)}
-        // },
-
         formatter: this.actionButton,
       },
     ];
@@ -261,10 +251,8 @@ export default class VaccinesTable extends React.Component {
         description_tx: this.state.description,
       };
       try {
-        console.log("postData >>>", postData);
         const response = await VaccinesService.createVaccine(postData);
         if (response.status == true) {
-          console.log(response.data);
           this.setState({
             color: "success",
             authenticationMessage: response.data.message,

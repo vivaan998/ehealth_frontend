@@ -6,7 +6,6 @@ import { HeaderMain } from "./../components/HeaderMain";
 class Providers extends React.Component {
     constructor(props){
         super(props);
-        console.log("Providers props>>>",props);
     }
 
     render(){

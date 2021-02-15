@@ -34,7 +34,6 @@ class AppLayout extends React.Component {
 
     render() {
         const { children } = this.props;
-        // console.log(favIcons)
         
         return (
             <ThemeProvider initialStyle="light" initialColor="primary">

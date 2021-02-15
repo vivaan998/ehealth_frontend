@@ -59,7 +59,6 @@ const getAllPatientsList = async (data) => {
     }
     var response;
     var apiPath = paths.get_all_patients + data;
-    console.log('api path >>>', apiPath);
     const res = await axios.get(apiPath, config)
         .then(function (res){
             response = {status: true, data: res.data}

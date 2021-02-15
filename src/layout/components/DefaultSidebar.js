@@ -63,14 +63,12 @@ class DefaultSidebar extends React.Component{
             }
         }
         catch(e){
-            console.log('error >>>', e);
             console.log(e, e.data);
         }
     }
 
     componentDidMount = async () => { 
         if (AuthenticationService.getUser()){
-            console.log('getting menu did mount' );
             this.getMenu();            
         }
         else{

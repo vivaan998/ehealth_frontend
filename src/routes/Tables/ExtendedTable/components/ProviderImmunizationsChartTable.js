@@ -43,7 +43,6 @@ const sortCaret = (order) => {
 export default class ProviderImmunizationsChartTable extends React.Component {
     constructor(props) {
         super(props);
-        console.log('PI table >>>', props);
         this.state = {
             data: props.data,
             provider_name: "",

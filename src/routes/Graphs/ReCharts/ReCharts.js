@@ -35,7 +35,6 @@ class ReCharts extends React.Component {
         try{
             const response = await ChartsService.getMonthlyImmunization();
             if (response.status == true) {
-                console.log(response.data);
                 this.setState({
                     barMonthImmunization: response.data.result,
                     isLoadingBarMonthImmunization: false
@@ -48,7 +47,6 @@ class ReCharts extends React.Component {
             }
         }
         catch(e){
-            console.log('error >>>', e);
         }
     }
 
@@ -60,7 +58,6 @@ class ReCharts extends React.Component {
         try{
             const response = await ChartsService.getProviderImmunization();
             if (response.status == true) {
-                console.log(response.data);
                 this.setState({
                     radarProviderImmunization: response.data.result,
                     tableProviderImmunization: response.data.result,
