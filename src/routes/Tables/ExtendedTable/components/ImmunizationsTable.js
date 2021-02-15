@@ -107,7 +107,18 @@ export default class ImmunizationsTable extends React.Component {
                         isGettingData: false
                     });
                 }
-            }else {
+            }else if (this.props.location.vaccine_id) {
+                const response = await ImmunizationsService.immunizationOfThisVaccine(paramData, this.props.location.vaccine_id);
+                if (response.status == true) {
+                    this.setState({
+                        immunizationsList: response.data.result,
+                        nextPage: response.data.next_page,
+                        previousPage: response.data.previous_page,
+                        isGettingData: false
+                    });
+                }
+            }
+            else {
                 const response = await ImmunizationsService.getList(paramData);
                 if (response.status == true) {
                     this.setState({
@@ -486,7 +497,7 @@ export default class ImmunizationsTable extends React.Component {
                                                 <FormGroup row>
                                                     <Label for="provider" sm={4}>
                                                         Provider Name
-                          </Label>
+                                                    </Label>
                                                     <Col sm={8}>
                                                         {Config.getProfileData().role === 100 ? (
                                                             <Input
@@ -576,7 +587,7 @@ export default class ImmunizationsTable extends React.Component {
                                                 <FormGroup row>
                                                     <Label for="vaccine" sm={4}>
                                                         Vaccine Name
-                          </Label>
+                                                    </Label>
                                                     <Col sm={8}>
                                                         <Input
                                                             type="select"
@@ -602,7 +613,7 @@ export default class ImmunizationsTable extends React.Component {
                                                 <FormGroup row>
                                                     <Label for="datetime" sm={4}>
                                                         Date and Time
-                          </Label>
+                                                    </Label>
                                                     <Col sm={8}>
                                                         <DateTimePicker
                                                             value={this.state.datetime}
@@ -622,7 +633,7 @@ export default class ImmunizationsTable extends React.Component {
                                             </FormText>
                                             <UncontrolledModal.Close color="link">
                                                 Discard
-                      </UncontrolledModal.Close>
+                                            </UncontrolledModal.Close>
                                             <Button
                                                 color="primary"
                                                 onClick={() => this.createImmunization()}

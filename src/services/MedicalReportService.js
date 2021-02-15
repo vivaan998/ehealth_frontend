@@ -12,7 +12,7 @@ const getPatient = async (patient_id) => {
         },
     }
     var response;
-    const res = await axios.get(paths.get_patient_by_id+patient_id, config)
+    const res = await axios.get(paths.get_patient_name_email+patient_id, config)
         .then(function (res) {
             response = { status: true, data: res.data }
         })
@@ -63,7 +63,7 @@ const getImmunizations = async (data, patient_id) => {
         }
     }
     var response;
-    const res = await axios.get(paths.get_immunizations_of_patient+patient_id,config)
+    const res = await axios.get(paths.immunizations,config)
         .then(function (res){
             response = {status: true, data: res.data}
         })
@@ -88,7 +88,7 @@ const getAppointments = async (data, patient_id) => {
         }
     }
     var response;
-    const res = await axios.get(paths.get_appointmentd_of_patient+patient_id,config)
+    const res = await axios.get(paths.appointments,config)
         .then(function (res){
             response = {status: true, data: res.data}
         })

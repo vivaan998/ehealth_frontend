@@ -68,9 +68,9 @@ export default class MedicalReportTable extends React.Component {
             nextPageAppointments: '',
             previousPageAppointments: '',
             allProviders: [],
-            provider: "",
+            provider: null,
             allPractitioners: [],
-            practitioner: "",
+            practitioner: null,
             bpSys: "",
             bpSys_errorMessage: "",
             bpDia: "",
@@ -93,26 +93,47 @@ export default class MedicalReportTable extends React.Component {
             isGettingImmunizationData: false,
             isGettingAppointmentsData: false,
         }
+        console.log("medical report table props>>>", this.props);
     }
 
     getVital = async (page = null, search = null) => {
         try {
-            this.setState({
-                isGettingVitalData: true
-            });
-            const paramData = {
-                page: page,
-                search: search,
-                patient_id: this.props.location.patient_id
-            }
-            const response = await MedicalReportService.getVitals(paramData);
-            if (response.status == true) {
-                this.setState({
-                    vitalsList: response.data.result,
-                    nextPageVital: response.data.next_page,
-                    previousPageVital: response.data.previous_page,
-                    isGettingVitalData: false
-                });
+            if (Config.getProfileData().role === 0) {
+                const paramData = {
+                    page: page,
+                    search: search,
+                    patient_id: Config.getProfileData().id
+                }
+                console.log("get vital function", paramData);
+
+                const response = await MedicalReportService.getVitals(paramData);
+                console.log("vital response>>>", response);
+
+                if (response.status == true) {
+                    this.setState({
+                        vitalsList: response.data.result,
+                        nextPageVital: response.data.next_page,
+                        previousPageVital: response.data.previous_page,
+                    });
+                }
+            } else {
+                const paramData = {
+                    page: page,
+                    search: search,
+                    patient_id: this.props.location.patient_id
+                }
+                console.log("get vital function", paramData);
+
+                const response = await MedicalReportService.getVitals(paramData);
+                console.log("vital response>>>", response);
+
+                if (response.status == true) {
+                    this.setState({
+                        vitalsList: response.data.result,
+                        nextPageVital: response.data.next_page,
+                        previousPageVital: response.data.previous_page,
+                    });
+                }
             }
         }
         catch (e) {
@@ -123,22 +144,41 @@ export default class MedicalReportTable extends React.Component {
 
     getImmunization = async (page = null, search = null) => {
         try {
-            this.setState({
-                isGettingImmunizationData: true
-            });
-            const paramData = {
-                page: page,
-                search: search
+            if (Config.getProfileData().role === 0) {
+                const patient_id = Config.getProfileData().id;
+                console.log("immunizationsss patient_id", patient_id);
+                const paramData = {
+                    page: page,
+                    search: search
+                }
+                const response = await MedicalReportService.getImmunizations(paramData, patient_id);
+                console.log("response>>>", response)
+                if (response.status == true) {
+                    this.setState({
+                        immunizationsList: response.data.result,
+                        nextPageImmunizations: response.data.next_page,
+                        previousPageImmunizations: response.data.previous_page,
+                    });
+                }
+            } else {
+                const patient_id = this.props.location.patient_id;
+                console.log("immunizationsss patient_id", patient_id);
+                const paramData = {
+                    page: page,
+                    search: search
+                }
+                const response = await MedicalReportService.getImmunizations(paramData, patient_id);
+                if (response.status == true) {
+                    this.setState({
+                        immunizationsList: response.data.result,
+                        nextPageImmunizations: response.data.next_page,
+                        previousPageImmunizations: response.data.previous_page,
+                    });
+                }
+
             }
-            const response = await MedicalReportService.getImmunizations(paramData, this.props.location.patient_id);
-            if (response.status == true) {
-                this.setState({
-                    immunizationsList: response.data.result,
-                    nextPageImmunizations: response.data.next_page,
-                    previousPageImmunizations: response.data.previous_page,
-                    isGettingImmunizationData: false
-                });
-            }
+
+            console.log("getImmunizations>>>", this.state.immunizationsList);
         }
         catch (e) {
             console.log('error >>>', e);
@@ -148,22 +188,38 @@ export default class MedicalReportTable extends React.Component {
 
     getAppointment = async (page = null, search = null) => {
         try {
-            this.setState({
-                isGettingAppointmentsData: true
-            });
-            const paramData = {
-                page: page,
-                search: search
+            if (Config.getProfileData().role === 0) {
+                const patient_id = Config.getProfileData().id;
+                console.log("appointmentsss patient_id", patient_id);
+                const paramData = {
+                    page: page,
+                    search: search
+                }
+                const response = await MedicalReportService.getAppointments(paramData, patient_id);
+                if (response.status == true) {
+                    this.setState({
+                        appointmentsList: response.data.result,
+                        nextPageAppointments: response.data.next_page,
+                        previousPageAppointments: response.data.previous_page,
+                    });
+                }
+            } else {
+                console.log("appointmentsss patient_id", this.props.locationn.patient_id);
+                const paramData = {
+                    page: page,
+                    search: search
+                }
+                const response = await MedicalReportService.getAppointments(paramData, this.props.location.patient_id);
+                if (response.status == true) {
+                    this.setState({
+                        appointmentsList: response.data.result,
+                        nextPageAppointments: response.data.next_page,
+                        previousPageAppointments: response.data.previous_page,
+                    });
+                }
             }
-            const response = await MedicalReportService.getAppointments(paramData, this.props.location.patient_id);
-            if (response.status == true) {
-                this.setState({
-                    appointmentsList: response.data.result,
-                    nextPageAppointments: response.data.next_page,
-                    previousPageAppointments: response.data.previous_page,
-                    isGettingAppointmentsData: false
-                });
-            }
+
+            console.log("getAppointmentss>>>", this.state.appointmentsList);
         }
         catch (e) {
             console.log('error >>>', e);
@@ -178,11 +234,12 @@ export default class MedicalReportTable extends React.Component {
                 this.setState({
                     patient_detail: response.data.result[0],
                 });
-                this.getVital();
-                this.getImmunization();
-                this.getAppointment();
-            }
 
+
+            }
+            this.getVital();
+            this.getImmunization();
+            this.getAppointment();
         }
         catch (e) {
             console.log('error >>>', e);
@@ -765,6 +822,7 @@ export default class MedicalReportTable extends React.Component {
             appointment_date: formatedDateTime,
         };
         try {
+            console.log(">>>>>>>>>>>", postData);
             const response = await AppointmentsService.createAppointment(
                 postData
             );
@@ -835,12 +893,12 @@ export default class MedicalReportTable extends React.Component {
                                                                     </Input>
                                                                 ) : (
                                                                         Config.getProfileData().role === 50 ? (
-                                                                            <option>{Config.getProfileData().name}</option>
+                                                                            <option value={null} >{Config.getProfileData().provider}</option>
                                                                         ) : (
                                                                                 Config.getProfileData().role === 10 ? (
-                                                                                    <option>{Config.getProfileData().name}</option>
+                                                                                    <option value={null} >{Config.getProfileData().provider}</option>
                                                                                 ) : (
-                                                                                        <option>{Config.getProfileData().name}</option>
+                                                                                        <option value={null} >{Config.getProfileData().provider}</option>
                                                                                     )
                                                                             )
 
@@ -868,7 +926,7 @@ export default class MedicalReportTable extends React.Component {
 
                                                                     </Input>
                                                                 ) : (
-                                                                        <option>{Config.getProfileData().name}</option>
+                                                                        <option value={null}>{Config.getProfileData().name}</option>
                                                                     )}
                                                                 <FormText color="danger">
                                                                     {this.state.practitioner_errorMessage}
@@ -1052,12 +1110,12 @@ export default class MedicalReportTable extends React.Component {
                                                                     </Input>
                                                                 ) : (
                                                                         Config.getProfileData().role === 50 ? (
-                                                                            <option>{Config.getProfileData().name}</option>
+                                                                            <option value={null}>{Config.getProfileData().name}</option>
                                                                         ) : (
                                                                                 Config.getProfileData().role === 10 ? (
-                                                                                    <option>{Config.getProfileData().name}</option>
+                                                                                    <option value={null}>{Config.getProfileData().name}</option>
                                                                                 ) : (
-                                                                                        <option>{Config.getProfileData().name}</option>
+                                                                                        <option value={null}>{Config.getProfileData().name}</option>
                                                                                     )
                                                                             )
 
@@ -1085,7 +1143,7 @@ export default class MedicalReportTable extends React.Component {
 
                                                                     </Input>
                                                                 ) : (
-                                                                        <option>{Config.getProfileData().name}</option>
+                                                                        <option value={null}>{Config.getProfileData().name}</option>
                                                                     )}
                                                                 <FormText color="danger">
                                                                     {this.state.practitioner_errorMessage}
@@ -1213,12 +1271,12 @@ export default class MedicalReportTable extends React.Component {
                                                                     </Input>
                                                                 ) : (
                                                                         Config.getProfileData().role === 50 ? (
-                                                                            <option>{Config.getProfileData().name}</option>
+                                                                            <option value={null} >{Config.getProfileData().name}</option>
                                                                         ) : (
                                                                                 Config.getProfileData().role === 10 ? (
-                                                                                    <option>{Config.getProfileData().name}</option>
+                                                                                    <option value={null} >{Config.getProfileData().name}</option>
                                                                                 ) : (
-                                                                                        <option>{Config.getProfileData().name}</option>
+                                                                                        <option value={null}>{Config.getProfileData().name}</option>
                                                                                     )
                                                                             )
 
@@ -1246,7 +1304,7 @@ export default class MedicalReportTable extends React.Component {
 
                                                                     </Input>
                                                                 ) : (
-                                                                        <option>{Config.getProfileData().name}</option>
+                                                                        <option value={null}>{Config.getProfileData().name}</option>
                                                                     )}
                                                                 <FormText color="danger">
                                                                     {this.state.practitioner_errorMessage}
