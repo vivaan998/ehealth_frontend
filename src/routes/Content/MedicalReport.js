@@ -17,14 +17,23 @@ class MedicalReport extends React.Component {
 
     async getNameandEmailOfPatient(){
         try {
-            const response = await MedicalReportService.getPatient(this.props.location.patient_id);
-            console.log('data Medical Report >>>', response.data);
-            if (response.status == true) {
-                this.setState({
-                    patient_detail: response.data.result[0],
-                });
+            if (Config.getProfileData().role === 0){
+                const response = await MedicalReportService.getPatient(Config.getProfileData().id);
+                console.log('data Medical Report >>>', response.data);
+                if (response.status == true) {
+                    this.setState({
+                        patient_detail: response.data,
+                    });
+                }
+            }else{
+                const response = await MedicalReportService.getPatient(this.props.location.patient_id);
+                console.log('data Medical Report >>>', response.data);
+                if (response.status == true) {
+                    this.setState({
+                        patient_detail: response.data,
+                    });
+                }
             }
-
         }
         catch (e) {
             console.log('error >>>', e);
@@ -49,8 +58,8 @@ class MedicalReport extends React.Component {
         return (
             <Container>
                 
-                <h5>Patient Name: {this.state.patient_detail.first_name+" "+this.state.patient_detail.last_name} </h5>
-                <h5>Patient Email: {this.state.patient_detail.email_tx} </h5> <br/><br/>
+                <h5>Patient Name: {this.state.patient_detail.patient_name} </h5>
+                <h5>Patient Email: {this.state.patient_detail.patient_email} </h5> <br/><br/>
                 <MedicalReportTable {...this.props} />
             </Container>
         );
