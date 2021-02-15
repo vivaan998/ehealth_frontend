@@ -183,6 +183,8 @@ export default class ProviderTable extends React.Component {
         this.props.history.push({
             pathname: "/mymedicalreport",
             patient_id: row.patient_id,
+            provider_id: row.provider_id,
+            practitioner_id: row.practitioner_id
         });
     }
 

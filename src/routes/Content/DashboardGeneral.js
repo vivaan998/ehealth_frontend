@@ -9,12 +9,10 @@ class DashboardGeneral extends React.Component {
         super(props);
     }
 
-
     
     componentDidMount(){
         if (AuthenticationService.getUser()){
             console.log('succeed');
-            
         }
         else{
             this.props.history.push({

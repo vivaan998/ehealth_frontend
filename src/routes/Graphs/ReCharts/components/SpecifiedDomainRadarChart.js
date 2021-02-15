@@ -5,6 +5,7 @@ import {
     RadarChart, 
     PolarGrid, 
     Legend,
+    Tooltip,
     PolarAngleAxis, 
     PolarRadiusAxis
 } from './../../../../components/recharts';
@@ -39,6 +40,13 @@ class SpecifiedDomainRadarChart extends React.Component{
                 <PolarGrid stroke='#CED4DA' />
                 <PolarAngleAxis dataKey="provider" />
                 <PolarRadiusAxis angle={0} domain={[max, min]} />
+                <Tooltip
+                        contentStyle={{
+                            background: '#353C48',
+                            border: `1px solid #FFF`,
+                            color: '#FFF'
+                        }}
+                    />
                 <Radar name="Immunizations" dataKey="total_immunizations" stroke='#6610f2' fill='#6610f2' fillOpacity={0.3}/>
                 <Legend />
                 </RadarChart>
