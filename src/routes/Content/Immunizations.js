@@ -6,7 +6,6 @@ import { HeaderMain } from "./../components/HeaderMain";
 class Immunizations extends React.Component {
     constructor(props) {
         super(props);
-        console.log("Immunizations props", props);
     }
     render() {
         return (

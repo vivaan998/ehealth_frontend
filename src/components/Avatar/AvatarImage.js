@@ -16,12 +16,11 @@ class AvatarImage extends React.PureComponent {
     };
 
     static defaultProps = {
-        placeholder: <i className="fa fa-user fa-fw"></i>
+        placeholder: <i className="fa fa-gitlab fa-fw"></i>
     }
 
     constructor(props) {
         super(props);
-        
         this.state = {
             imgLoaded: false
         };
@@ -32,7 +31,6 @@ class AvatarImage extends React.PureComponent {
         const parentClass = classNames('avatar-image', {
             'avatar-image--loaded': this.state.imgLoaded
         }, className);
-
         return (
             <div className={ parentClass }>
                 <Avatar className="avatar-image__image" {...avatarProps}>

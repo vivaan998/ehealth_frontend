@@ -23,7 +23,7 @@ export class CustomSearch extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         if (prevState.value !== this.state.value) {
-            this.props.onSearch(this.state.value);
+            this.props.parentCallBack(this.state.value);
         }
     }
 

@@ -21,20 +21,23 @@ class DefaultSidebar extends React.Component{
             profileData: 'Default User',
             menuItems: '',
             menuList: '',
+            isDataGetting: false,
         }
     }
     getMenu = async () => {
         try{
+            this.setState({
+                isDataGetting: true
+            });
             const response = await MenuListingService.getMenu();
             if (response.status == true){
                 this.setState({
                     profileData: response.data.data,
                     menuItems: response.data.menu,
                     isLoading: false,
-                    
+                    isDataGetting: false                    
                 });
-                Config.profileData = this.state.profileData;
-                console.log('menuItems >>>', this.state.menuItems);
+                Config.setProfileData(this.state.profileData);
                 let menu;
                 var temp = this.state.menuItems;
                 menu = (temp).map(o => o.title);
@@ -42,18 +45,37 @@ class DefaultSidebar extends React.Component{
                         menuList: menu
                 });
 
+                if (Config.getProfileData().role === 0){
+                    this.props.history.push({
+                        pathname: "/mymedicalreport",
+                    })
+                }
+                if (Config.getProfileData().role === 10){
+                    this.props.history.push({
+                        pathname: "/patients",
+                    })
+                }
+                if (Config.getProfileData().role === 50){
+                    this.props.history.push({
+                        pathname: "/practitioners",
+                    })
+                }
+                if (Config.getProfileData().role != 100){
+                    this.setState({
+                        menuList: (this.state.menuList).filter(e => e !== 'Dashboard')
+                    })
+                }
+
             }
         }
         catch(e){
-            console.log('error >>>', e);
             console.log(e, e.data);
         }
     }
 
     componentDidMount = async () => { 
         if (AuthenticationService.getUser()){
-            this.getMenu();
-            
+            this.getMenu();            
         }
         else{
             this.props.history.push({
@@ -84,14 +106,14 @@ class DefaultSidebar extends React.Component{
                 { /* END SIDEBAR: Only for Desktop */ }
 
                 { /* START SIDEBAR: Only for Mobile */ }
+                
                 <Sidebar.MobileFluid>
                     <SidebarTopA data={this.state} {...this.props}/>
-                    
+                    {this.state.isDataGetting ? 'Loading menu...': ''}
                     <Sidebar.Section fluid cover>
                         { /* SIDEBAR: Menu */ }
                         <SidebarMiddleNav {...this.props} data={this.state}/>
                     </Sidebar.Section>
-                    <SidebarBottomA />
 
                 </Sidebar.MobileFluid>
                 { /* END SIDEBAR: Only for Mobile */ }

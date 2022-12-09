@@ -6,7 +6,6 @@ import { Consumer } from './context';
 
 
 const UncontrolledModalSave = (props) => {
-    console.log('props >>>', props);
     const { tag, ...otherProps } = props;
     const Tag = tag;
 

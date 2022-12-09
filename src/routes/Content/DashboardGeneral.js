@@ -1,10 +1,15 @@
 import React from 'react';
 import Config from '../../config/Config'
 import AuthenticationService from '../../services/AuthenticationService'
+import { Container } from './../../components';
+import { HeaderMain } from './../components/HeaderMain';
+import ReCharts from './../Graphs/ReCharts/ReCharts';
 class DashboardGeneral extends React.Component {
     constructor(props){
         super(props);
     }
+
+    
     componentDidMount(){
         if (AuthenticationService.getUser()){
             console.log('succeed');
@@ -18,7 +23,7 @@ class DashboardGeneral extends React.Component {
     
     render(){
         return (
-            <h1>Dashboard</h1>
+            <ReCharts/>
         )
     }
 }

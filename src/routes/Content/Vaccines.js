@@ -7,7 +7,6 @@ import AuthenticationService from '../../services/AuthenticationService';
 class Vaccines extends React.Component{
     constructor(props){
         super(props);
-        console.log("vaccine props>>>", props);
     }
     
     componentDidMount(){

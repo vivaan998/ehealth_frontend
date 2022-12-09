@@ -33,7 +33,6 @@ const setCredentials = (data) => {
 const getCredentials = () => {
     var access_token;
     access_token = localStorage.getItem('access_token');
-    console.log('token >>>', access_token);
     return access_token
 }
 

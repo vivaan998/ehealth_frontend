@@ -1,5 +1,4 @@
 import React from 'react';
-import faker from 'faker/locale/en_US';
 import { Link } from 'react-router-dom';
 
 import { 
@@ -18,7 +17,6 @@ const avatarImg = randomAvatar();
 class SidebarTopA extends React.Component{
     constructor(props){
         super(props);
-        console.log('props in sideA >>>', props);
     }
     render(){
         return(
@@ -30,19 +28,6 @@ class SidebarTopA extends React.Component{
                             <Sidebar.HideSlim>
                                 <Avatar.Image
                                     size="lg"
-                                    src={require('../../../images/avatars/1.jpg')}
-                                    addOns={[
-                                        // <AvatarAddOn.Icon 
-                                        //     className="fa fa-circle"
-                                        //     color="white"
-                                        //     key="avatar-icon-bg"
-                                        // />,
-                                        <AvatarAddOn.Icon 
-                                            className="fa fa-circle"
-                                            color="success"
-                                            key="avatar-icon-fg"
-                                        />
-                                    ]}
                                 />
                             </Sidebar.HideSlim>
                         </Link>
@@ -52,26 +37,6 @@ class SidebarTopA extends React.Component{
                                 {this.props.data.profileData.name}
                                 {/* <i className="fa fa-angle-down ml-2"></i> */}
                             </DropdownToggle>
-                            {/* <DropdownMenu persist>
-                            <DropdownItem header>
-                                Super Admin
-                            </DropdownItem>
-                            <DropdownItem divider />
-                            <DropdownItem tag={ Link } to="/apps/profile-details">
-                                My Profile
-                            </DropdownItem>
-                            <DropdownItem tag={ Link } to="/apps/settings-edit">
-                                Settings
-                            </DropdownItem>
-                            <DropdownItem tag={ Link } to="/apps/billing-edit">
-                                Billings
-                            </DropdownItem>
-                            <DropdownItem divider />
-                            <DropdownItem tag={ Link } to="/pages/login">
-                                <i className="fa fa-fw fa-sign-out mr-2"></i>
-                                Sign Out
-                            </DropdownItem>
-                            </DropdownMenu> */}
                         </UncontrolledButtonDropdown>
                         <div className="small sidebar__link--muted">
                             { this.props.data.profileData.designation}
@@ -85,19 +50,6 @@ class SidebarTopA extends React.Component{
                     <Sidebar.Section>
                         <Avatar.Image
                             size="sm"
-                            src={ avatarImg }
-                            addOns={[
-                                <AvatarAddOn.Icon 
-                                    className="fa fa-circle"
-                                    color="white"
-                                    key="avatar-icon-bg"
-                                />,
-                                <AvatarAddOn.Icon 
-                                    className="fa fa-circle"
-                                    color="success"
-                                    key="avatar-icon-fg"
-                                />
-                            ]}
                         />
                     </Sidebar.Section>
                 </Sidebar.ShowSlim>

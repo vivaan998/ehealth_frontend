@@ -5,16 +5,16 @@ import classNames from 'classnames';
 import { ThemeConsumer } from '../../../components/Theme';
 
 const logos = {
-    'white': './../../../images/logos/eHealth.png',
-    'primary': './../../../images/logos/eHealth.png',
-    'success': './../../../images/logos/logo-success.svg',
-    'warning': './../../../images/logos/logo-warning.svg',
-    'danger': './../../../images/logos/logo-danger.svg',
-    'info': './../../../images/logos/logo-info.svg',
-    'indigo': './../../../images/logos/logo-indigo.svg',
-    'purple': './../../../images/logos/logo-purple.svg',
-    'pink': './../../../images/logos/logo-pink.svg',
-    'yellow': './../../../images/logos/logo-yellow.svg'
+    'white': 'images/logos/eHealth.png',
+    'primary': 'images/logos/eHealth.png',
+    'success': 'images/logos/logo-success.svg',
+    'warning': 'images/logos/logo-warning.svg',
+    'danger': 'images/logos/logo-danger.svg',
+    'info': 'images/logos/logo-info.svg',
+    'indigo': 'images/logos/logo-indigo.svg',
+    'purple': 'images/logos/logo-purple.svg',
+    'pink': 'images/logos/logo-pink.svg',
+    'yellow': 'images/logos/logo-yellow.svg'
 }
 
 const getLogoUrl = (style, color) => {
@@ -44,7 +44,7 @@ const LogoThemed = ({ checkBackground, className, ...otherProps }) => (
                 }
                 className={ classNames('d-block', className) }
                 alt="eHealth Logo"
-                height = '100'
+                height = '100px'
                 { ...otherProps }
             />
         )

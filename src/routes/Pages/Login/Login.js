@@ -36,6 +36,20 @@ class Login extends React.Component {
         }
     }
 
+    componentDidMount(){
+        if (AuthenticationService.getUser()){
+            console.log('succeed');
+            this.props.history.push({
+                pathname: "/dashboard",
+            })
+        }
+        else{
+            this.props.history.push({
+                pathname: "/login",
+            })
+        }
+    }
+
     async Authenticate() {
         this.setState(({
             isLoading: true,
@@ -81,7 +95,6 @@ class Login extends React.Component {
             try{
                 const response = await AuthenticationService.Login(postData);
                 if (response.status == true) {
-                    console.log(response.data);
                     this.setState({
                         color: "success",
                         authenticationMessage: "Login successful",
@@ -89,9 +102,6 @@ class Login extends React.Component {
                     });
 
                     AuthenticationService.setToken(response.data.access_token);
-                    // Config.access_token = response.data.access_token;
-                    // Config.role_id = 100;
-                    
                     this.props.history.replace({
                         pathname: "/dashboard",
                         state: {
@@ -140,7 +150,7 @@ class Login extends React.Component {
                 <EmptyLayout.Section center>
                     { /* START Header */}
                     <HeaderAuth 
-                        title="Sign In"
+                        title="Login"
                     />
                     { /* END Header */}
                     { /* START Form */}
@@ -157,7 +167,7 @@ class Login extends React.Component {
                                         type="email"
                                         name="emailId" 
                                         id="emailId"
-                                        placeholder="harshil@gmail.com" 
+                                        placeholder="user@example.com" 
                                         className="bg-white"
                                         value={this.state.emailId}
                                         onChange={e => this.onChangeEmail(e.target.value)}
@@ -212,7 +222,7 @@ class Login extends React.Component {
                                     onClick={() => this.Authenticate()}
                                     disabled={this.state.isLoading}
                                 >
-                                    Sign In
+                                {this.state.isLoading ? ('Logging In...') : ('Login')}
                                 </Button>
                             )
                         }
@@ -223,17 +233,7 @@ class Login extends React.Component {
                         </FormText>
                         
                     </Form>
-                    { /* END Form */}
-                    { /* START Bottom Links */}
-                    {/* <div className="d-flex mb-5">
-                        <Link to="/pages/forgotpassword" className="text-decoration-none">
-                            Forgot Password
-                        </Link>
-                    </div> */}
-                    { /* END Bottom Links */}
-                    { /* START Footer */}
                     <FooterAuth />
-                    { /* END Footer */}
                 </EmptyLayout.Section>
             </EmptyLayout>
         );

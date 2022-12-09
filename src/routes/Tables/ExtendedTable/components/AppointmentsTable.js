@@ -1,41 +1,50 @@
-import React from 'react';
-import BootstrapTable from 'react-bootstrap-table-next';
-import paginationFactory from 'react-bootstrap-table2-paginator';
-import filterFactory, { Comparator, dateFilter } from 'react-bootstrap-table2-filter'
-import ToolkitProvider from 'react-bootstrap-table2-toolkit';
-import _ from 'lodash';
-import faker from 'faker/locale/en_US';
-import moment from 'moment';
+import React from "react";
+import BootstrapTable from "react-bootstrap-table-next";
+import filterFactory, {
+    Comparator,
+    dateFilter,
+} from "react-bootstrap-table2-filter";
+import ToolkitProvider from "react-bootstrap-table2-toolkit";
+import _ from "lodash";
+import moment from "moment";
 
 import {
     // Badge,
     Button,
     // CustomInput,
     // StarRating,
-    ButtonGroup
-} from '../../../../components';
-import { CustomExportCSV } from './CustomExportButton';
-import { CustomSearch } from './CustomSearch';
-import { CustomPaginationPanel } from './CustomPaginationPanel';
-import { CustomSizePerPageButton } from './CustomSizePerPageButton';
-import { CustomPaginationTotal } from './CustomPaginationTotal';
-// import { randomArray } from './../../../../utilities';
-import {
-    buildCustomTextFilter,
-    // buildCustomSelectFilter,
-    // buildCustomNumberFilter
-} from '../filters';
-
-import AppointmentsService from './../../../../services/AppointmentsService';
-import AuthenticationService from './../../../../services/AuthenticationService';
+    ButtonInput,
+    ButtonGroup,
+    UncontrolledModal,
+    ModalHeader,
+    ModalBody,
+    Col,
+    Input,
+    InputGroup,
+    InputGroupAddon,
+    FormText,
+    ModalFooter,
+    Label,
+    Form,
+    FormGroup,
+} from "../../../../components";
+import { CustomExportCSV } from "./CustomExportButton";
+import { CustomSearch } from "./CustomSearch";
+import Config from "./../../../../config/Config";
+import AppointmentsService from "../../../../services/AppointmentsService";
+import ImmunizationsService from "../../../../services/ImmunizationsService";
+import AuthenticationService from "../../../../services/AuthenticationService";
+import ProvidersService from "../../../../services/ProvidersService";
+import PractitionersService from "../../../../services/PractitionersService";
+import PatientsService from "../../../../services/PatientsService";
+import VaccinesService from "../../../../services/VaccinesService";
+import DateTimePicker from "react-datetime-picker";
+import MedicalReportService from "../../../../services/MedicalReportService";
 
 const sortCaret = (order) => {
-    if (!order)
-        return <i className="fa fa-fw fa-sort text-muted"></i>;
-    if (order)
-        return <i className={`fa fa-fw text-muted fa-sort-${order}`}></i>
-}
-
+    if (!order) return <i className="fa fa-fw fa-sort text-muted"></i>;
+    if (order) return <i className={`fa fa-fw text-muted fa-sort-${order}`}></i>;
+};
 
 export default class AppointmentsTable extends React.Component {
     constructor(props) {
@@ -43,102 +52,315 @@ export default class AppointmentsTable extends React.Component {
 
         this.state = {
             appointmentsList: [],
+            date: "",
+            time: "",
+            practitioner: null,
+            patient: null,
+            provider: null,
+            date_errorMessage: "",
+            time_errorMessage: "",
+            practitioner_errorMessage: "",
+            patient_errorMessage: "",
+            provider_errorMessage: "",
+            authenticationMessage: "",
+            color: "black",
+            isLoading: false,
+            name: "",
+            nextPage: "",
+            previousPage: "",
+            allProviders: [],
+            allPractitioners: [],
+            allPatients: [],
+            searchValue: null,
+            archiveMessage: "",
+            isArchiving: false,
+            datetime: new Date(),
+            isGettingData:true,
+            providerName: ''
         };
 
         this.headerCheckboxRef = React.createRef();
     }
 
-    getList = async (page=null, search=null) => {
+
+    getList = async (page = null, search = null) => {
         try {
             const paramData = {
                 page: page,
                 search: search
             }
-            
-            if (this.props.location.provider_id){
-                console.log("provider_id in appointments",this.props.location.provider_id)
-                const response = await AppointmentsService.getPractitionerOfThisProvider(this.props.location.provider_id);
-                if (response.status == true){
+
+            if (this.props.location.provider_id) {
+                const response = await AppointmentsService.appointmentsOfThisProvider(paramData, this.props.location.provider_id);
+                if (response.status == true) {
                     this.setState({
                         appointmentsList: response.data.result,
                         nextPage: response.data.next_page,
                         previousPage: response.data.previous_page,
+                        isGettingData: false
+                    });
+                }
+            }else if (this.props.location.practitioner_id) {
+                const response = await AppointmentsService.appointmentsOfThisPractitioner(paramData, this.props.location.practitioner_id);
+                if (response.status == true) {
+                    this.setState({
+                        appointmentsList: response.data.result,
+                        nextPage: response.data.next_page,
+                        previousPage: response.data.previous_page,
+                        isGettingData: false
+                    });
+                }
+            } else {
+                const response = await AppointmentsService.getList(paramData);
+                if (response.status == true) {
+                    this.setState({
+                        appointmentsList: response.data.result,
+                        nextPage: response.data.next_page,
+                        previousPage: response.data.previous_page,
+                        isGettingData: false
                     });
                 }
             }
-            else{
-                const response = await AppointmentsService.getList(paramData);
-                if (response.status == true){
+
+        } catch (e) {
+            console.log("error >>>", e);
+            console.log(e, e.data);
+        }
+    };
+
+    getAllProviders = async () => {
+        try {
+            const response = await ProvidersService.getAllProvidersList();
+            if (response.status == true) {
+                this.setState({
+                    allProviders: response.data.data,
+                    provider: response.data.data[0].provider_id,
+                });
+                this.getAllPractitioners(this.state.provider);
+            }
+        } catch (e) {
+            console.log("error >>>", e);
+            console.log(e, e.data);
+        }
+    };
+    getAllPractitioners = async (value) => {
+        try {
+            const response = await PractitionersService.getAllPractitionersList(
+                value
+            );
+            if (response.status == true) {
+                if (response.data.data.length > 0) {
                     this.setState({
-                        appointmentsList: response.data.result,
-                        nextPage: response.data.next_page,
-                        previousPage: response.data.previous_page,
+                        allPractitioners: response.data.data,
+                        practitioner: response.data.data[0].practitioner_id,
+                    });
+                    this.getAllPatients(this.state.practitioner);
+                } else {
+                    this.setState({
+                        allPractitioners: [],
+                        allPatients: [],
+                        practitioner: null,
+                        patient: null,
                     });
                 }
+            }
+        } catch (e) {
+            console.log("error >>>", e);
+            console.log(e, e.data);
+        }
+    };
+    getAllPatients = async (value) => {
+        try {
+            const response = await PatientsService.getAllPatientsList(value);
+            if (response.status == true) {
+                if (response.data.data.length > 0) {
+                    this.setState({
+                        allPatients: response.data.data,
+                        patient: response.data.data[0].patient_id,
+                    });
+                } else {
+                    this.setState({
+                        allPatients: [],
+                        patient: null,
+                    });
+                }
+            }
+        } catch (e) {
+            console.log("error >>>", e);
+            console.log(e, e.data);
+        }
+    }
+
+
+
+    async handleArchiveOnClick(cell, row) {
+        const data = {
+            "appointment_id": row.appointment_id
+        }
+        try {
+            this.setState({
+                isArchiving: true
+            });
+            const response = await AppointmentsService.archiveAppointment(data);
+            if (response.status == true) {
+                console.log(response.data);
+                this.setState({
+                    archiveMessage: "Appointment archived successfully",
+                    isArchiving: false
+                });
+                this.getList();
+
+            }
+            else {
+                this.setState({
+                    archiveMessage: response.data.data.error,
+                    isArchiving: false
+                });
             }
         }
         catch (e) {
-            console.log('error >>>', e);
-            console.log(e, e.data);
+            console.log(e, e.data)
         }
     }
 
     componentDidMount = async () => {
         if (AuthenticationService.getUser()) {
             this.getList();
-        }
-        else {
+            if (Config.getProfileData().role === 100) {
+                this.getAllProviders();
+            }
+            if (Config.getProfileData().role === 50) {
+                this.getAllPractitioners(Config.getProfileData().id);
+                this.setState({
+                    providerName: Config.getProfileData().name
+                })
+            }
+            if (Config.getProfileData().role === 10) {
+                this.getAllPatients(Config.getProfileData().id);
+                this.setState({
+                    providerName: Config.getProfileData().provider
+                })
+            }
+        } else {
             this.props.history.push({
                 pathname: "/login",
-            })
+            });
+
         }
+    };
+
+    onChangeProvider(value) {
+        this.getAllPractitioners(value);
+        this.setState({
+            provider: parseInt(value),
+        });
     }
 
-    // handleSelect(row, isSelected) {
-    //     if (isSelected) {
-    //         this.setState({ selected: [...this.state.selected, row.id] })
-    //     } else {
-    //         this.setState({
-    //             selected: this.state.selected.filter(itemId => itemId !== row.id)
-    //         })
-    //     }
-    // }
+    onChangePractitioner(value) {
+        this.getAllPatients(value);
+        this.setState({
+            practitioner: parseInt(value),
+        });
+    }
 
-    // handleSelectAll(isSelected, rows) {
-    //     if (isSelected) {
-    //         this.setState({ selected: _.map(rows, 'id') })
-    //     } else {
-    //         this.setState({ selected: [] });
-    //     }
-    // }
+    onChangePatient(value) {
+        this.setState({
+            patient: parseInt(value),
+        });
+    }
 
-    // handleAddRow() {
-    //     const currentSize = this.state.products.length;
+    onChangeDatetime(value) {
+        this.setState({
+            datetime: value,
+        });
+    }
 
-    //     this.setState({
-    //         products: [
-    //             generateRow(currentSize + 1),
-    //             ...this.state.products,
-    //         ]
-    //     });
-    // }
+    async createAppointment() {
+        this.setState({
+            isLoading: true,
+            authenticationMessage: "",
+        });
 
-    // handleDeleteRow() {
-    //     this.setState({
-    //         products: _.filter(this.state.products, product =>
-    //             !_.includes(this.state.selected, product.id))
-    //     })
-    // }
+        if (this.state.provider == "") {
+            this.setState({
+                provider_errorMessage: "Provider not available",
+                isLoading: false,
+            });
+            return;
+        } else {
+            this.setState({
+                provider_errorMessage: "",
+            });
+        }
 
-    // handleResetFilters() {
-    //     this.nameFilter('');
-    //     this.qualityFilter('');
-    //     this.priceFilter('');
-    //     this.satisfactionFilter('');
-    // }
+        if (this.state.practitioner == "") {
+            this.setState({
+                practitioner_errorMessage: "Practitioner not available",
+                isLoading: false,
+            });
+            return;
+        } else {
+            this.setState({
+                practitioner_errorMessage: "",
+            });
+        }
 
-    handleArchiveOnClick(cell, row) {
-        console.log("Archive button clicked, active flag:", row.active_fl);
+        if (this.state.patient == "") {
+            this.setState({
+                patient_errorMessage: "Patient not available",
+                isLoading: false,
+            });
+            return;
+        } else {
+            this.setState({
+                patient_errorMessage: "",
+            });
+        }
+
+        if (this.state.datetime == "") {
+            this.setState({
+                date_errorMessage: "Date not available",
+                isLoading: false,
+            });
+            return;
+        } else {
+            this.setState({
+                date_errorMessage: "",
+            });
+            var formatedDateTime = moment
+                .utc(moment(this.state.datetime, "YYYY-MM-DD HH:MM:SS"))
+                .format();
+            formatedDateTime = formatedDateTime.replace("T", " ").replace("Z", "");
+            const postData = {
+                provider_id: this.state.provider,
+                practitioner_id: this.state.practitioner,
+                patient_id: this.state.patient,
+                appointment_date: formatedDateTime,
+            };
+            try {
+                console.log(postData);
+                const response = await AppointmentsService.createAppointment(
+                    postData
+                );
+                if (response.status == true) {
+                    console.log(response.data);
+                    this.setState({
+                        color: "success",
+                        authenticationMessage: response.data.message,
+                        isLoading: false,
+                    });
+                    this.getList();
+                } else {
+                    this.setState({
+                        color: "danger",
+                        isLoading: false,
+                        authenticationMessage: response.data.data.error,
+                    });
+                }
+            } catch (e) {
+                console.log(e, e.data);
+            }
+        }
     }
 
     actionColButton = (cell, row) => {
@@ -157,181 +379,245 @@ export default class AppointmentsTable extends React.Component {
     createColumnDefinitions() {
         return [
             {
-                dataField: "appointmetns_id",
+                dataField: "appointment_id",
                 hidden: true,
-                isKey: true
+                isKey: true,
             },
             {
-                dataField: 'appointmentDate',
-                text: 'Appointment Date',
-                formatter: (cell) =>
-                    moment(cell).format('DD/MM/YYYY'),
-                // filter: dateFilter({
-                //     className: 'd-flex align-items-center',
-                //     comparatorClassName: 'd-none',
-                //     dateClassName: 'form-control form-control-sm',
-                //     comparator: Comparator.GT,
-                //     getFilter: filter => { this.stockDateFilter = filter; }
-                // }),
+                dataField: "appointment_date",
+                text: "Appointment Date",
+                formatter: (cell) => moment(cell).format("DD/MM/YYYY"),
                 sort: true,
-                sortCaret
-            }, {
-                dataField: 'appointmentTime',
-                text: 'Appointment Time',
-                formatter: (cell) =>
-                    moment(cell).format('HH:mm:ss'),
-                // filter: dateFilter({
-                //     className: 'd-flex align-items-center',
-                //     comparatorClassName: 'd-none',
-                //     dateClassName: 'form-control form-control-sm',
-                //     comparator: Comparator.GT,
-                //     getFilter: filter => { this.stockDateFilter = filter; }
-                // }),
+                sortCaret,
+            },
+            {
+                dataField: "appointment_time",
+                text: "Appointment Time",
                 sort: true,
-                sortCaret
-            }, {
-                dataField: 'patientName',
-                text: 'Patient Name',
+                sortCaret,
+            },
+            {
+                dataField: "patient",
+                text: "Patient Name",
                 sort: true,
                 // align: "center",
                 sortCaret,
-                formatter: (cell) => (
-                    <span className="text-inverse">
-                        { cell}
-                    </span>
-                ),
-                // ...buildCustomTextFilter({
-                //     placeholder: 'Enter Patient name...',
-                //     getFilter: filter => { this.nameFilter = filter; }
-                // })
-            }, {
-                dataField: 'scheduledBy',
-                text: 'Scheduled By',
+                formatter: (cell) => <span className="text-inverse">{cell}</span>,
+            },
+            {
+                dataField: "practitioner",
+                text: "Scheduled By",
                 sort: true,
                 sortCaret,
-                formatter: (cell) => (
-                    <span className="text-inverse">
-                        { cell}
-                    </span>
-                ),
-                // ...buildCustomTextFilter({
-                //     placeholder: 'Enter Patient name...',
-                //     getFilter: filter => { this.nameFilter = filter; }
-                // })
-            }, {
-                dataField: 'scheduledOn',
-                text: 'Scheduled On',
-                formatter: (cell) =>
-                    moment(cell).format('DD/MM/YYYY'),
-                // filter: dateFilter({
-                //     className: 'd-flex align-items-center',
-                //     comparatorClassName: 'd-none',
-                //     dateClassName: 'form-control form-control-sm',
-                //     comparator: Comparator.GT,
-                //     getFilter: filter => { this.stockDateFilter = filter; }
-                // }),
+                formatter: (cell) => <span className="text-inverse">{cell}</span>,
+            },
+            {
+                dataField: "created_at",
+                text: "Scheduled On",
+                formatter: (cell) => moment(cell).format("DD/MM/YYYY"),
                 sort: true,
-                sortCaret
-            }, {
-                text: 'Action',
-                // sort: true,
-                // align: "center",
-                // sortCaret,
-                formatter: this.actionColButton
-            }
+                sortCaret,
+            },
+            {
+                text: "Action",
+                formatter: this.actionColButton,
+            },
         ];
     }
 
+    handleCallback = async (childData) => {
+        this.getList(null, childData);
+    };
+
     render() {
         const columnDefs = this.createColumnDefinitions();
-        // const paginationDef = paginationFactory({
-        //     paginationSize: 5,
-        //     showTotal: true,
-        //     pageListRenderer: (props) => (
-        //         <CustomPaginationPanel {...props} size="sm" className="ml-md-auto mt-2 mt-md-0" />
-        //     ),
-        //     sizePerPageRenderer: (props) => (
-        //         <CustomSizePerPageButton {...props} />
-        //     ),
-        //     paginationTotalRenderer: (from, to, size) => (
-        //         <CustomPaginationTotal {...{ from, to, size }} />
-        //     )
-        // });
-        // const selectRowConfig = {
-        //     mode: 'checkbox',
-        //     selected: this.state.selected,
-        //     onSelect: this.handleSelect.bind(this),
-        //     onSelectAll: this.handleSelectAll.bind(this),
-        //     selectionRenderer: ({ mode, checked, disabled }) => (
-        //         <CustomInput type={ mode } checked={ checked } disabled={ disabled } />
-        //     ),
-        //     selectionHeaderRenderer: ({ mode, checked, indeterminate }) => (
-        //         <CustomInput type={ mode } checked={ checked } innerRef={el => el && (el.indeterminate = indeterminate)} />
-        //     )
-        // };
-        // console.log(this.state.appointmentsList);
         return (
             <ToolkitProvider
                 keyField="id"
                 data={this.state.appointmentsList}
                 columns={columnDefs}
-                search
-                exportCSV
             >
-                {
-                    props => (
-                        <React.Fragment>
-                            <div className="d-flex justify-content-end align-items-center mb-2">
-                                <div className="d-flex ml-auto">
-                                    <CustomSearch
-                                        className="mr-2"
-                                        {...props.searchProps}
-                                    />
-                                    <ButtonGroup>
-                                        <CustomExportCSV
-                                            {...props.csvProps}
-                                        >
-                                            Export
-                                    </CustomExportCSV>
-                                        <Button
-                                            size="sm"
-                                            outline
-                                        // onClick={this.handleDeleteRow.bind(this)}
-                                        >
-                                            Delete
+                {(props) => (
+                    <React.Fragment>
+                        <div className="d-flex justify-content-end align-items-center mb-2">
+                            <div className="d-flex ml-auto">
+                                <CustomSearch
+                                    className="mr-2"
+                                    {...props.searchProps}
+                                    parentCallBack={this.handleCallback}
+                                />
+                                <ButtonGroup>
+                                    <Button size="sm" outline id="modalDefault301">
+                                        <i className="fa fa-fw fa-plus"></i>
                                     </Button>
-                                        <Button
-                                            size="sm"
-                                            outline
-                                        // onClick={this.handleAddRow.bind(this)}
-                                        >
-                                            <i className="fa fa-fw fa-plus"></i>
-                                        </Button>
-                                    </ButtonGroup>
-                                </div>
+                                    <UncontrolledModal
+                                        target="modalDefault301"
+                                        className="modal-outline-primary"
+                                    >
+                                        <ModalHeader tag="h5">New Appointment</ModalHeader>
+                                        <ModalBody>
+                                            <Form>
+                                                <FormGroup row>
+                                                    <Label for="provider" sm={4}>
+                                                        Provider Name
+                                                    </Label>
+                                                    <Col sm={8}>
+                                                        {Config.getProfileData().role === 100 ? (
+                                                            <Input
+                                                                type="select"
+                                                                name="select"
+                                                                id="provider"
+                                                                value={this.state.provider}
+                                                                onChange={(e) =>
+                                                                    this.onChangeProvider(e.target.value)
+                                                                }
+                                                            >
+                                                                {this.state.allProviders.map((obj) => (
+                                                                    <option value={obj.provider_id}>
+                                                                        {obj.name}
+                                                                    </option>
+                                                                ))}
+                                                            </Input>
+                                                        ) : (
+                                                                <option>{this.state.providerName}</option>
+                                                            )}
+                                                        <FormText color="danger">
+                                                            {this.state.provider_errorMessage}
+                                                        </FormText>
+                                                    </Col>
+                                                </FormGroup>
+                                                <FormGroup row>
+                                                    <Label for="practitioner" sm={4}>
+                                                        Practitioner Name
+                                                    </Label>
+                                                    <Col sm={8}>
+                                                        {Config.getProfileData().role === 100 ||
+                                                            Config.getProfileData().role === 50 ? (
+                                                                <Input
+                                                                    type="select"
+                                                                    name="select"
+                                                                    id="practitioner"
+                                                                    value={this.state.practitioner}
+                                                                    onChange={(e) =>
+                                                                        this.onChangePractitioner(e.target.value)
+                                                                    }
+                                                                >
+                                                                    {this.state.allPractitioners.map((obj) => (
+                                                                        <option value={obj.practitioner_id}>
+                                                                            {obj.name}
+                                                                        </option>
+                                                                    ))}
+                                                                </Input>
+                                                            ) : (
+                                                                <option>{Config.getProfileData().name}</option>
+                                                            )}
+                                                        <FormText color="danger">
+                                                            {this.state.practitioner_errorMessage}
+                                                        </FormText>
+                                                    </Col>
+                                                </FormGroup>
+                                                <FormGroup row>
+                                                    <Label for="patient" sm={4}>
+                                                        Patient Name
+                          </Label>
+                                                    <Col sm={8}>
+                                                        {Config.getProfileData().role === 100 ||
+                                                            Config.getProfileData().role === 50 ||
+                                                            Config.getProfileData().role === 10 ? (
+                                                                <Input
+                                                                    type="select"
+                                                                    name="select"
+                                                                    id="patient"
+                                                                    value={this.state.patient}
+                                                                    onChange={(e) =>
+                                                                        this.onChangePatient(e.target.value)
+                                                                    }
+                                                                >
+                                                                    {this.state.allPatients.map((obj) => (
+                                                                        <option value={obj.patient_id}>
+                                                                            {obj.name}
+                                                                        </option>
+                                                                    ))}
+                                                                </Input>
+                                                            ) : (
+                                                                <option>{Config.getProfileData().name}</option>
+                                                            )}
+                                                        <FormText color="danger">
+                                                            {this.state.patient_errorMessage}
+                                                        </FormText>
+                                                    </Col>
+                                                </FormGroup>
+                                                <FormGroup row>
+                                                    <Label for="datetime" sm={4}>
+                                                        Date and Time
+                          </Label>
+                                                    <Col sm={8}>
+                                                        <DateTimePicker
+                                                            value={this.state.datetime}
+                                                            onChange={(value) => this.onChangeDatetime(value)}
+                                                            minDate={moment().toDate()}
+                                                        />
+                                                        <FormText color="danger">
+                                                            {this.state.date_errorMessage}
+                                                        </FormText>
+                                                    </Col>
+                                                </FormGroup>
+                                            </Form>
+                                        </ModalBody>
+                                        <ModalFooter>
+                                            <FormText color={this.state.color}>
+                                                {this.state.authenticationMessage}
+                                            </FormText>
+                                            <UncontrolledModal.Close color="link">
+                                                Discard
+                      </UncontrolledModal.Close>
+                                            <Button
+                                                color="primary"
+                                                onClick={() => this.createAppointment()}
+                                                disabled={this.state.isLoading}
+                                            >
+                                                {this.state.isLoading
+                                                    ? "Creating Appointment..."
+                                                    : "Create Appointment"}
+                                            </Button>
+                                        </ModalFooter>
+                                    </UncontrolledModal>
+                                </ButtonGroup>
                             </div>
-                            <BootstrapTable
-                                classes="table-responsive"
-                                // pagination={paginationDef}
-                                filter={filterFactory()}
-                                // selectRow={ selectRowConfig }
-                                bordered={false}
-                                responsive
-                                {...props.baseProps}
-                            />
+                        </div>
+                        <BootstrapTable
+                            classes="table-responsive-sm"
+                            filter={filterFactory()}
+                            bordered={false}
+                            responsive
+                            noDataIndication={this.state.isGettingData ? 'Getting appointments...' : 'No appointments found!'}
+                            {...props.baseProps}
+                        />
 
-                            <ButtonGroup>
-                                <Button size="sm" outline onClick={() => { this.getList(this.state.previousPage, null) }} disabled={(this.state.previousPage) ? false : true}>
-                                    <i className="fa fa-fw fa-chevron-left"></i>
-                                </Button>
-                                <Button size="sm" outline onClick={() => { this.getList(this.state.nextPage, null) }} disabled={(this.state.nextPage) ? false : true}>
-                                    <i className="fa fa-fw fa-chevron-right"></i>
-                                </Button>
-                            </ButtonGroup>
-
-                        </React.Fragment>
-                    )
-                }
+                        <ButtonGroup>
+                            <Button
+                                size="sm"
+                                outline
+                                onClick={() => {
+                                    this.getList(this.state.previousPage, null);
+                                }}
+                                disabled={this.state.previousPage ? false : true}
+                            >
+                                <i className="fa fa-fw fa-chevron-left"></i>
+                            </Button>
+                            <Button
+                                size="sm"
+                                outline
+                                onClick={() => {
+                                    this.getList(this.state.nextPage, null);
+                                }}
+                                disabled={this.state.nextPage ? false : true}
+                            >
+                                <i className="fa fa-fw fa-chevron-right"></i>
+                            </Button>
+                        </ButtonGroup>
+                    </React.Fragment>
+                )}
             </ToolkitProvider>
         );
     }
